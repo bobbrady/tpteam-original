@@ -1,8 +1,4 @@
-#summary One-sentence summary of this page.
-
-=Installation=
-
-This section describes the prerequisites and step-by-step procedure for installing TPTeam.
+#This section describes the prerequisites and step-by-step procedure for installing TPTeam.
 
 =Software Requirements=
 
@@ -56,4 +52,3 @@ http://tpteam.eclipse.googlepages.com/installTPTP.png
 http://tpteam.eclipse.googlepages.com/addCVS.png
 
  
-

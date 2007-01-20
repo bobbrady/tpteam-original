@@ -1,4 +1,5 @@
 #summary Prerequisites and step-by-step install procedure
+#labels Phase-Requirements,Phase-Deploy
 
 =Software Requirements=
 

@@ -1,6 +1,8 @@
 #summary Prerequisites and step-by-step install procedure
 #labels Phase-Requirements,Phase-Deploy
 
+[TPTeamStart TPTeam Wiki Home]
+
 =Software Requirements=
 
 The following open source and freely available software is required to be installed before running TPTeam.

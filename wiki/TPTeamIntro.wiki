@@ -1,0 +1,11 @@
+#summary A General Overview of TPTeam
+
+http://tpteam.eclipse.googlepages.com/UseCase.jpg
+
+=Overview==
+
+The aim of TPTeam is to create an exemplary collaborative testing tool by using the [http://eclipse.org/equinox Eclipse Equinox] and [http://eclipse.org/ecf Communication Framework (ECF)] projects.This goal will be achieved by the development of three components: TPBuddy, a rich GUI client; TPBridge, an event-driven bundle that bridges communication across JVMs; and TPManager, a test management bundle. All three components will utilize novel service-oriented architecture components derived from Equinox and distributed events to achieve collaborative unit testing. The proposed work represents a practical first step in utilizing newly available Eclipse open source projects for the creation of collaborative tools.
+
+http://tpteam.eclipse.googlepages.com/TPBuddyGUI.jpg
+
+TPTeam allows users distributed across the enterprise network to collaboratively manage software projects while executing tests and being alerted to results in real-time. It provides a GUI with built-in functionality for group chatting and project management. "Dashboard" views provide real-time statistical updates on a test project's state and progress. TPTeam is extensible: other Eclipse plugins can be added to integrate requirements, build, and issue management in a collaborative fashion.

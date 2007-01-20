@@ -1,4 +1,4 @@
-#This section describes the prerequisites and step-by-step procedure for installing TPTeam.
+# This section describes the prerequisites and step-by-step procedure for installing TPTeam.
 
 =Software Requirements=
 

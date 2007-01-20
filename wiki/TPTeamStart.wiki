@@ -1,4 +1,5 @@
 #summary The wiki start page for TPTeam.
+#labels Featured
 
 = Introduction =
 
@@ -12,5 +13,4 @@ The aim of TPTeam is to create an exemplary collaborative testing tool by using 
   * [TPTeamInstall]: This section describes the perquisites and step-by-step procedure for installing TPTeam
   * TPTeamConfig: How-to configure various security, database, team, and other settings.
   * [http://tpteam.eclipse.googlepages.com/TPTeamEclipseWorld.ppt EclipseWorld2006 TPTeam Presentation]: A !PowerPoint presentation covering motivation, use cases, OSGi & ECF fundamentals, plus code snippets supporting TPTeam.
-
 

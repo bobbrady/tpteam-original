@@ -1,0 +1,59 @@
+#summary One-sentence summary of this page.
+
+=Installation=
+
+This section describes the prerequisites and step-by-step procedure for installing TPTeam.
+
+=Software Requirements=
+
+The following open source and freely available software is required to be installed before running TPTeam.
+
+TPTeam Peer Machine: TPBuddy RCP plus TPBridge OSGi Bundle
+
+    * Eclipse 3.2 or later
+    * Eclipse Communication Framework (ECF) Latest Release
+    * Eclipse Equinox Event OSGi Bundle
+    * Eclipse Test and Performance Tool Platform (TPTP) Latest Release
+
+TPManager Machine: TPManager and TPBridge OSGi Bundles
+
+    * Eclipse 3.2 or later
+    * Eclipse Communication Framework (ECF) Latest Release
+    * Eclipse Equinox Event OSGi Bundle
+    * Eclipse Test and Performance Tool Platform (TPTP)
+    * A Servlet Container (Tomcat recommended)
+
+TPTeam Eclipse Projects Required
+
+TPBuddy, TPBridge, and TPManager Eclipse projects can be downloaded from sourceforge using the CVS parameters below. They can then be run from within Eclipse IDE by using the launcher or exported as plugins/bundles.
+
+    * CVS Server: tpteam.cvs.sourceforge.net
+    * CVS Project Root: /cvsroot/tpteam
+    * User: anonymous
+    * Password: Leave Blank, None Required
+    * Eclipse Projects: All Projects under edu.harvard.fas.rbrady.tpteam
+
+==Software Requirements: Step-by-Step Installation==
+
+First, go to the Eclipse web site and download then unpack Eclipse 3.2 or later for the appropriate operating system.
+
+http://tpteam.eclipse.googlepages.com/installEclipse_1.png
+
+ Next, go to the ECF home page. Download and unpack the latest ECF release to the same directory as you did for Eclipse.Eclipse web site.
+
+http://tpteam.eclipse.googlepages.com/installECF.png
+
+ After ECF is installed, go to the Equinox home page and download the Events package. Move it to the plugins directory of the Eclipse installation.
+
+http://tpteam.eclipse.googlepages.com/installEvents.png
+
+ You're almost done! Now start Eclipse and click on the following menu sequence: Help->Software Updates->Find and Install->New Features. Select the Callisto Discovery Site and check off the "Test and Performance" category. You'll want to also install the required features button.
+
+http://tpteam.eclipse.googlepages.com/installTPTP.png
+
+ Finally, add the TPTeam CVS repository to your Eclipse Workbench. Follow this menu sequence: Window->Open Perspective->CVS Exploring. Click on the CVS icon that has a "+" plus sign next to it. Fill-in the dialog using the CVS parameters mentioned previously.
+
+http://tpteam.eclipse.googlepages.com/addCVS.png
+
+ 
+

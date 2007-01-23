@@ -1,0 +1,60 @@
+<html>
+<!-- *******************************************************************************
+ * Copyright (c) 2006 Robert Brady. All rights reserved. This
+ * program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Robert Brady - initial API and implementation
+ ****************************************************************************** -->
+
+<head>
+<title>TPManager Admin Home Page</title>
+<script language="JavaScript">
+<!--
+	function validateForm ( )
+	{
+		var op = document.adminOp.op.value;
+		var type = document.adminOp.type.value;
+		if(op == "Choose" || type == "Choose")
+		{
+			alert("Please select an operation and type to perform");
+			return false;
+		}
+		var opType = op + type;
+		if(opType == "addProduct")
+			opType += ".html";
+		document.adminOp.action = op + "/" + opType;
+		document.adminOp.submit();
+        return true;
+}
+-->
+</script>
+
+</head>
+<body>
+
+<h3 align="center">TPManager Admin Home Page</h3>
+<hr size="2">
+<p>
+<form name="adminOp" method="post" onSubmit="return validateForm( );">
+<P>
+<div align="center"><SELECT name="op">
+	<OPTION selected value="Choose">Choose Op</OPTION>
+	<OPTION value="add">Add</OPTION>
+	<OPTION value="update">Update</OPTION>
+	<OPTION value="delete">Delete</OPTION>
+    <OPTION value="view">View</OPTION>
+        <OPTION value="exec">Execute</OPTION>
+</SELECT> &nbsp;&nbsp;&nbsp; <SELECT name="type">
+	<OPTION selected value="Choose">Choose Type</OPTION>
+	<OPTION value="Product">Product</OPTION>
+	<OPTION value="Project">Project</OPTION>
+	<OPTION value="Test">Test</OPTION>
+	<OPTION value="User">User</OPTION>
+</SELECT>
+<P><INPUT type="submit" value="Go"></P>
+</FORM>
+<hr size="2">
+</body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpbridge"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.junit_3.8.1/junit.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.hyades.test.tools.core_4.2.1.v200607310100/common.runner.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.hyades.test.tools.core_4.2.1.v200607310100/java.runner.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpbuddy"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpmanager"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

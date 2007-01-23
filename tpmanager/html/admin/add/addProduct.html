@@ -1,0 +1,53 @@
+<html>
+<!-- *******************************************************************************
+ * Copyright (c) 2006 Robert Brady. All rights reserved. This
+ * program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Robert Brady - initial API and implementation
+ ****************************************************************************** -->
+
+<head>
+<title>TPManager Admin Home Page</title>
+<script language="JavaScript">
+<!--
+	function validateForm ( )
+	{
+		var name = document.addProd.prodName.value;
+		var desc = document.addProd.prodDesc.value;
+		if( name == "")
+		{
+			alert("Please enter at least a product name.");
+			return false;
+		}
+		document.addProd.action = "addProductEntity";
+		document.addProd.submit();
+        return true;
+}
+-->
+</script>
+
+</head>
+<body>
+
+<h3 align="center">TPManager Admin</h3>
+<div align="center">
+<a href="../index.html">Home</a>
+<hr size="2">
+<p>
+
+<h4>Add Product</h4>
+<form name="addProd" method="post" onSubmit="return validateForm( );">
+<table >
+<tr><th>Name:</th><td><input type="text" name="prodName" size="25"></td></tr>
+<tr><th>Description:</th><td><input type="text" name="prodDesc" size="50"></td></tr>
+</table>
+<br>
+<input type="submit" value="Add">
+</form>
+<p>
+</div>
+<hr size="2>
+</body>
+</html>

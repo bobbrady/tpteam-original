@@ -1,0 +1,46 @@
+<html>
+<!-- *******************************************************************************
+ * Copyright (c) 2006 Robert Brady. All rights reserved. This
+ * program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Robert Brady - initial API and implementation
+ ****************************************************************************** -->
+
+<head>
+<title>TPManager Home Page</title>
+</head>
+<body>
+<h3 align="center">TPManager Test Execution Request Page</h3>
+<hr size="2">
+<p>
+<div align="center">
+<form action="http://localhost:8080/bridge/tpteam/processTestExec"
+	method="post">
+<table>
+	<tr>
+		<th>Username</th>
+		<td><input type="text" size="20" name="username"></td>
+	</tr>
+	<tr>
+		<th>Password</th>
+		<td><input type="password" size="20" name="password"></td>
+	</tr>
+	<tr>
+		<th>Project.TestSuite</th>
+		<td><select name="testID">
+			<option value="-1">Choose One</option>
+			<option value="1">Demo.TestEditTestSuite</option>
+			<option value="2">Demo.TestAddUser</option>
+		    </select>
+	</td>
+	</tr>
+
+</table>
+<p><input type="submit">
+</form>
+</div>
+<hr size="2>
+</body>
+</html>

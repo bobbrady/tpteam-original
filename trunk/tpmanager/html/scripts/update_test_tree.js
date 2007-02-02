@@ -6,7 +6,7 @@ function validateForm(form)
 		return false;
 	}
 	form.testID.value = selectedID;
-	form.action = "viewTest3";
+	form.action = "updateTest3";
 	form.submit();
 	return true;
 }

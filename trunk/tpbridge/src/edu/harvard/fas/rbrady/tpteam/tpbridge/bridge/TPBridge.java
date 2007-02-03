@@ -190,9 +190,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			
 
 			// Then connect
-			String userName = "tpteam_1";
-			String hostName = "jabber.org";
-			String password = "hufogani_1";
+			String userName = "rpbrady.delme";
+			String hostName = "gmail.com";
+			String password = "hufogani";
 			
 			createTrivialSharedObjectForContainer();
 			
@@ -331,8 +331,15 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 					.getSharedObjectManager().getSharedObject(sharedObjectID);
 				*/
 			TPEvent tpEvent = new TPEvent(event);
-			System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName());
-			sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
+			//System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName());
+			String[] ECFIDs = tpEvent.getDictionary().get(TPEvent.SEND_TO).split("/");
+			for(String ECFID : ECFIDs)
+			{
+				//sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
+				sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
+				System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName() + " to " + ECFID);
+			}
+
 		//	tpSharedObject.getContext().sendMessage(null, tpEvent);
 			
 		} catch (Exception e) {

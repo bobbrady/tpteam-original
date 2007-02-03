@@ -114,7 +114,7 @@ public class ViewTest3 extends ServletUtil {
 			updateRows.append( "<tr><th align=\"left\">Eclipse Project:</th><td align=\"right\">"
 					+ jUnitTest.getProject() + "</td></tr>\n");
 			updateRows.append( "<tr><th align=\"left\">Test Suite:</th><td align=\"right\">"
-					+ jUnitTest.getTestSuite() + ".testsuite</td></tr>\n");
+					+ jUnitTest.getTestSuite() + "</td></tr>\n");
 			updateRows.append( "<tr><th align=\"left\">Report Directory:</th><td align=\"right\">"
 					+ jUnitTest.getReportDir() + "</td></tr>\n");
 			updateRows.append( "<tr><th align=\"left\">TPTP Connection URL:</th><td align=\"right\">"

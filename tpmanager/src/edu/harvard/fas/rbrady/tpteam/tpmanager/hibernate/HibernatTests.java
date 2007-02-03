@@ -6,6 +6,10 @@ import java.util.Stack;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.osgi.service.event.Event;
+
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
 public class HibernatTests {
 
@@ -27,7 +31,8 @@ public class HibernatTests {
 			//updateProj(1);
 			//deleteTest(22);
 			//insertTestExec(45);
-			deleteProj(41);
+			//deleteProj(41);
+			getTPEventSendTo(62);
 			HibernateUtil.getSessionFactory().close();
 			
 		} catch (Exception e) {
@@ -150,6 +155,7 @@ public class HibernatTests {
 			throw e;
 		}
 	}
+
 	public static void getProd(int id) throws Exception {
 		System.out.println("Getting Prod");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -175,6 +181,59 @@ public class HibernatTests {
 			throw e;
 		}
 	}
+	
+	public static void getTPEventSendTo(int id) throws Exception {
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+
+			tx = s.beginTransaction();
+			Test test = (Test) s.load(Test.class, new Integer(id));
+			
+			String testType = test.getTestType().getName();
+				
+			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
+					"Demo Project (TPTeam)", "user", test.getName(),
+					String.valueOf(id), "status");
+
+			// Add all project user's ECF IDs to SEND_TO field of event
+			Project proj = (Project)s.load(Project.class, new Integer(test.getProject().getId()));
+			StringBuffer userECF = new StringBuffer();
+			for(TpteamUser user : proj.getTpteamUsers())
+			{
+				if(userECF.length() == 0)
+					userECF.append(user.getEcfId());
+				else
+					userECF.append("/" + user.getEcfId());
+			}
+			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
+			
+			Event myEvent = new Event(tpEvent.getTopic(), tpEvent.getDictionary());
+			
+			TPEvent tpEventFromOSGIEvent = new TPEvent(myEvent);
+
+			String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
+			System.out.println("sendTo: " + sendTo);
+			String[] ECFIDs = sendTo.split("/");
+			for(String ECFID : ECFIDs)
+			{
+				//sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
+				//sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
+				System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName() + " to " + ECFID);
+			}
+
+			
+			s.flush();
+
+
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+	}
+
 
 	public static void getTpteamUser(int id) throws Exception {
 		System.out.println("Getting TpTeamUser");

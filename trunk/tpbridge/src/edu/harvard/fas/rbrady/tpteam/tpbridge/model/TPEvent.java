@@ -32,22 +32,29 @@ public class TPEvent implements Serializable{
 
 	public static final String STATUS_KEY = "STATUS";
 	
+	public static final String SEND_TO = "SEND_TO";
+	
 	private Hashtable<String, String> mDictionary;
 
 	private String mTopic;
 	
 	public TPEvent(Event event) {
 		mDictionary = new Hashtable<String, String>();
+		/*
 		mDictionary.put(PROJECT_KEY, (String)event.getProperty(PROJECT_KEY));
 		mDictionary.put(PARENT_CONTAINER_KEY,(String)event.getProperty(PARENT_CONTAINER_KEY));
 		mDictionary.put(TEST_NAME_KEY,(String)event.getProperty(TEST_NAME_KEY));
 		mDictionary.put(ID_KEY,(String)event.getProperty(ID_KEY));
 		mDictionary.put(STATUS_KEY,(String)event.getProperty(STATUS_KEY));
+		mDictionary.put(SEND_TO,(String)event.getProperty(SEND_TO));
 		String ecfContainerID = (String)event.getProperty(ITPBridge.CONTAINER_ID_KEY);
 		String ecfSharedObjectID = (String)event.getProperty(ITPBridge.SHARED_OBJECT_ID_KEY);
 		
 		mDictionary.put(ITPBridge.CONTAINER_ID_KEY, ecfContainerID);
 		mDictionary.put(ITPBridge.SHARED_OBJECT_ID_KEY, ecfSharedObjectID);
+		*/
+		for(String propName : event.getPropertyNames())
+			mDictionary.put(propName, (String)event.getProperty(propName));
 		
 		mTopic = event.getTopic();
 	}

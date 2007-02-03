@@ -23,6 +23,7 @@ import org.hibernate.Transaction;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
@@ -88,6 +89,19 @@ public class AdminProcessTestExec extends ServletUtil {
 			mTPEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
 					"Demo Project (TPTeam)", mRemoteUser, test.getName(),
 					mTestID, "status");
+
+			// Add all project user's ECF IDs to SEND_TO field of event
+			Project proj = (Project)s.load(Project.class, new Integer(test.getProject().getId()));
+			StringBuffer userECF = new StringBuffer();
+			for(TpteamUser user : proj.getTpteamUsers())
+			{
+				if(userECF.length() == 0)
+					userECF.append(user.getEcfId());
+				else
+					userECF.append("/" + user.getEcfId());
+			}
+			mTPEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
+			
 			s.flush();
 			tx.commit();			
 			

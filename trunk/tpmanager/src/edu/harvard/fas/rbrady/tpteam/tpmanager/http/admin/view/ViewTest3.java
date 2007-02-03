@@ -12,6 +12,7 @@ package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -170,7 +171,8 @@ public class ViewTest3 extends ServletUtil {
 		{
 			return resultRows;
 		}
-		for(TestExecution exec : testExecs)
+		TreeSet<TestExecution> testExecTree = new TreeSet<TestExecution>(testExecs);
+		for(TestExecution exec : testExecTree)
 		{
 			String status = "<b><font color=\"green\">PASS</font></b>";
 			if(exec.getStatus() == 'F' || exec.getStatus() == 'f')

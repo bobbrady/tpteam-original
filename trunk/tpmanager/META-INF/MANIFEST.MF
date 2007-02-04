@@ -24,4 +24,5 @@ Bundle-ClassPath: .,
  lib/dom4j-1.6.1.jar,
  lib/hibernate3.jar,
  lib/jta.jar,
- lib/log4j-1.2.11.jar
+ lib/log4j-1.2.11.jar,
+ lib/tptp-automation-client.jar

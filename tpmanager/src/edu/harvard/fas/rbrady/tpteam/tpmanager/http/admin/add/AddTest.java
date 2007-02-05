@@ -27,29 +27,31 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class AddTest extends ServletUtil {
 
-	private static final long serialVersionUID = 7456848419577223441L;
+	protected static final long serialVersionUID = 7456848419577223441L;
 
-	private boolean mIsProjAvailable = false;
+	protected boolean mIsProjAvailable = false;
 
-	private String mProjOptions = null;
+	protected String mProjOptions = null;
 
-	private String mTestTypeOptions = null;
+	protected String mTestTypeOptions = null;
 
-	private String mTestName = null;
+	protected String mTestName = null;
 
-	private String mTestDesc = null;
+	protected String mTestDesc = null;
 
-	private String mTestTypeIDName = null;
+	protected String mTestTypeIDName = null;
 
-	private String mTestTypeID = null;
+	protected String mTestTypeID = null;
 
-	private String mTestTypeName = null;
+	protected String mTestTypeName = null;
 
-	private String mProjIDName = null;
+	protected String mProjIDName = null;
 
-	private String mProjID = null;
+	protected String mProjID = null;
 
-	private String mProjName = null;
+	protected String mProjName = null;
+
+	protected String mRemoteUser = null;
 
 	public static final String ECLIPSE_HOME = "c:/Java/Eclipse3.2.1/eclipse";
 
@@ -76,6 +78,7 @@ public class AddTest extends ServletUtil {
 			 ******************************************************************/
 			mTestTypeIDName = req.getParameter("testType");
 			mProjIDName = req.getParameter("proj");
+			mRemoteUser = req.getRemoteUser();
 
 			if (mTestName != null && mTestTypeIDName != null
 					&& mProjIDName != null) {
@@ -84,9 +87,9 @@ public class AddTest extends ServletUtil {
 				getPage1(req, resp);
 			}
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
@@ -96,7 +99,9 @@ public class AddTest extends ServletUtil {
 		getProjOptions();
 		getTestTypeOptions();
 		if (mIsProjAvailable == false) {
-			throwError(req, resp);
+			StringBuffer error = new StringBuffer(
+					"<h3>Error: No Project Available.  A Project needs to be created first.</h3>");
+			throwError(req, resp, error, this);
 		} else {
 			showAddTestPage1(req, resp);
 		}
@@ -112,7 +117,7 @@ public class AddTest extends ServletUtil {
 		showAddTestPage2(req, resp);
 	}
 
-	private String getProjOptions() throws Exception {
+	protected String getProjOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 
@@ -149,7 +154,7 @@ public class AddTest extends ServletUtil {
 		return mProjOptions;
 	}
 
-	private String getTestTypeOptions() throws Exception {
+	protected String getTestTypeOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 
@@ -185,14 +190,9 @@ public class AddTest extends ServletUtil {
 		return mTestTypeOptions;
 	}
 
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String error = "<h3>Error: No Project Available.  A Project needs to be created first.</h3>";
-		adminError(req, resp, error);
-	}
-
-	private void showAddTestPage1(HttpServletRequest req,
-			HttpServletResponse resp) throws ServletException, IOException {
+	protected void showAddTestPage1(HttpServletRequest req,
+			HttpServletResponse resp) throws ServletException, IOException,
+			Exception {
 
 		StringBuffer reply = new StringBuffer();
 		reply.append("<h4>Add Test Plan Object, Page 1 of 2</h4>\n");
@@ -210,12 +210,10 @@ public class AddTest extends ServletUtil {
 		reply
 				.append("</table>\n<br>\n<input type=\"submit\" value=\"Add\">\n</form>\n");
 
-		adminHeader(req, resp, ServletUtil.ADD_TEST_JS);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, ServletUtil.ADD_TEST_JS, this);
 	}
 
-	private void showAddTestPage2(HttpServletRequest req,
+	protected void showAddTestPage2(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
 		StringBuffer reply = new StringBuffer();
@@ -244,13 +242,12 @@ public class AddTest extends ServletUtil {
 		reply.append("</td></tr></table><p>\n");
 		reply.append(getTestTypeFormTable());
 		reply.append("<input type=\"submit\" value=\"Add\">\n</form>\n");
-		adminHeader(req, resp, getTestTypeJavaScript()
-				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, getTestTypeJavaScript()
+				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS,
+				this);
 	}
 
-	private String getTestTypeFormTable() {
+	protected String getTestTypeFormTable() {
 		String testTypeTable = "";
 		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
 			testTypeTable = getJUnitFormTable();
@@ -258,7 +255,7 @@ public class AddTest extends ServletUtil {
 		return testTypeTable;
 	}
 
-	private String getTestTypeJavaScript() {
+	protected String getTestTypeJavaScript() {
 		String testTypeJS = "";
 		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
 			// testTypeJS = getJUnitJavaScript();
@@ -269,21 +266,28 @@ public class AddTest extends ServletUtil {
 		return testTypeJS;
 	}
 
-	private String getJUnitFormTable() {
+	protected String getJUnitFormTable() {
 		StringBuffer reply = new StringBuffer();
-		reply.append("<table >\n<caption><b>JUnit Test Properties</b></caption>\n");
-		reply.append("<tr><th>Eclipse Home:</th><td><input type=\"text\" name=\"eclipseHome\" size=\"75\" value=\""
-				+ ECLIPSE_HOME + "\"></td></tr>\n");
-		reply.append("<tr><th>Eclipse Workspace:</th><td><input type=\"text\" name=\"eclipseWorkspace\" size=\"75\" value=\""
-				+ ECLIPSE_WORKSPACE + "\"></td></tr>\n");
-		reply.append("<tr><th>Eclipse Project:</th><td><input type=\"text\" name=\"eclipseProj\" size=\"75\" value=\""
-				+ ECLIPSE_PROJECT + "\"></td></tr>\n");
-		reply.append("<tr><th>Test Suite:</th><td><input type=\"text\" name=\"testSuite\" size=\"75\" value=\""
-				+ mTestName + ".testsuite\"></td></tr>\n");
-		reply.append("<tr><th>Report Directory:</th><td><input type=\"text\" name=\"reportDir\" size=\"75\" value=\""
-				+ REPORT_DIR + "\"></td></tr>\n");
-		reply.append("<tr><th>TPTP Connection URL:</th><td><input type=\"text\" name=\"tptpConn\" size=\"75\" value=\""
-				+ TPTP_CONN + "\"></td></tr>\n");
+		reply
+				.append("<table >\n<caption><b>JUnit Test Properties</b></caption>\n");
+		reply
+				.append("<tr><th>Eclipse Home:</th><td><input type=\"text\" name=\"eclipseHome\" size=\"75\" value=\""
+						+ ECLIPSE_HOME + "\"></td></tr>\n");
+		reply
+				.append("<tr><th>Eclipse Workspace:</th><td><input type=\"text\" name=\"eclipseWorkspace\" size=\"75\" value=\""
+						+ ECLIPSE_WORKSPACE + "\"></td></tr>\n");
+		reply
+				.append("<tr><th>Eclipse Project:</th><td><input type=\"text\" name=\"eclipseProj\" size=\"75\" value=\""
+						+ ECLIPSE_PROJECT + "\"></td></tr>\n");
+		reply
+				.append("<tr><th>Test Suite:</th><td><input type=\"text\" name=\"testSuite\" size=\"75\" value=\""
+						+ mTestName + ".testsuite\"></td></tr>\n");
+		reply
+				.append("<tr><th>Report Directory:</th><td><input type=\"text\" name=\"reportDir\" size=\"75\" value=\""
+						+ REPORT_DIR + "\"></td></tr>\n");
+		reply
+				.append("<tr><th>TPTP Connection URL:</th><td><input type=\"text\" name=\"tptpConn\" size=\"75\" value=\""
+						+ TPTP_CONN + "\"></td></tr>\n");
 		reply.append("</table>\n<br>\n");
 		return reply.toString();
 	}

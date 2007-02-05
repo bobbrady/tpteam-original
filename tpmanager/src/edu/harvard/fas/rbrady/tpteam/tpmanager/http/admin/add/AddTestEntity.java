@@ -43,7 +43,7 @@ public class AddTestEntity extends ServletUtil {
 	String mProjID = null;
 
 	String mParentID = null;
-	
+
 	String mRemoteUser = null;
 
 	public void init(ServletConfig config) throws ServletException {
@@ -64,17 +64,15 @@ public class AddTestEntity extends ServletUtil {
 
 			Integer testID = saveTest();
 			saveTestType(req, resp, testID);
-
+			StringBuffer reply = new StringBuffer("<h3>Add Test " + mTestName
+					+ " was Successful</h3>");
+			showPage(req, resp, reply, null, this);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
-		adminHeader(req, resp, null);
-		String reply = "<h3>Add Test " + mTestName + " was Successful</h3>";
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
 	}
 
 	private Integer saveTest() throws Exception {
@@ -87,7 +85,6 @@ public class AddTestEntity extends ServletUtil {
 			// For standalone operation
 			// Session s =
 			// HibernateUtil.getSessionFactory().getCurrentSession();
-
 
 			Character isFolder = 'N';
 			tx = s.beginTransaction();
@@ -117,9 +114,10 @@ public class AddTestEntity extends ServletUtil {
 			} else {
 				test.setPath(String.valueOf(testID));
 			}
-			test.setCreatedBy((TpteamUser)s.load(TpteamUser.class, remoteUserId));
+			test.setCreatedBy((TpteamUser) s.load(TpteamUser.class,
+					remoteUserId));
 			test.setCreatedDate(new Date());
-			
+
 			s.saveOrUpdate(test);
 			tx.commit();
 		} catch (Exception e) {

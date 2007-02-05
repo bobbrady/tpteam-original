@@ -53,6 +53,14 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewTest2;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewTest3;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewUser2;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add.AddTestByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add.AddTestEntityByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser2;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser3;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestEntityByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfile;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfileEntity;
 
 
 	public class HttpServiceTracker extends ServiceTracker {
@@ -111,6 +119,17 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewUser2;
 				httpService.registerServlet("/tpteam/admin/view/viewTest3", new ViewTest3(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/admin/exec/execTest", new ExecTest(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/admin/exec/execTest2", new ExecTest2(), null, null); //$NON-NLS-1$
+				/**********************************************************************
+				 * User Servlets
+				 **********************************************************************/
+				httpService.registerServlet("/tpteam/user/add/addTest", new AddTestByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/add/addTestEntity", new AddTestEntityByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateTest", new UpdateTestByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateTest2", new UpdateTestByUser2(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateTest3", new UpdateTestByUser3(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateTestEntity", new UpdateTestEntityByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateUser", new UpdateUserProfile(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/update/updateUserEntity", new UpdateUserProfileEntity(), null, null); //$NON-NLS-1$
 
 				// User HTML Pages
 				httpService.registerResources("/tpteam/user/index.html", "/html/user/index.html", null); //$NON-NLS-1$ //$NON-NLS-2$

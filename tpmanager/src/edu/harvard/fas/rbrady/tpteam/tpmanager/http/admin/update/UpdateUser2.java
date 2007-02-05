@@ -21,38 +21,38 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Role;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 
 public class UpdateUser2 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mUserId = null;
+	protected String mFormAction = "<input type=\"hidden\" name=\"formAction\" value=\"updateUserEntity\">\n";
 
-	private String mFirstName = null;
+	protected String mUserId = null;
 
-	private String mLastName = null;
+	protected String mFirstName = null;
 
-	private String mUserName = null;
-	
-	private String mPassword = null;
+	protected String mLastName = null;
 
-	private String mECFId = null;
+	protected String mUserName = null;
 
-	private String mEmail = null;
+	protected String mPassword = null;
 
-	private String mPhone = null;
-	
-	private String mRoleId = null;
-	
-	private String mRoleOptions = null;
-	
-	private boolean mIsRoleAvailable;
+	protected String mECFId = null;
+
+	protected String mEmail = null;
+
+	protected String mPhone = null;
+
+	protected String mRoleId = null;
+
+	protected String mRoleOptions = null;
+
+	protected boolean mIsRoleAvailable;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -61,24 +61,33 @@ public class UpdateUser2 extends ServletUtil {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-			mUserId = req.getParameter("userId");
-			getUser();
-			getRoleOptions();
-			showPage(req, resp);
+			if(this instanceof UserServlet)
+			{
+				mUserId = String.valueOf(getRemoteUserID(req.getRemoteUser()));
+				getUser();
+			}
+			else
+			{
+				mUserId = req.getParameter("userId");
+				getUser();
+				getRoleOptions();
+			}
+			getPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
 
 	public void getUser() throws Exception {
 		TpteamUser user = null;
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 		// For standalone
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+
 		Transaction tx = null;
 		try {
 
@@ -100,12 +109,12 @@ public class UpdateUser2 extends ServletUtil {
 			throw e;
 		}
 	}
-	
-	private String getRoleOptions() throws Exception
-	{
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+	protected String getRoleOptions() throws Exception {
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 		// For standalone
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		Transaction tx = null;
 		List<Role> roles = null;
@@ -113,17 +122,16 @@ public class UpdateUser2 extends ServletUtil {
 		try {
 
 			tx = s.beginTransaction();
-			
-			roles = s.createQuery("from Role as role order by role.name asc").list();
-			for(Role role : roles)
-			{
-				if(role.getRoleId() == Integer.parseInt(mRoleId))
-				{
-					roleOptions.append("<option value=\"" + role.getRoleId() + "\" selected>" + role.getName() + "</option>\n");	
-				}
-				else
-				{
-					roleOptions.append("<option value=\"" + role.getRoleId() + "\">" + role.getName() + "</option>\n");					
+
+			roles = s.createQuery("from Role as role order by role.name asc")
+					.list();
+			for (Role role : roles) {
+				if (role.getRoleId() == Integer.parseInt(mRoleId)) {
+					roleOptions.append("<option value=\"" + role.getRoleId()
+							+ "\" selected>" + role.getName() + "</option>\n");
+				} else {
+					roleOptions.append("<option value=\"" + role.getRoleId()
+							+ "\">" + role.getName() + "</option>\n");
 				}
 			}
 
@@ -133,22 +141,15 @@ public class UpdateUser2 extends ServletUtil {
 				tx.rollback();
 			throw e;
 		}
-		if(roleOptions.length() > 0)
-			mIsRoleAvailable = true;		
-		
+		if (roleOptions.length() > 0)
+			mIsRoleAvailable = true;
+
 		mRoleOptions = roleOptions.toString();
 		return roleOptions.toString();
 	}
 
-
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String error = "<h3>Error: No Product or TPTeam Member Available</h3>";
-		adminError(req, resp, error);
-	}
-
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void getPage(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException, Exception {
 		StringBuffer reply = new StringBuffer();
 		reply.append("<h4>Update User</h4>\n");
 		reply
@@ -163,9 +164,11 @@ public class UpdateUser2 extends ServletUtil {
 				.append("<tr><th>User Name:</th><td><input type=\"text\" name=\"userName\"  value=\""
 						+ mUserName + "\" size=\"25\"></td></tr>\n");
 		reply
-				.append("<tr><th>Password:</th><td><input type=\"password\" name=\"password\" value=\"" + mPassword + "\" size=\"50\"></td></tr>\n");
+				.append("<tr><th>Password:</th><td><input type=\"password\" name=\"password\" value=\""
+						+ mPassword + "\" size=\"50\"></td></tr>\n");
 		reply
-		.append("<tr><th>Password (confirm):</th><td><input type=\"password\" name=\"passwordConfirm\" value=\"" + mPassword + "\" size=\"50\"></td></tr>\n");
+				.append("<tr><th>Password (confirm):</th><td><input type=\"password\" name=\"passwordConfirm\" value=\""
+						+ mPassword + "\" size=\"50\"></td></tr>\n");
 		reply
 				.append("<tr><th>ECF Id:</th><td><input type=\"text\" name=\"ecfID\"  value=\""
 						+ mECFId + "\" size=\"25\"></td></tr>\n");
@@ -175,31 +178,18 @@ public class UpdateUser2 extends ServletUtil {
 		reply
 				.append("<tr><th>Phone (ddd-ddd-dddd):</th><td><input type=\"text\" name=\"phone\"  value=\""
 						+ mPhone + "\" size=\"25\"></td></tr>\n");
-		reply.append("<tr><th>Role:</th><td><select name=\"role\">" + mRoleOptions + "</select></td></tr>\n");
+		if(!(this instanceof UserServlet))
+		{
+			reply.append("<tr><th>Role:</th><td><select name=\"role\">"
+				+ mRoleOptions + "</select></td></tr>\n");
+		}
 		reply
 				.append("</table>\n<br>\n<input type=\"hidden\" name=\"userId\" value=\""
 						+ mUserId
-						+ "\">\n<input type=\"submit\" value=\"Update\">\n</form>\n");
+						+ "\">\n"
+						+ mFormAction
+						+ "<input type=\"submit\" value=\"Update\">\n</form>\n");
 
-		adminHeader(req, resp, UPDATE_USER_JS);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, UPDATE_USER_JS, this);
 	}
-	
-	public static void main(String[] args)
-	{
-		try
-		{
-		UpdateUser2 updateUser = new UpdateUser2();
-		updateUser.mUserId = "1";
-		updateUser.getUser();
-		System.out.println("User RoleID: " + updateUser.mRoleId);
-		System.out.println(updateUser.getRoleOptions());
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 }

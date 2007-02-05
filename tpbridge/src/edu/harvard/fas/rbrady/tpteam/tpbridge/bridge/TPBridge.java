@@ -190,9 +190,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			
 
 			// Then connect
-			String userName = "rpbrady.delme";
-			String hostName = "gmail.com";
-			String password = "hufogani";
+			String userName = "**********";
+			String hostName = "jabber.org";
+			String password = "**********";
 			
 			createTrivialSharedObjectForContainer();
 			
@@ -213,7 +213,7 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 				}
 			}
 			
-			this.targetIMUser = "tpteam_2@jabber.org";
+			this.targetIMUser = "********@jabber.org";
 			// Send initial message for room
 			//client.sendMessage(targetIMUser,"Hi, I'm an IM robot");
 			

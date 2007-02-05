@@ -2,6 +2,7 @@ package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.hibernate.Session;
@@ -32,7 +33,8 @@ public class HibernatTests {
 			//deleteTest(22);
 			//insertTestExec(45);
 			//deleteProj(41);
-			getTPEventSendTo(62);
+			//getTPEventSendTo(62);
+			getProjByUser(101);
 			HibernateUtil.getSessionFactory().close();
 			
 		} catch (Exception e) {
@@ -684,6 +686,29 @@ public class HibernatTests {
 				tx.rollback();
 			throw e;
 		}
+	}
+	
+	private static void getProjByUser(int id) throws Exception
+	{
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		//List<TpteamUser> users = null;
+		String teamOptions = "";
+		try {
+
+			tx = s.beginTransaction();
+
+			TpteamUser user = (TpteamUser)s.createQuery("from TpteamUser as user where user.id = " + id).uniqueResult();
+			Set<Project> projs = user.getProjects();
+			for(Project proj : projs)
+				System.out.println("Project: " + proj.getName());
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+
 	}
 
 }

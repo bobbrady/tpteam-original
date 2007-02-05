@@ -12,7 +12,7 @@ function validateForm(form)
 	}
 	
 	form.testID.value = selectedID;
-	form.action = "adminProcessTestExec";
+	form.action = "processTestExec";
 	form.submit();
 	return true;
 }

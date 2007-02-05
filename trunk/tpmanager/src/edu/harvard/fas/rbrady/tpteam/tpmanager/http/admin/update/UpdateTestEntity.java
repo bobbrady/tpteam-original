@@ -30,15 +30,15 @@ public class UpdateTestEntity extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	String mTestID = null;
+	protected String mTestID = null;
 
-	String mTestName = null;
+	protected String mTestName = null;
 
-	String mTestDesc = null;
+	protected String mTestDesc = null;
 
-	String mTestTypeName = null;
+	protected String mTestTypeName = null;
 
-	String mRemoteUser = null;
+	protected String mRemoteUser = null;
 
 	boolean mIsFolder = false;
 
@@ -56,19 +56,17 @@ public class UpdateTestEntity extends ServletUtil {
 		try {
 			updateTest();
 			updateTestType(req, resp, Integer.parseInt(mTestID));
+			StringBuffer reply = new StringBuffer("<h3>Update Test " + mTestName + " was Successful</h3>");
+			showPage(req, resp, reply, null, this);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
-		adminHeader(req, resp, null);
-		String reply = "<h3>Update Test " + mTestName + " was Successful</h3>";
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
 	}
 
-	private void updateTest() throws Exception {
+	protected void updateTest() throws Exception {
 		// For standalone operation
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
@@ -97,7 +95,7 @@ public class UpdateTestEntity extends ServletUtil {
 		}
 	}
 
-	private void updateTestType(HttpServletRequest req,
+	protected void updateTestType(HttpServletRequest req,
 			HttpServletResponse resp, Integer testID) throws Exception {
 		if (mIsFolder) {
 			return;
@@ -107,7 +105,7 @@ public class UpdateTestEntity extends ServletUtil {
 		}
 	}
 
-	private void updateJUnitTestType(HttpServletRequest req,
+	protected void updateJUnitTestType(HttpServletRequest req,
 			HttpServletResponse resp, Integer testID) throws Exception {
 		// For standalone operation
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();

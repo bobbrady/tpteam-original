@@ -27,15 +27,15 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 public class UpdateUser extends ServletUtil {
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private boolean mIsUserAvailable = false;
+	protected boolean mIsUserAvailable = false;
 
-	private String mUserRows = null;
+	protected String mUserRows = null;
 
-	private String rowNameHeader = "<tr><form method=\"post\" action=\"updateUser2\"><td>";
+	protected String rowNameHeader = "<tr><form method=\"post\" action=\"updateUser2\"><td>";
 
-	private String rowIDHeader = "<input type=\"hidden\" name=\"userId\"";
+	protected String rowIDHeader = "<input type=\"hidden\" name=\"userId\"";
 
-	private String rowSubmitHeader = "<td><input type=\"submit\" value=\"Update\"></td>\n</form></tr>\n";
+	protected String rowSubmitHeader = "<td><input type=\"submit\" value=\"Update\"></td>\n</form></tr>\n";
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -46,9 +46,14 @@ public class UpdateUser extends ServletUtil {
 		try {
 			mUserRows = getUserRows();
 			if (mIsUserAvailable == false) {
-				throwError(req, resp);
+				StringBuffer error = new StringBuffer(
+						"<h3>Error: No Users Exist</h3>");
+				throwError(req, resp, error, this);
 			} else {
-				showPage(req, resp);
+				StringBuffer reply = new StringBuffer(
+						"<h4>Update User</h4>\n<table border=\"2\">\n<th>Last, First</th><th></th>\n"
+								+ mUserRows + "</table>");
+				showPage(req, resp, reply, null, this);
 			}
 		} catch (Exception e) {
 			String error = "<h3>Error: " + e.getMessage() + "<br>"
@@ -58,10 +63,11 @@ public class UpdateUser extends ServletUtil {
 		}
 	}
 
-	private String getUserRows() throws Exception {
-		 Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+	protected String getUserRows() throws Exception {
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 		// For standalone
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		Transaction tx = null;
 		List<TpteamUser> users = null;
@@ -91,31 +97,5 @@ public class UpdateUser extends ServletUtil {
 			mIsUserAvailable = true;
 
 		return userRows.toString();
-	}
-
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String error = "<h3>Error: No Users Exist</h3>";
-		adminError(req, resp, error);
-	}
-
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String reply = "<h4>Update User</h4>\n<table border=\"2\">\n<th>Last, First</th><th></th>\n"
-				+ mUserRows + "</table>";
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
-	}
-
-	public static void main(String[] args) {
-		try {
-
-			UpdateUser servlet = new UpdateUser();
-			System.out.println(servlet.getUserRows());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

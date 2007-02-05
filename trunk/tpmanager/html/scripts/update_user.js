@@ -50,7 +50,7 @@ function validateForm (form)
 		return false;
 	}
 		
-	form.action = "updateUserEntity";
+	form.action = form.formAction.value;
 	form.submit();
 	return true;
 }

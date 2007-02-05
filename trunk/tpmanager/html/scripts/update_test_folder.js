@@ -6,7 +6,7 @@ function validateForm(form)
 		alert("Please enter the test element name.");
 		return false;
 	}
-	form.action = "updateTestEntity";
+	form.action = form.formAction.value;
 	form.submit();
 	return true;
 }

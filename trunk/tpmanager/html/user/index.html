@@ -9,12 +9,69 @@
  ****************************************************************************** -->
 
 <head>
-<title>TPManager User Request Home Page</title>
+<title>TPManager Admin Home Page</title>
+<script language="JavaScript">
+<!--
+	function validateForm ( )
+	{
+		var op = document.userOp.op.value;
+		var type = document.userOp.type.value;
+		if(op == "Choose" || type == "Choose")
+		{
+			alert("Please select an operation and type to perform");
+			return false;
+		}
+		var opType = op + type;
+		if((op == "add" || op == "update" || op == "delete") &&
+		   (type == "Product" || type == "Project"))
+		   {
+		   	alert("Only TPTeam Administrators may add/update/delete Products or Projects.");
+			return false;
+		   }
+		   else if((op == "add" || op == "delete") && type == "User")
+		   {
+		   	alert("Only TPTeam Administrators may add/delete Users.");
+			return false;
+		   }
+		else if(op == "exec" && (type == "Product" || type == "Project" || type == "User"))
+		   {
+		   	alert("Only Tests can be executed.");
+			return false;
+		   }
+		   
+		   
+	
+		document.userOp.action = op + "/" + opType;
+		document.userOp.submit();
+        return true;
+}
+-->
+</script>
+
 </head>
 <body>
-<h3 align="center">TPManager User Request Home Page</h3>
+
+<h3 align="center">TPTeam Home Page</h3>
 <hr size="2">
 <p>
-<hr size="2>
+<form name="userOp" method="post" onSubmit="return validateForm( );">
+<P>
+<div align="center"><SELECT name="op">
+	<OPTION selected value="Choose">Choose Op</OPTION>
+	<OPTION value="add">Add</OPTION>
+	<OPTION value="update">Update</OPTION>
+	<OPTION value="delete">Delete</OPTION>
+	<OPTION value="view">View</OPTION>
+	<OPTION value="exec">Execute</OPTION>
+</SELECT> &nbsp;&nbsp;&nbsp; <SELECT name="type">
+	<OPTION selected value="Choose">Choose Type</OPTION>
+	<OPTION value="Product">Product</OPTION>
+	<OPTION value="Project">Project</OPTION>
+	<OPTION value="Test">Test</OPTION>
+	<OPTION value="User">User</OPTION>
+</SELECT>
+<P><INPUT type="submit" value="Go"></P>
+</FORM>
+<hr size="2">
 </body>
 </html>

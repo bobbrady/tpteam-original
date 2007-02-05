@@ -32,9 +32,11 @@ public class UpdateTest3 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mTestID = null;
+	protected String mTestID = null;
 
-	private String mJavaScript = null;
+	protected String mJavaScript = null;
+	
+	protected String mFormAction = "<input type=\"hidden\" name=\"formAction\" value=\"updateTestEntity\">\n";
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -46,9 +48,9 @@ public class UpdateTest3 extends ServletUtil {
 			mTestID = req.getParameter("testID");
 			getPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
@@ -58,27 +60,25 @@ public class UpdateTest3 extends ServletUtil {
 		showUpdateTestPage3(req, resp);
 	}
 
-	private void showUpdateTestPage3(HttpServletRequest req,
+	protected void showUpdateTestPage3(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
 
-		String reply = "<h4>Update Test Plan Node</h4>\n";
-		reply += "<form name=\"updateTest\" method=\"post\" onSubmit=\"return validateForm(this);\">\n";
-		reply += "<table border=\"1\">\n";
-		reply += getUpdateTestRows(mTestID);
-		reply += "</table><p>\n";
-		reply += "<input type=\"submit\" value=\"Update\">\n</form>\n";
+		StringBuffer reply = new StringBuffer("<h4>Update Test Plan Node</h4>\n");
+		reply.append("<form name=\"updateTest\" method=\"post\" onSubmit=\"return validateForm(this);\">\n");
+		reply.append("<table border=\"1\">\n");
+		reply.append(getUpdateTestRows(mTestID));
+		reply.append("</table><p>\n");
+		reply.append("<input type=\"submit\" value=\"Update\">\n</form>\n");
 
-		adminHeader(req, resp, mJavaScript);
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
+		showPage(req, resp, reply, mJavaScript, this);
 	}
 
-	private String getUpdateTestRows(String testId) throws Exception {
+	protected String getUpdateTestRows(String testId) throws Exception {
 		// Standalone session
 		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
-		String updateRows = "";
+		StringBuffer updateRows = new StringBuffer();
 		try {
 			Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
@@ -91,10 +91,10 @@ public class UpdateTest3 extends ServletUtil {
 				mJavaScript = ServletUtil.UPDATE_TEST_DEF_JS;
 			}
 			
-			updateRows = getFolderUpdateRows(test);
+			updateRows.append(getFolderUpdateRows(test));
 
 			if (test.getJunitTests().size() > 0) {
-				updateRows += getJUnitUpdateRows(test);
+				updateRows.append(getJUnitUpdateRows(test));
 			}
 			tx.commit();
 
@@ -103,55 +103,46 @@ public class UpdateTest3 extends ServletUtil {
 				tx.rollback();
 			throw e;
 		}
-		return updateRows;
+		return updateRows.toString();
 	}
 
-	private String getJUnitUpdateRows(Test test) {
-		String updateRows = "";
+	protected String getJUnitUpdateRows(Test test) {
+		StringBuffer updateRows = new StringBuffer();
 		for (JunitTest jUnitTest : test.getJunitTests()) {
-			updateRows += "<tr><th>Eclipse Home:</th><td><input type=\"text\" name=\"eclipseHome\" size=\"75\" value=\""
-					+ jUnitTest.getEclipseHome() + "\"></td></tr>\n";
-			updateRows += "<tr><th>Eclipse Workspace:</th><td><input type=\"text\" name=\"eclipseWorkspace\" size=\"75\" value=\""
-					+ jUnitTest.getWorkspace() + "\"></td></tr>\n";
-			updateRows += "<tr><th>Eclipse Project:</th><td><input type=\"text\" name=\"eclipseProj\" size=\"75\" value=\""
-					+ jUnitTest.getProject() + "\"></td></tr>\n";
-			updateRows += "<tr><th>Test Suite:</th><td><input type=\"text\" name=\"testSuite\" size=\"75\" value=\""
-					+ jUnitTest.getTestSuite() + ".testsuite\"></td></tr>\n";
-			updateRows += "<tr><th>Report Directory:</th><td><input type=\"text\" name=\"reportDir\" size=\"75\" value=\""
-					+ jUnitTest.getReportDir() + "\"></td></tr>\n";
-			updateRows += "<tr><th>TPTP Connection URL:</th><td><input type=\"text\" name=\"tptpConn\" size=\"75\" value=\""
-					+ jUnitTest.getTptpConnection() + "\"></td></tr>\n";
+			updateRows.append("<tr><th>Eclipse Home:</th><td><input type=\"text\" name=\"eclipseHome\" size=\"75\" value=\""
+					+ jUnitTest.getEclipseHome() + "\"></td></tr>\n");
+			updateRows.append("<tr><th>Eclipse Workspace:</th><td><input type=\"text\" name=\"eclipseWorkspace\" size=\"75\" value=\""
+					+ jUnitTest.getWorkspace() + "\"></td></tr>\n");
+			updateRows.append("<tr><th>Eclipse Project:</th><td><input type=\"text\" name=\"eclipseProj\" size=\"75\" value=\""
+					+ jUnitTest.getProject() + "\"></td></tr>\n");
+			updateRows.append("<tr><th>Test Suite:</th><td><input type=\"text\" name=\"testSuite\" size=\"75\" value=\""
+					+ jUnitTest.getTestSuite() + "\"></td></tr>\n");
+			updateRows.append("<tr><th>Report Directory:</th><td><input type=\"text\" name=\"reportDir\" size=\"75\" value=\""
+					+ jUnitTest.getReportDir() + "\"></td></tr>\n");
+			updateRows.append("<tr><th>TPTP Connection URL:</th><td><input type=\"text\" name=\"tptpConn\" size=\"75\" value=\""
+					+ jUnitTest.getTptpConnection() + "\"></td></tr>\n");
 		}
-		return updateRows;
+		return updateRows.toString();
 	}
 
-	private String getFolderUpdateRows(Test test) {
-		String updateRows = "";
+	protected String getFolderUpdateRows(Test test) {
+		StringBuffer updateRows = new StringBuffer();
 		String desc = "";
 		if (test.getDescription() != null
 				&& !test.getDescription().equalsIgnoreCase("")) {
 			desc = test.getDescription();
 		}
-		updateRows += "<tr><th>Name:</th><td>"
+		updateRows.append("<tr><th>Name:</th><td>"
 				+ "<input type=\"text\" name=\"testName\" value=\"" + test.getName() + "\" size=\"75\">" 
-				+ "<input type=\"hidden\" name=\"testID\" value=\"" + mTestID + "\"></td></tr>\n";
+				+ "<input type=\"hidden\" name=\"testID\" value=\"" + mTestID + "\"></td></tr>\n");
 		
-		updateRows += "<tr><th>Description:</th><td>" 
+		updateRows.append(mFormAction);
+		
+		updateRows.append("<tr><th>Description:</th><td>" 
 				+ "<input type=\"text\" name=\"testDesc\" value=\""
-				+ desc + "\" size=\"75\"></td></tr>\n";
+				+ desc + "\" size=\"75\"></td></tr>\n");
 		
-		return updateRows;
+		return updateRows.toString();
 	}
 	
-	public static void main(String[] args)
-	{
-		UpdateTest3 servlet = new UpdateTest3();
-		servlet.mTestID = "81";
-		try {
-			System.out.println(servlet.getUpdateTestRows("81"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

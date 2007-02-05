@@ -24,6 +24,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Role;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 
 public class UpdateUserEntity extends ServletUtil {
 
@@ -68,21 +69,24 @@ public class UpdateUserEntity extends ServletUtil {
 				user.setPassword(ServletUtil.getSHA1Hash(password));
 			}
 
-			Role role = (Role) s.load(Role.class, new Integer(roleId));
-			user.setRole(role);
+			if(!(this instanceof UserServlet))
+			{
+				Role role = (Role) s.load(Role.class, new Integer(roleId));
+				user.setRole(role);
+			}
 			tx.commit();
+
+			StringBuffer reply = new StringBuffer("<h3>Update TPTeam User "
+					+ lastName + ", " + firstName + " was Successful</h3>");
+			showPage(req, resp, reply, null, this);
+
 		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
-		adminHeader(req, resp, null);
-		String reply = "<h3>Update TPTeam User " + lastName + ", " + firstName
-				+ " was Successful</h3>";
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
 	}
 }

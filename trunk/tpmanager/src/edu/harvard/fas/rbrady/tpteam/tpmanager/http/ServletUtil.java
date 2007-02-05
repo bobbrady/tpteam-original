@@ -17,12 +17,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 
 public class ServletUtil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	public static final String ADD_TEST_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test.js\">\n";
 
 	public static final String ADD_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test_tree.js\">\n";
@@ -76,6 +77,21 @@ public class ServletUtil extends HttpServlet {
 				+ "<a href=\"/bridge/tpteam/admin/index.html\">Home</a><hr size=\"2\">\n";
 		out.println(header);
 	}
+	
+	public void userHeader(HttpServletRequest request,
+			HttpServletResponse response, String javaScript)
+			throws ServletException, IOException {
+		if (javaScript == null)
+			javaScript = "";
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		String header = "<html><head><title>TPTeam Pages</title>\n"
+				+ javaScript
+				+ "</head>\n"
+				+ "<body><div align=\"center\"><h3>TPTeam</h3>\n"
+				+ "<a href=\"/bridge/tpteam/user/index.html\">Home</a><hr size=\"2\">\n";
+		out.println(header);
+	}
 
 	public void adminFooter(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -84,12 +100,23 @@ public class ServletUtil extends HttpServlet {
 		out.println(footer);
 		out.close();
 	}
+	
+	public void userFooter(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		adminFooter(request, response);
+	}
 
 	public void adminReply(HttpServletRequest request,
 			HttpServletResponse response, String reply)
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		out.println(reply);
+	}
+	
+	public void userReply(HttpServletRequest request,
+			HttpServletResponse response, String reply)
+			throws ServletException, IOException {
+		adminReply(request, response, reply);
 	}
 
 	public void adminError(HttpServletRequest request,
@@ -100,8 +127,42 @@ public class ServletUtil extends HttpServlet {
 		adminReply(request, response, error);
 		adminFooter(request, response);
 	}
+	
+	public void userError(HttpServletRequest request,
+			HttpServletResponse response, String error)
+			throws ServletException, IOException {
+		userHeader(request, response, null);
+		error += "<p/><a href=\"javascript:history.back(1)\">Try Again</a><p/>";
+		userReply(request, response, error);
+		userFooter(request, response);
+	}
+	
+	protected void throwError(HttpServletRequest req, HttpServletResponse resp,
+			StringBuffer error, HttpServlet servlet) throws ServletException, IOException {
+		if(servlet instanceof UserServlet)
+			userError(req, resp, error.toString());
+		else
+			adminError(req, resp, error.toString());
+	}
 
-	public String getTreeJavaScript() {
+	protected void showPage(HttpServletRequest req, HttpServletResponse resp,
+			StringBuffer reply, String javaScript, HttpServlet servlet) throws ServletException,
+			IOException, Exception {
+		if(servlet instanceof UserServlet)
+		{
+			userHeader(req, resp, javaScript);
+			userReply(req, resp, reply.toString());
+			userFooter(req, resp);
+		}
+		else
+		{
+			adminHeader(req, resp, javaScript);
+			adminReply(req, resp, reply.toString());
+			adminFooter(req, resp);
+
+		}
+	}
+		public String getTreeJavaScript() {
 		String javaScript = ""
 				+ " var openImg = new Image();\n"
 				+ " openImg.src = \"open.gif\";\n"

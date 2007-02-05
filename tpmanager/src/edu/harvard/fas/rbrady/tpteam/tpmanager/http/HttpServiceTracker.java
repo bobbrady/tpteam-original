@@ -55,6 +55,9 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view.ViewUser2;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add.AddTestByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add.AddTestEntityByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTest2ByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTestByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTestEntityByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser2;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser3;
@@ -130,6 +133,9 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfil
 				httpService.registerServlet("/tpteam/user/update/updateTestEntity", new UpdateTestEntityByUser(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/update/updateUser", new UpdateUserProfile(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/update/updateUserEntity", new UpdateUserProfileEntity(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/delete/deleteTest", new DeleteTestByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/delete/deleteTest2", new DeleteTest2ByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/delete/deleteTestEntity", new DeleteTestEntityByUser(), null, null); //$NON-NLS-1$
 
 				// User HTML Pages
 				httpService.registerResources("/tpteam/user/index.html", "/html/user/index.html", null); //$NON-NLS-1$ //$NON-NLS-2$

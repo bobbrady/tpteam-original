@@ -28,11 +28,11 @@ public class ViewProduct extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private boolean mIsProdAvailable = false;
+	protected boolean mIsProdAvailable = false;
 
-	private String mProdRows = null;
+	protected String mProdRows = null;
 
-	private String mRowHeader = "<tr><th>Name</th><th>Description</th></tr>\n";
+	protected String mRowHeader = "<tr><th>Name</th><th>Description</th></tr>\n";
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -43,19 +43,22 @@ public class ViewProduct extends ServletUtil {
 		try {
 			getProdRows();
 			if (mIsProdAvailable == false) {
-				throwError(req, resp);
+				StringBuffer error = new StringBuffer("<h3>Error: No Product Available</h3>");
+				throwError(req, resp, error, this);
 			} else {
-				showPage(req, resp);
+				StringBuffer reply = new StringBuffer("<h4>View Products</h4>\n<table border=\"1\">"
+					+ mRowHeader + mProdRows + "</table>");
+				showPage(req, resp, reply, null, this);
 			}
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
 
-	private String getProdRows() throws Exception {
+	protected String getProdRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 		// For standalone
@@ -88,31 +91,5 @@ public class ViewProduct extends ServletUtil {
 			mIsProdAvailable = true;
 		mProdRows = prodRows.toString();
 		return mProdRows;
-	}
-
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String error = "<h3>Error: No Product Available</h3>";
-		adminError(req, resp, error);
-	}
-
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String reply = "<h4>View Products</h4>\n<table border=\"1\">"
-				+ mRowHeader + mProdRows + "</table>";
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
-	}
-
-	public static void main(String[] args) {
-		try {
-
-			ViewProduct servlet = new ViewProduct();
-			System.out.println(servlet.getProdRows());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

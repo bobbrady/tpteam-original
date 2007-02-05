@@ -24,30 +24,33 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 
 public class ViewUser2 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mUserId = null;
+	protected String mRemoteUser = null;
 
-	private String mFirstName = null;
+	protected String mUserId = null;
 
-	private String mLastName = null;
+	protected String mFirstName = null;
 
-	private String mUserName = null;
+	protected String mLastName = null;
 
-	private String mPassword = null;
+	protected String mUserName = null;
 
-	private String mECFId = null;
+	protected String mPassword = null;
 
-	private String mEmail = null;
+	protected String mECFId = null;
 
-	private String mPhone = null;
+	protected String mEmail = null;
 
-	private String mRole = null;
+	protected String mPhone = null;
 
-	private String mProjects = null;
+	protected String mRole = null;
+
+	protected String mProjects = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -56,26 +59,31 @@ public class ViewUser2 extends ServletUtil {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
+			mRemoteUser = req.getRemoteUser();
 			mUserId = req.getParameter("userId");
 			getUser();
 			showPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
 
 	public void getUser() throws Exception {
 		TpteamUser user = null;
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-		// For standalone
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-
 		Transaction tx = null;
 		try {
+			if(this instanceof UserServlet)
+			{
+				mUserId = String.valueOf(getRemoteUserID(mRemoteUser));
+			}
+			Session s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+			// For standalone
+			// Session s =
+			// HibernateUtil.getSessionFactory().getCurrentSession();
 
 			tx = s.beginTransaction();
 			user = (TpteamUser) s.load(TpteamUser.class, new Integer(mUserId));
@@ -95,7 +103,7 @@ public class ViewUser2 extends ServletUtil {
 		}
 	}
 
-	private void getProjects(Set<Project> projects) throws Exception {
+	protected void getProjects(Set<Project> projects) throws Exception {
 		StringBuffer projs = new StringBuffer();
 		if (projects == null || projects.size() < 1) {
 			mProjects = "";
@@ -107,14 +115,8 @@ public class ViewUser2 extends ServletUtil {
 		mProjects = projs.toString();
 	}
 
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String error = "<h3>Error: No Product or TPTeam Member Available</h3>";
-		adminError(req, resp, error);
-	}
-
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void showPage(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException, Exception {
 		StringBuffer reply = new StringBuffer();
 		reply.append("<h4>View User</h4>\n");
 		reply
@@ -140,21 +142,6 @@ public class ViewUser2 extends ServletUtil {
 						+ mProjects + "</td></tr>\n");
 		reply.append("</table>\n");
 
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, null, this);
 	}
-
-	public static void main(String[] args) {
-		try {
-			ViewUser2 viewUser = new ViewUser2();
-			viewUser.mUserId = "1";
-			viewUser.getUser();
-			System.out.println("Projets: " + viewUser.mProjects);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

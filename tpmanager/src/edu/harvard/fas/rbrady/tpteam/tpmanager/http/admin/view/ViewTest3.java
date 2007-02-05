@@ -32,9 +32,9 @@ public class ViewTest3 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mTestID = null;
+	protected String mTestID = null;
 
-	private String mJavaScript = null;
+	protected String mJavaScript = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -46,9 +46,9 @@ public class ViewTest3 extends ServletUtil {
 			mTestID = req.getParameter("testID");
 			getPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
@@ -58,7 +58,7 @@ public class ViewTest3 extends ServletUtil {
 		showUpdateTestPage3(req, resp);
 	}
 
-	private void showUpdateTestPage3(HttpServletRequest req,
+	protected void showUpdateTestPage3(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
 
@@ -69,12 +69,10 @@ public class ViewTest3 extends ServletUtil {
 		reply.append(getTestRows(mTestID));
 		reply.append("</table><p>\n");
 
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, null, this);
 	}
 
-	private String getTestRows(String testId) throws Exception {
+	protected String getTestRows(String testId) throws Exception {
 		Transaction tx = null;
 		StringBuffer updateRows = new StringBuffer();
 		try {
@@ -105,7 +103,7 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 
-	private String getJUnitUpdateRows(Test test) {
+	protected String getJUnitUpdateRows(Test test) {
 		StringBuffer updateRows = new StringBuffer();
 		for (JunitTest jUnitTest : test.getJunitTests()) {
 			updateRows.append( "<tr><th align=\"left\">Eclipse Home:</th><td align=\"right\">"
@@ -124,7 +122,7 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 
-	private String getFolderRows(Test test) throws ParseException {
+	protected String getFolderRows(Test test) throws ParseException {
 		StringBuffer updateRows = new StringBuffer();
 		String desc = "";
 		if (test.getDescription() != null
@@ -161,7 +159,7 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 	
-	private String getTestResults(Set<TestExecution> testExecs)
+	protected String getTestResults(Set<TestExecution> testExecs)
 	{
 		StringBuffer results = new StringBuffer();
 		String resultRows = "";
@@ -186,16 +184,4 @@ public class ViewTest3 extends ServletUtil {
 		}
 		return results.toString();
 	}
-	
-	public static void main(String[] args)
-	{
-		ViewTest3 servlet = new ViewTest3();
-		servlet.mTestID = "62";
-		try {
-			System.out.println(servlet.getTestRows("62"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

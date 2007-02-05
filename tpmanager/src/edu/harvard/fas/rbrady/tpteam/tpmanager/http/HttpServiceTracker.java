@@ -64,6 +64,13 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestEntityByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfile;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfileEntity;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewProductByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewProject2ByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewProjectByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewTest2ByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewTest3ByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewTestByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewUserProfile;
 
 
 	public class HttpServiceTracker extends ServiceTracker {
@@ -136,6 +143,13 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateUserProfil
 				httpService.registerServlet("/tpteam/user/delete/deleteTest", new DeleteTestByUser(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/delete/deleteTest2", new DeleteTest2ByUser(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/delete/deleteTestEntity", new DeleteTestEntityByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewProduct", new ViewProductByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewUser", new ViewUserProfile(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewProject", new ViewProjectByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewProject2", new ViewProject2ByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewTest", new ViewTestByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewTest2", new ViewTest2ByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/view/viewTest3", new ViewTest3ByUser(), null, null); //$NON-NLS-1$
 
 				// User HTML Pages
 				httpService.registerResources("/tpteam/user/index.html", "/html/user/index.html", null); //$NON-NLS-1$ //$NON-NLS-2$

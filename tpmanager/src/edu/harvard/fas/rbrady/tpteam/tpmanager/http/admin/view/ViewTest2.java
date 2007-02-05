@@ -22,7 +22,7 @@ public class ViewTest2 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mProjID = null;
+	protected String mProjID = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -34,14 +34,14 @@ public class ViewTest2 extends ServletUtil {
 			mProjID = req.getParameter("projId");
 			getPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
 
-	private void getPage(HttpServletRequest req, HttpServletResponse resp)
+	protected void getPage(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, Exception {
 		StringBuffer reply = new StringBuffer();
 		reply
@@ -56,9 +56,8 @@ public class ViewTest2 extends ServletUtil {
 		reply
 				.append("<input type=\"hidden\" name=\"testID\" value=\"\">\n</td></tr></table><p>\n<input type=\"submit\" value=\"Details\">\n</form>\n");
 
-		adminHeader(req, resp, ServletUtil.VIEW_TEST_TREE_JS
-				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+		showPage(req, resp, reply, ServletUtil.VIEW_TEST_TREE_JS
+				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS,
+				this);
 	}
 }

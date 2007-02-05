@@ -29,7 +29,9 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 public class DeleteTestEntity extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
+
 	String mTestID = null;
+
 	String mTestName = null;
 
 	public void init(ServletConfig config) throws ServletException {
@@ -39,30 +41,29 @@ public class DeleteTestEntity extends ServletUtil {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		mTestID = req.getParameter("testID");
-		
+
 		try {
-			deleteTest();			
+			deleteTest();
+			StringBuffer reply = new StringBuffer("<h3>Delete Test Node \""
+					+ mTestName + " \" was Successful</h3>");
+			showPage(req, resp, reply, null, this);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
-		adminHeader(req, resp, null);
-		String reply = "<h3>Delete Test Node \"" + mTestName + " \" was Successful</h3>";
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
 	}
-	
-	private void deleteTest() throws Exception
-	{
+
+	private void deleteTest() throws Exception {
 		// For standalone operation
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
-			Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+			Session s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
 			tx = s.beginTransaction();
-			Test test = (Test)s.load(Test.class, new Integer(mTestID));
+			Test test = (Test) s.load(Test.class, new Integer(mTestID));
 			mTestName = test.getName();
 			s.delete(test);
 			s.flush();
@@ -71,6 +72,6 @@ public class DeleteTestEntity extends ServletUtil {
 			if (tx != null)
 				tx.rollback();
 			throw e;
-		} 
+		}
 	}
 }

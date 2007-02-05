@@ -26,46 +26,51 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class DeleteTest extends ServletUtil {
 	private static final long serialVersionUID = 7456848419577223441L;
-	private boolean mIsProjAvailable = false;
-	private String mProjRows = null;
 
-	private String rowNameHeader = "<tr><form method=\"post\" action=\"deleteTest2\"><th>Project</th><td>";
-	
-	private String rowIDHeader = "<input type=\"hidden\" name=\"projId\"";
-	
-	private String rowSubmitHeader = "<td><input type=\"submit\" value=\"Delete Test Node\"></td>\n</form></tr>\n";
-	
+	protected boolean mIsProjAvailable = false;
+
+	protected String mProjRows = null;
+
+	protected String mRemoteUser = null;
+
+	protected String rowNameHeader = "<tr><form method=\"post\" action=\"deleteTest2\"><th>Project</th><td>";
+
+	protected String rowIDHeader = "<input type=\"hidden\" name=\"projId\"";
+
+	protected String rowSubmitHeader = "<td><input type=\"submit\" value=\"Delete Test Node\"></td>\n</form></tr>\n";
+
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		try
-		{
-		getProjRows();
-		if(mIsProjAvailable == false)
-		{
-			throwError(req, resp);
-		}
-		else
-		{
-			showPage(req, resp);
-		}
-		}
-		 catch (Exception e) {
-				String error = "<h3>Error: " + e.getMessage() + "<br>" + 
-				e.getCause() + "</h3>";
-				adminError(req, resp, error);
-				return;
+		try {
+			mRemoteUser = req.getRemoteUser();
+			getProjRows();
+			if (mIsProjAvailable == false) {
+				StringBuffer error = new StringBuffer(
+						"<h3>Error: No Project Available</h3>");
+				throwError(req, resp, error, this);
+			} else {
+				StringBuffer reply = new StringBuffer(
+						"<h4>Delete Test Tree Node: Select Parent Project</h4>\n<table border=\"2\">"
+								+ mProjRows + "</table>");
+				showPage(req, resp, reply, null, this);
 			}
+		} catch (Exception e) {
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
+			return;
+		}
 	}
-	
-	private String getProjRows() throws Exception
-	{
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+	protected String getProjRows() throws Exception {
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 		// For standalone
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		Transaction tx = null;
 		List<Project> projs = null;
@@ -74,14 +79,15 @@ public class DeleteTest extends ServletUtil {
 
 			tx = s.beginTransaction();
 
-			projs = s.createQuery("from Project as p order by p.name asc").list();
-			for(Project proj : projs)
-			{
+			projs = s.createQuery("from Project as p order by p.name asc")
+					.list();
+			for (Project proj : projs) {
 				String desc = proj.getDescription();
-				if(desc == null || desc.equalsIgnoreCase("null"))
+				if (desc == null || desc.equalsIgnoreCase("null"))
 					desc = "";
 				projRows.append(rowNameHeader + proj.getName() + "</td>\n");
-				projRows.append(rowIDHeader + " value=\"" + proj.getId() + "\">\n");
+				projRows.append(rowIDHeader + " value=\"" + proj.getId()
+						+ "\">\n");
 				projRows.append(rowSubmitHeader);
 			}
 
@@ -91,41 +97,9 @@ public class DeleteTest extends ServletUtil {
 				tx.rollback();
 			throw e;
 		}
-		if(projRows.length()> 0)
+		if (projRows.length() > 0)
 			mIsProjAvailable = true;
 		mProjRows = projRows.toString();
 		return mProjRows;
-	}
-
-	
-	private void throwError(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException
-	{
-		String error = "<h3>Error: No Project Available</h3>";
-		adminError(req, resp, error);
-	}
-	
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException
-	{		
-		String reply = "<h4>Delete Test Tree Node: Select Parent Project</h4>\n<table border=\"2\">" + mProjRows + "</table>";		
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply);
-		adminFooter(req, resp);
-	}
-	
-	public static void main(String[] args)
-	{
-		try
-		{
-			
-		DeleteTest servlet = new DeleteTest();
-		System.out.println(servlet.getProjRows());
-		
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 }

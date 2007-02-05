@@ -34,9 +34,9 @@ public class DeleteTest2 extends ServletUtil {
 			mProjID = req.getParameter("projId");
 			getPage(req, resp);
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
@@ -52,9 +52,9 @@ public class DeleteTest2 extends ServletUtil {
 		reply.append(ServletUtil.getTestTree(mProjID, false));
 		reply
 				.append("<input type=\"hidden\" name=\"testID\" value=\"\">\n</td></tr></table><p>\n<input type=\"submit\" value=\"Delete\">\n</form>\n");
-		adminHeader(req, resp, ServletUtil.DELETE_TEST_TREE_JS
-				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
+
+		showPage(req, resp, reply, ServletUtil.DELETE_TEST_TREE_JS
+				+ ServletUtil.ADD_TEST_TREE_JS + ServletUtil.ADD_TEST_TREE_CSS,
+				this);
 	}
 }

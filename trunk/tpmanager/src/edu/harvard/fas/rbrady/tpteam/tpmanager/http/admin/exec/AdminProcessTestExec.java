@@ -33,11 +33,11 @@ public class AdminProcessTestExec extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	private String mRemoteUser;
+	protected String mRemoteUser;
 
-	private String mTestID;
+	protected String mTestID;
 	
-	private TPEvent mTPEvent;
+	protected TPEvent mTPEvent;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -52,21 +52,18 @@ public class AdminProcessTestExec extends ServletUtil {
 		try 
 		{
 			validateTestReq(req);
-			String reply = execTest();
-			adminHeader(req, resp, null);
-			adminReply(req, resp, reply);
-			adminFooter(req, resp);
+			StringBuffer reply = new StringBuffer(execTest());
+			showPage(req, resp, reply, null, this);
 			insertTestExecResult(mTPEvent);
-
 		} catch (Exception e) {
-			String error = "<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>";
-			adminError(req, resp, error);
+			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
+					+ e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
 			return;
 		}
 	}
 	
-	private String execTest() throws Exception
+	protected String execTest() throws Exception
 	{
 		StringBuffer reply = new StringBuffer();
 		Transaction tx = null;
@@ -128,7 +125,7 @@ public class AdminProcessTestExec extends ServletUtil {
 		return reply.toString();
 	}
 
-	private void insertTestExecResult(TPEvent tpEvent) throws Exception {
+	protected void insertTestExecResult(TPEvent tpEvent) throws Exception {
 		Transaction tx = null;
 		try {
 			int remoteUserId = ServletUtil.getRemoteUserID(mRemoteUser);
@@ -162,7 +159,7 @@ public class AdminProcessTestExec extends ServletUtil {
 		}
 	}
 
-	private void validateTestReq(HttpServletRequest req) throws Exception {
+	protected void validateTestReq(HttpServletRequest req) throws Exception {
 		/*
 		 * String testID = req.getParameter("testID"); if(testID == null) return
 		 * false; if(!mTests.containsKey(testID)) return false;

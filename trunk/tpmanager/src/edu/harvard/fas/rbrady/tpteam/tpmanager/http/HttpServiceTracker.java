@@ -58,6 +58,9 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add.AddTestEntityByUser
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTest2ByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTestByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete.DeleteTestEntityByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.exec.ExecTest2ByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.exec.ExecTestByUser;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.exec.UserProcessTestExec;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser2;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.update.UpdateTestByUser3;
@@ -150,6 +153,9 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewUserProfile;
 				httpService.registerServlet("/tpteam/user/view/viewTest", new ViewTestByUser(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/view/viewTest2", new ViewTest2ByUser(), null, null); //$NON-NLS-1$
 				httpService.registerServlet("/tpteam/user/view/viewTest3", new ViewTest3ByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/exec/execTest", new ExecTestByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/exec/execTest2", new ExecTest2ByUser(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/user/exec/processTestExec", new UserProcessTestExec(), null, null); //$NON-NLS-1$
 
 				// User HTML Pages
 				httpService.registerResources("/tpteam/user/index.html", "/html/user/index.html", null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -180,7 +186,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view.ViewUserProfile;
 				httpService.registerResources("/tpteam/scripts/exec_test_tree.js", "/html/scripts/exec_test_tree.js", null); //$NON-NLS-1$ //$NON-NLS-2$
 				// TPTP Resources
 				//httpService.registerServlet("/tpteam/processTestExec", new ProcessTestExecServlet(), null, null); //$NON-NLS-1$
-				httpService.registerServlet("/tpteam/admin/exec/adminProcessTestExec", new AdminProcessTestExec(), null, null); //$NON-NLS-1$
+				httpService.registerServlet("/tpteam/admin/exec/processTestExec", new AdminProcessTestExec(), null, null); //$NON-NLS-1$
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

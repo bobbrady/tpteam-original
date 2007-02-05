@@ -29,12 +29,18 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 public class ViewProject2 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
-	private String mTeam = null;
-	private String mProjId = null;
-	private String mProjName = null;
-	private String mProjDesc = null;
-	private String mProd = null;
-	private int[] mUserIds = null;
+
+	protected String mTeam = null;
+
+	protected String mProjId = null;
+
+	protected String mProjName = null;
+
+	protected String mProjDesc = null;
+
+	protected String mProd = null;
+
+	protected int[] mUserIds = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -42,36 +48,30 @@ public class ViewProject2 extends ServletUtil {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		try
-		{
-		mProjId = req.getParameter("projId");
-		getProject();
-		showPage(req, resp);
+		try {
+			mProjId = req.getParameter("projId");
+			getProject();
+			getPage(req, resp);
+		} catch (Exception e) {
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			throwError(req, resp, error, this);
+			return;
 		}
-		 catch (Exception e) {
-				String error = "<h3>Error: " + e.getMessage() + "<br>" + 
-				e.getCause() + "</h3>";
-				adminError(req, resp, error);
-				return;
-			}
 	}
-	
-	
-	private void getProject() throws Exception
-	{
+
+	protected void getProject() throws Exception {
 		Project proj = null;
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 		Transaction tx = null;
 		try {
 
 			tx = s.beginTransaction();
-			proj = (Project)s.load(Project.class, new Integer(mProjId));
-			if(proj.getDescription() != null)
-			{
+			proj = (Project) s.load(Project.class, new Integer(mProjId));
+			if (proj.getDescription() != null) {
 				mProjDesc = proj.getDescription();
-			}
-			else
-			{
+			} else {
 				mProjDesc = "";
 			}
 			mProjName = proj.getName();
@@ -85,40 +85,42 @@ public class ViewProject2 extends ServletUtil {
 			throw e;
 		}
 	}
-	
-	
-	private void getTeam(Set<TpteamUser> team) throws Exception
-	{
+
+	protected void getTeam(Set<TpteamUser> team) throws Exception {
 		StringBuffer teamUsers = new StringBuffer();
-		if(team.size() < 1)
-		{
+		if (team.size() < 1) {
 			mTeam = "";
 			return;
 		}
-		for(TpteamUser user : team)
-		{
-			teamUsers.append(user.getLastName() + ", " + user.getFirstName() + " (" + user.getUserName() + ")<br>\n");
+		for (TpteamUser user : team) {
+			teamUsers.append(user.getLastName() + ", " + user.getFirstName()
+					+ " (" + user.getUserName() + ")<br>\n");
 		}
 		mTeam = teamUsers.toString();
 	}
-	
-		
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException
-	{
+
+	protected void getPage(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException, Exception {
 		StringBuffer reply = new StringBuffer();
 		reply.append("<h4>View Project</h4>\n");
-		reply.append("<table border=\"1\"><tr><th align=\"left\">Name:</th><td align=\"right\">" + mProjName + "</td></tr>\n");
-		reply.append("<tr><th align=\"left\">Description:</th><td align=\"right\">" + mProjDesc + "</td></tr>\n");
-		reply.append("<tr><th align=\"left\">Product:</th><td align=\"right\">" + mProd + "</td></tr>\n");
-		reply.append("<tr><th align=\"left\">Team Members:</th><td align=\"right\">" + mTeam + "</td></tr>\n");
-		reply.append("<tr><th align=\"left\">View  Test Tree:</th><td align=\"right\"><form method=\"post\" action=\"viewTest2\">\n<input type=\"hidden\" name=\"projId\" value=\"" + mProjId + "\">\n<input type=\"submit\" value=\"Test Tree Details\">\n</form>\n");
+		reply
+				.append("<table border=\"1\"><tr><th align=\"left\">Name:</th><td align=\"right\">"
+						+ mProjName + "</td></tr>\n");
+		reply
+				.append("<tr><th align=\"left\">Description:</th><td align=\"right\">"
+						+ mProjDesc + "</td></tr>\n");
+		reply.append("<tr><th align=\"left\">Product:</th><td align=\"right\">"
+				+ mProd + "</td></tr>\n");
+		reply
+				.append("<tr><th align=\"left\">Team Members:</th><td align=\"right\">"
+						+ mTeam + "</td></tr>\n");
+		reply
+				.append("<tr><th align=\"left\">View  Test Tree:</th><td align=\"right\"><form method=\"post\" action=\"viewTest2\">\n<input type=\"hidden\" name=\"projId\" value=\""
+						+ mProjId
+						+ "\">\n<input type=\"submit\" value=\"Test Tree Details\">\n</form>\n");
 		reply.append("</table>\n<br>\n");
-		
-		adminHeader(req, resp, null);
-		adminReply(req, resp, reply.toString());
-		adminFooter(req, resp);
-	}
 
+		showPage(req, resp, reply, null, this);
+	}
 
 }

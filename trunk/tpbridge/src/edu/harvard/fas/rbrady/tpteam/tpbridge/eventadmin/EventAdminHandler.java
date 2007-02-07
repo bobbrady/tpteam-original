@@ -13,7 +13,7 @@ import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.ecf.core.events.ISharedObjectMessageEvent;
+import org.eclipse.ecf.core.sharedobject.events.ISharedObjectMessageEvent;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
@@ -74,7 +74,8 @@ public class EventAdminHandler  implements EventHandler, Observer {
 	
 	public void update(Observable observable, Object object) {
 		if (observable instanceof TPSharedObject
-				&& object instanceof ISharedObjectMessageEvent) {
+				/*&& object instanceof ISharedObjectMessageEvent*/) {
+			
 			ISharedObjectMessageEvent sharedObjEvent = (ISharedObjectMessageEvent) object;
 			TPEvent tpEvent = (TPEvent) sharedObjEvent.getData();
 			System.out
@@ -83,6 +84,7 @@ public class EventAdminHandler  implements EventHandler, Observer {
 			mEvents.add(tpEvent);
 			tpEvent.getDictionary().put("MYID", "FOOBAR");
 			Activator.getEventAdminClient().sendEvent(tpEvent.getTopic(), tpEvent.getDictionary());
+			
 		}
 	}
 	

@@ -96,5 +96,19 @@ public class AutomationClient {
 		return verdict;
 
 	}
+	
+	public static void main(String[] args)
+	{
+		String eclipse = "c:/Java/Eclipse3.2.1_ECF0.9.6/eclipse";
+		String workspace = "c:/tpteam/workspace_tpteam_test";
+		String project = "edu.harvard.fas.rbrady.tpteam.test";
+		String[] suites = new String[]{"edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/ProductTest.testsuite"};
+		String connection = "tptp:rac://localhost:1002/default";
+		String report = "c:/tpteam/tests/reports";
+		
+		AutomationClient client = new AutomationClient();
+		client.run(eclipse, workspace, project, suites, report, connection);
+		
+	}
 
 }

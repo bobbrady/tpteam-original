@@ -26,7 +26,7 @@
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.TestView"
             icon="icons/junit.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview"
-            name="TestView"/>
+            name="Project Test Tree"/>
       <view
             allowMultiple="true"
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.EventHistoryView"
@@ -34,5 +34,38 @@
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.eventhistview"
             name="Event History"/>
    </extension>
-
+      
+      <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.ecfActionSet"
+            label="ECF"
+            visible="true">
+         <action
+      		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.EventHistoryAction"
+               icon="icons/event_message.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.eventhistoryaction"
+               label="Open Event History View..."
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="Open Event History View"/>
+         <action
+      		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.TestTreeAction"
+               icon="icons/junit.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.testtreeaction"
+               label="Open Test Tree View..."
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="Open Test Tree View"/>      
+         <action
+      			class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.LoginAction"
+               icon="icons/person.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.LoginAction"
+               label="Connect..."
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="Connect Workspace to ECF Group"/>
+      </actionSet>
+   </extension>
+   
 </plugin>

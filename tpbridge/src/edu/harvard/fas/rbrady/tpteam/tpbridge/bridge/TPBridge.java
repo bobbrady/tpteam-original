@@ -165,9 +165,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			
 
 			// Then connect
-			String userName = "tpteam_2";
+			String userName = "tpteam";
 			String hostName = "jabber.org";
-			String password = "hufogani_2";
+			String password = "";
 			
 			createTrivialSharedObjectForContainer();
 			
@@ -189,7 +189,7 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 				}
 			}
 			*/
-			this.targetIMUser = "tpteam_1@jabber.org";
+			this.targetIMUser = "tpteam@jabber.org";
 			// Send initial message for room
 			
 			/*

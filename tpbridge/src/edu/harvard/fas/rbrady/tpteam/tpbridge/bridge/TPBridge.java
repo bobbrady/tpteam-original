@@ -8,34 +8,24 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.ecf.core.ContainerFactory;
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.IContainer;
-import org.eclipse.ecf.core.IContainerFactory;
-import org.eclipse.ecf.core.ISharedObjectContainer;
-import org.eclipse.ecf.core.events.ISharedObjectMessageEvent;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.provider.IContainerInstantiator;
+import org.eclipse.ecf.core.sharedobject.ISharedObjectContainer;
+import org.eclipse.ecf.core.sharedobject.events.ISharedObjectMessageEvent;
 import org.eclipse.ecf.core.util.ECFException;
-
 import org.eclipse.ecf.presence.IPresence;
 import org.eclipse.ecf.presence.IPresenceListener;
-import org.eclipse.ecf.presence.IRosterEntry;
-import org.eclipse.ecf.provider.generic.ContainerInstantiator;
-import org.jivesoftware.smack.Roster;
-import org.jivesoftware.smack.RosterEntry;
-import org.jivesoftware.smack.RosterGroup;
+import org.eclipse.ecf.presence.roster.IRosterEntry;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -84,9 +74,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 	}
 
 	private void populateContainerFactory(String containerType) {
-
+/*
 		// Create IContainerInstantiator manually
-		IContainerInstantiator instantiator = new ContainerInstantiator();
+		IContainerInstantiator instantiator = new BaseContainerInstantiator();
 		// Create a container description that has default ID & KeepAlive
 		// descriptions
 		
@@ -98,7 +88,8 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 				"ecf.xmpp.smack", instantiator, "ecf.xmpp.smack",
 				argTypes, argDefaults, argNames);
 		// Add this new description to ContainerFactory
-		 
+	
+		 */
 		 /*
 		
     	String namespaceName = "ecf.xmpp.smack";
@@ -147,57 +138,42 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			
 			IPresenceListener presenceListener = new IPresenceListener(){
 
-				public void handleContainerDeparted(ID departedContainer) {
+				public void handleRosterEntryAdd(IRosterEntry arg0) {
 					// TODO Auto-generated method stub
 					
 				}
 
-				public void handleContainerJoined(ID joinedContainer) {
+				public void handleRosterEntryRemove(IRosterEntry arg0) {
 					// TODO Auto-generated method stub
 					
 				}
 
-				public void handleRosterEntry(IRosterEntry entry) {
+				public void handleRosterEntryUpdate(IRosterEntry arg0) {
 					// TODO Auto-generated method stub
-					System.out.println("handleRosterEntry IRosterEntry: " + entry.getName() + ", State: " + entry.getPresenceState());
-				}
-
-				public void handleSetRosterEntry(IRosterEntry entry) {
-					// TODO Auto-generated method stub
-					System.out.println("handleSetRosterEntry IRosterEntry: " + entry.getName() + ", State: " + entry.getPresenceState());
 					
 				}
 
-				public void handlePresence(ID fromID, IPresence presence) {
+				public void handlePresence(ID arg0, IPresence arg1) {
 					// TODO Auto-generated method stub
-				
-					System.out.println("handlePresence: fromID " + fromID.getName() + ", Status " + presence.getStatus());
-					IRosterEntry entry = new org.eclipse.ecf.presence.impl.RosterEntry(fromID, fromID, fromID.getName(), presence);
-					System.out.println("handlePresence IRosterEntry: " + entry.getName() + 
-								", Type: " + presence.getType() + ", Mode: " + presence.getMode() +
-								", Priority: " + presence.getPriority());
-					for (Iterator i = presence.getProperties().keySet().iterator(); i.hasNext();) {
-						String key = (String) i.next();
-						String value = (String) presence.getProperties().get(key);
-						System.out.println("\tKey = "+ key + ", Value = " + value);
-					}
+					
 				}
-				
-			};
+
+						};
 			
 			client.setPresenceListener(presenceListener);
 			client.setupPresence();
 			
 
 			// Then connect
-			String userName = "**********";
+			String userName = "tpteam_2";
 			String hostName = "jabber.org";
-			String password = "**********";
+			String password = "hufogani_2";
 			
 			createTrivialSharedObjectForContainer();
 			
 			client.doConnect(userName + "@" + hostName, password);
 			
+			/*
 			// Print all groups & entries
 			Roster roster = client.getContainer().getRoster();
 			Iterator rosterIter = roster.getGroups();
@@ -212,12 +188,14 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 					System.out.println("\tRoster Entry: " + entry.getName() + ", "+ entry.getStatus() + " Status");
 				}
 			}
-			
-			this.targetIMUser = "********@jabber.org";
+			*/
+			this.targetIMUser = "tpteam_1@jabber.org";
 			// Send initial message for room
-			//client.sendMessage(targetIMUser,"Hi, I'm an IM robot");
 			
-/*
+			/*
+			client.sendMessage(targetIMUser,"Hi, I'm an IM robot");
+			
+
 			boolean running = true;
 			int count = 0;
 			// Loop ten times and send ten 'hello there' so messages to targetIMUser
@@ -225,11 +203,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 				sendSOMessage(userName + ": " + count+"" +
 						" hello there");
 			wait(10000);
-	
-			
-		
 			}
-*/
+			*/
+
 			/*			
 			// Create ECF IDs from String IDs
 			ID targetID = IDFactory.getDefault().createStringID(targetIDStr);
@@ -274,7 +250,7 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
     	if (sharedObject != null) {
     	//	sharedObject.sendMessageTo(client.getID(targetIMUser),msg);
     		try {
-				sharedObject.getContext().sendMessage(client.getID(targetIMUser),msg);
+				sharedObject.getContext().sendMessage(client.createID(targetIMUser),msg);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -336,7 +312,7 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			for(String ECFID : ECFIDs)
 			{
 				//sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
-				sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
+				sharedObject.getContext().sendMessage(client.createID(ECFID),tpEvent);
 				System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName() + " to " + ECFID);
 			}
 
@@ -372,7 +348,8 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 		//sharedObject.addObserver(this);
 		sharedObject.addObserver(Activator.getEventAdminHandler());
 		// Add shared object to container
-		client.getContainer().getSharedObjectManager().addSharedObject(newID, sharedObject, null);
+		((ISharedObjectContainer) client.getContainer().getAdapter(ISharedObjectContainer.class)).getSharedObjectManager().addSharedObject(newID, sharedObject, null);
+		
 }
 
 	public void update(Observable observable, Object object) {

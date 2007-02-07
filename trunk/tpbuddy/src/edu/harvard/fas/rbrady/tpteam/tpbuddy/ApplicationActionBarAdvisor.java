@@ -11,8 +11,10 @@ package edu.harvard.fas.rbrady.tpteam.tpbuddy;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -32,13 +34,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     }
 
     protected void makeActions(IWorkbenchWindow window) {
-
+/*
     	openViewAction = new OpenViewAction(window, "Open Event History View", EventHistoryView.ID,"/icons/event_message.gif");
     	testViewAction = new OpenViewAction(window, "Open Test Plan View", TestView.ID,"icons/junit.gif");
     	
     	
     	register(testViewAction);
     	register(openViewAction);
+    	*/
     
     }
 
@@ -56,11 +59,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     
     protected void fillCoolBar(ICoolBarManager coolbar)
     {
+    	/*
     	IToolBarManager toolbar = new ToolBarManager(coolbar.getStyle());
     	coolbar.add(toolbar);
     	toolbar.add(testViewAction);
     	toolbar.add(openViewAction);
+    	*/
     	//toolbar.add(exitAction);
+		IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
+		coolbar.add(new ToolBarContributionItem(toolbar, "main"));
+
     	
     }
     

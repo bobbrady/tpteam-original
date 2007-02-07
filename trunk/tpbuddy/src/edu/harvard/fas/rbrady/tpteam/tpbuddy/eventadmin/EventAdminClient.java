@@ -33,17 +33,11 @@ public class EventAdminClient {
 		boolean messageSent = false;
 		
 		System.out.println("TPBuddy EventAdminClient SendEvent");
-		if(Activator.getDefault().getTPBridgeClient().getContainerID() == null)
-		{
-			Activator.getDefault().getTPBridgeClient().connect(ITPBridge.DEFAULT_CONTAINER_TYPE, ITPBridge.DEFAULT_SHARED_OBJECT_ID, ITPBridge.DEFAULT_TARGET_ID);
-		}
-		
 		EventAdmin eventAdmin = (EventAdmin) mServiceTracker.getService();
 
 		if (eventAdmin != null) {
 			if(topic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC) || topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC))
 			{
-				dictionary.put(ITPBridge.CONTAINER_ID_KEY, Activator.getDefault().getTPBridgeClient().getContainerID());
 				dictionary.put(ITPBridge.SHARED_OBJECT_ID_KEY, ITPBridge.DEFAULT_SHARED_OBJECT_ID);
 				System.out.println("EventAdminClient: Sent " + topic + " Event for " + dictionary.get(TPEvent.TEST_NAME_KEY) +
 					" with containerID " + dictionary.get(ITPBridge.CONTAINER_ID_KEY) + 

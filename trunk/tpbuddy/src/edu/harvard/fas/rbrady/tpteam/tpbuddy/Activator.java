@@ -32,6 +32,14 @@ public class Activator extends AbstractUIPlugin {
 	private EventAdminHandler mEventAdminHandler;
 
 	private TPBridgeClient mTPBridgeClient;
+	
+	public static final String APPLICATION_WINDOW_TITLE = "TPBuddy";
+	public static final int APPLICATION_WINDOW_SIZE_X = 600;
+	public static final int APPLICATION_WINDOW_SIZE_Y = 400;
+	public static final String CONNECT_WIZARD_PAGE_TITLE = "Connect to XMPP Server";
+	public static final String CONNECT_WIZARD_PAGE_DESCRIPTION = "Enter user id below and login";
+
+
 
 
 	/**
@@ -86,11 +94,11 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public EventAdminClient getEventAdminClient() {
+	public  EventAdminClient getEventAdminClient() {
 		return mEventAdminClient;
 	}
 
-	public EventAdminHandler getEventAdminHandler() {
+	public  EventAdminHandler getEventAdminHandler() {
 		return mEventAdminHandler;
 	}
 	

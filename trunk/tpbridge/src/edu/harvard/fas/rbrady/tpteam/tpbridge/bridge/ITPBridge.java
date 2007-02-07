@@ -10,6 +10,11 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 
 import java.util.ArrayList;
 
+import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.core.identity.ID;
+import org.eclipse.ecf.core.util.ECFException;
+import org.osgi.service.event.Event;
+
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
 
@@ -34,8 +39,22 @@ public interface ITPBridge {
 	public static final String DEFAULT_SHARED_OBJECT_ID = "myobject";
 
 	public static final String DEFAULT_TARGET_ID = "tpteam_1@jabber.org";
+	
+	public static final String CLIENT_TYPE = "CLIENT_TYPE";
+	
+	public static final String TPTEAM_MGR = "TPTEAM_MGR";
+	
+	public static final String TPTEAM_BUDDY = "TPTEAM_BUDDY";
 
-	public String connect(String containerType, String sharedObjIDStr, String targetIDStr);
+	public ID createID(String name);
+	
+	public void setContainer(IContainer container, String targetIDName, String clientType) throws ECFException;
+	
+	public String getTargetIDName();
+	
+	public String getClientType();
+	
+	public boolean sendECFTPMsg(Event event);
 	
 	public ArrayList<TPEvent> getEventLog();
 }

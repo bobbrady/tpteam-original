@@ -5,15 +5,7 @@ Bundle-SymbolicName: edu.harvard.fas.rbrady.tpteam.tpbridge
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.harvard.fas.rbrady.tpteam.tpbridge.Activator
 Bundle-Localization: plugin
-Import-Package: org.eclipse.ecf.call,
- org.eclipse.ecf.call.events,
- org.eclipse.ecf.presence,
- org.eclipse.ecf.presence.im,
- org.eclipse.ecf.presence.provider,
- org.eclipse.ecf.presence.roster,
- org.eclipse.ecf.provider.generic,
- org.eclipse.ecf.provider.xmpp,
- org.jivesoftware.smack,
+Import-Package: org.jivesoftware.smack,
  org.osgi.framework,
  org.osgi.service.event,
  org.osgi.util.tracker
@@ -21,4 +13,9 @@ Export-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model
 Require-Bundle: org.eclipse.ecf,
  org.eclipse.ecf.sharedobject,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.ecf.call,
+ org.eclipse.ecf.discovery,
+ org.eclipse.ecf.presence,
+ org.eclipse.ecf.provider,
+ org.eclipse.ecf.provider.xmpp

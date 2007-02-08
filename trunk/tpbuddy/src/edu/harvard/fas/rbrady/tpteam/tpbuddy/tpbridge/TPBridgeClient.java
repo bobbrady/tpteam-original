@@ -25,14 +25,15 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 
 public class TPBridgeClient extends Client{
-	public TPBridgeClient(BundleContext context) {
-		super(context);
-	}
 	public static final String WORKSPACE_NAME = "<workspace>";
     public static final String GENERIC_CONTAINER_CLIENT_NAME = "ecf.generic.client";
 	static Hashtable clients = new Hashtable();
 
 	PresenceContainerUI presenceContainerUI = null;
+
+	public TPBridgeClient(BundleContext context) {
+		super(context);
+	}
 	
 	/**
 	 * Create a new container instance, and connect to a remote server or group.

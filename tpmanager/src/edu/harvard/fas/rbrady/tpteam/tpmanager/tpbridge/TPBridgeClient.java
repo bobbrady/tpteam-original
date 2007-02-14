@@ -22,6 +22,7 @@ import org.osgi.framework.BundleContext;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class TPBridgeClient extends Client{
 
@@ -29,6 +30,7 @@ public class TPBridgeClient extends Client{
 	private Namespace mNamespace = null;
 	private IContainer mContainer = null;
 	private ID mTargetID = null;
+	
 
 
 	public TPBridgeClient(BundleContext context) {
@@ -36,7 +38,9 @@ public class TPBridgeClient extends Client{
 		try {
 			setupContainer();
 			// Then connect
-			doConnect("tpteam_1" + "@" + "jabber.org", "hufogani_1");
+			String tpMgrECFID = getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY);
+			String tpMgrPass = getTPTeamProps().getProperty(TPMANAGER_ECFID_PASSWORD);
+			doConnect(tpMgrECFID, tpMgrPass);
 			setContainer(getContainer(), mTargetID.getName(), ITPBridge.TPTEAM_MGR);
 
 		} catch (ECFException e) {

@@ -67,5 +67,19 @@
                tooltip="Connect Workspace to ECF Group"/>
       </actionSet>
    </extension>
+      <extension
+            id="tpbuddy_product"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="edu.harvard.fas.rbrady.tpteam.tpbuddy.application"
+               name="tpbuddy"/>
+      </extension>
+      <extension
+            id="product"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="edu.harvard.fas.rbrady.tpteam.tpbuddy.application"
+               name="tpbuddy"/>
+      </extension>
    
 </plugin>

@@ -9,7 +9,13 @@
 
 package edu.harvard.fas.rbrady.tpteam.tpmanager;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.hibernate.SessionFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -32,20 +38,20 @@ public class Activator implements BundleActivator {
 	private EventAdminHandler mEventAdminHandler;
 
 	private TPBridgeClient mTPBridgeClient;
-	
+
 	private TPManager mTPManager;
-	
+
 	private ServiceTracker mHttpServiceTracker;
-	
+
 	private SessionFactory mHiberSessionFactory;
 
-	public Activator()
-	{
+	public Activator() {
 		mBundle = this;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
@@ -54,18 +60,19 @@ public class Activator implements BundleActivator {
 		mTPBridgeClient = new TPBridgeClient(context);
 		mTPManager = new TPManager();
 		mEventAdminHandler.addObserver(mTPManager);
-		
+
 		mHttpServiceTracker = new HttpServiceTracker(context);
 		mHttpServiceTracker.open();
-		
+
 		mHiberSessionFactory = HibernateUtil.getSessionFactory();
-		
-		//OracleTest.dbConnect();
-		
+
+		// OracleTest.dbConnect();
+
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
@@ -73,7 +80,7 @@ public class Activator implements BundleActivator {
 		mHttpServiceTracker = null;
 		mHiberSessionFactory.close();
 	}
-	
+
 	/**
 	 * Returns the shared instance
 	 * 
@@ -82,7 +89,7 @@ public class Activator implements BundleActivator {
 	public static Activator getDefault() {
 		return mBundle;
 	}
-	
+
 	public EventAdminClient getEventAdminClient() {
 		return mEventAdminClient;
 	}
@@ -90,21 +97,17 @@ public class Activator implements BundleActivator {
 	public EventAdminHandler getEventAdminHandler() {
 		return mEventAdminHandler;
 	}
-	
-	public TPBridgeClient getTPBridgeClient()
-	{
+
+	public TPBridgeClient getTPBridgeClient() {
 		return mTPBridgeClient;
 	}
-	
-	public TPManager getTPManager()
-	{
+
+	public TPManager getTPManager() {
 		return mTPManager;
 	}
-	
-	public SessionFactory getHiberSessionFactory()
-	{
+
+	public SessionFactory getHiberSessionFactory() {
 		return mHiberSessionFactory;
 	}
-
 
 }

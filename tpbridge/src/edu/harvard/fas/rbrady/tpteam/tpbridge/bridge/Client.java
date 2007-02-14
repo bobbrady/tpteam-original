@@ -9,18 +9,25 @@
 package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.util.ECFException;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
 public class Client {
 
 	protected ServiceTracker mServiceTracker;
+	
+	public static final String TPMANAGER_ECFID_KEY = "tpmanager.ecfID";
+	
+	public static final String TPMANAGER_ECFID_PASSWORD = "tpmanager.password";
+
+
 	
 	public Client(BundleContext context) {
 		mServiceTracker = new ServiceTracker(context,
@@ -50,6 +57,9 @@ public class Client {
 		return tpBridge.getEventLog();
 	}
 	
-	
+	public Properties getTPTeamProps()
+	{
+		return Activator.getTPTeamProps();
+	}
 
 }

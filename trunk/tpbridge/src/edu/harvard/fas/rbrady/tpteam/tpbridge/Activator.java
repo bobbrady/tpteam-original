@@ -8,6 +8,13 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -23,11 +30,18 @@ public class Activator implements BundleActivator {
 	
 	private static EventAdminClient mEventAdminClient;
 	
+	public static final String TPTEAM_PROP_DIR = "data";
+
+	public static String TPTEAM_PROP_FILE = "tpteam.properties";
+	
+	private static Properties mTPTeamProps;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
+		loadTPTeamProps(context);
 		mEventAdminHandler = new EventAdminHandler(context);
 		mEventAdminClient = new EventAdminClient(context);
 		mTPBridge = new TPBridge(context);
@@ -54,6 +68,25 @@ public class Activator implements BundleActivator {
 	public static EventAdminClient getEventAdminClient()
 	{
 		return mEventAdminClient;
+	}
+
+	public static Properties getTPTeamProps()
+	{
+		return mTPTeamProps;
+	}
+	
+	private void loadTPTeamProps(BundleContext context) {
+		try {
+			Platform.getLocation().toFile();
+			InputStream is = FileLocator.openStream(context.getBundle(),
+					new Path(TPTEAM_PROP_DIR + "/" + TPTEAM_PROP_FILE), false);
+			mTPTeamProps = new Properties();
+			mTPTeamProps.load(is);
+			is.close();
+			
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 }

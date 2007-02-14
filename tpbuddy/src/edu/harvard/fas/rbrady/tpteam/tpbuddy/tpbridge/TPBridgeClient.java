@@ -28,11 +28,18 @@ public class TPBridgeClient extends Client{
 	public static final String WORKSPACE_NAME = "<workspace>";
     public static final String GENERIC_CONTAINER_CLIENT_NAME = "ecf.generic.client";
 	static Hashtable clients = new Hashtable();
-
+	private String mTPMgrECFID = null;
 	PresenceContainerUI presenceContainerUI = null;
 
 	public TPBridgeClient(BundleContext context) {
 		super(context);
+		mTPMgrECFID = getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY);
+		System.out.println("mTPMgrECFID: " + mTPMgrECFID);
+	}
+	
+	public String getTPMgrECFID()
+	{
+		return mTPMgrECFID;
 	}
 	
 	/**

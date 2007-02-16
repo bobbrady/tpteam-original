@@ -33,6 +33,12 @@
             icon="icons/event_message.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.eventhistview"
             name="Event History"/>
+      <view
+            allowMultiple="true"
+            class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.ProjectView"
+            icon="icons/checkout.gif"
+            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.projectview"
+            name="Project View"/>
    </extension>
       
       <extension
@@ -58,13 +64,21 @@
                toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
                tooltip="Open Test Tree View"/>      
          <action
+      			class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ProjectViewAction"
+               icon="icons/checkout.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ProjectViewAction"
+               label="View Projects"
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="View Projects From TPManager"/>      
+         <action
       			class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.LoginAction"
                icon="icons/person.gif"
                id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.LoginAction"
                label="Connect..."
                style="push"
                toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
-               tooltip="Connect Workspace to ECF Group"/>
+               tooltip="Connect Workspace to ECF Group"/>               
       </actionSet>
    </extension>
       <extension

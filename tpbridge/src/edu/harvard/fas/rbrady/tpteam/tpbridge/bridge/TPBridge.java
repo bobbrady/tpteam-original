@@ -128,8 +128,10 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 
 	protected void createTrivialSharedObjectForContainer() throws ECFException {
 		// Create a new GUID for new TrivialSharedObject instance
+		
 		ID newID = IDFactory.getDefault().createStringID(
 				TPSharedObject.class.getName());
+		
 		// Create TrivialSharedObject
 		// sharedObject = new TrivialSharedObject();
 		mSharedObject = new TPSharedObject();

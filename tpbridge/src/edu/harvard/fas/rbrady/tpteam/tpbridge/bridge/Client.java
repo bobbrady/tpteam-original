@@ -26,8 +26,8 @@ public class Client {
 	public static final String TPMANAGER_ECFID_KEY = "tpmanager.ecfID";
 	
 	public static final String TPMANAGER_ECFID_PASSWORD = "tpmanager.password";
-
-
+	
+	private String mTPMgrECFID = null;
 	
 	public Client(BundleContext context) {
 		mServiceTracker = new ServiceTracker(context,
@@ -35,15 +35,25 @@ public class Client {
 		mServiceTracker.open();
 	}
 
+	public void setTPMgrECFID(String tpMgrECFID)
+	{
+		mTPMgrECFID = tpMgrECFID;
+	}
 	
-	public boolean setContainer(IContainer container, String containerType, String clientType) throws ECFException
+	public String getTPMgrECFID()
+	{
+		return mTPMgrECFID;
+	}
+	
+	
+	public boolean setContainer(IContainer container, String targetIDName, String clientType) throws ECFException
 	{
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
 		if (tpBridge == null) {
 			System.out.println("TPBridgeClient: tpBridge service ref is null");
 			return false;
 		}
-		tpBridge.setContainer(container, containerType, clientType);
+		tpBridge.setContainer(container, targetIDName, clientType);
 		System.out.println("TPBridgeClient: tpBridge service container was set");
 		return true;
 	}

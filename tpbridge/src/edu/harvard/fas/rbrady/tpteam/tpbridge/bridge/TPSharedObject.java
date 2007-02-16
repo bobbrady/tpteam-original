@@ -58,10 +58,6 @@ public class TPSharedObject extends Observable implements ISharedObject {
         } else if (event instanceof IContainerDisconnectedEvent) {
             System.out.println("Remote "+((IContainerDisconnectedEvent)event).getTargetID()+" departed!");
         } else if (event instanceof ISharedObjectMessageEvent) {
-        	/*
-            ISharedObjectMessageEvent evt = (ISharedObjectMessageEvent) event;
-            System.out.println(getID() + " Got message "+evt.getData()+" from "+evt.getRemoteContainerID());
-           */
             setChanged();
             notifyObservers(event);
         }

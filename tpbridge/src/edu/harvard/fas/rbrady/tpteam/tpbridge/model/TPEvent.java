@@ -34,6 +34,8 @@ public class TPEvent implements Serializable{
 	
 	public static final String SEND_TO = "SEND_TO";
 	
+	public static final String FROM = "FROM";
+	
 	private Hashtable<String, String> mDictionary;
 
 	private String mTopic;

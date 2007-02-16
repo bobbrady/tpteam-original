@@ -38,9 +38,9 @@ public class TPBridgeClient extends Client{
 		try {
 			setupContainer();
 			// Then connect
-			String tpMgrECFID = getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY);
+			setTPMgrECFID(getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY));
 			String tpMgrPass = getTPTeamProps().getProperty(TPMANAGER_ECFID_PASSWORD);
-			doConnect(tpMgrECFID, tpMgrPass);
+			doConnect(getTPMgrECFID(), tpMgrPass);
 			setContainer(getContainer(), mTargetID.getName(), ITPBridge.TPTEAM_MGR);
 
 		} catch (ECFException e) {

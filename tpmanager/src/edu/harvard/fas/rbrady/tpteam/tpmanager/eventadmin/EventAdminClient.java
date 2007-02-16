@@ -35,7 +35,8 @@ public class EventAdminClient {
 
 		if (eventAdmin != null) {
 			if (topic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC)
-					|| topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
+					|| topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)
+					|| topic.equals(ITPBridge.PROJ_GET_RESP_TOPIC)) {
 				dictionary.put(ITPBridge.SHARED_OBJECT_ID_KEY,
 						ITPBridge.DEFAULT_SHARED_OBJECT_ID);
 				System.out.println("EventAdminClient: Sent " + topic

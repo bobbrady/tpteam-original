@@ -34,10 +34,8 @@ public class EventAdminClient {
 		EventAdmin eventAdmin = (EventAdmin) mServiceTracker.getService();
 
 		if (eventAdmin != null) {
-			if(topic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC) || topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC))
-			{
+			
 				System.out.println("TPBridge EventAdminClient: Sent " + topic + " Event for " + dictionary.get(TPEvent.TEST_NAME_KEY));			
-			}
 			dictionary.put("MYID", this.toString());
 			eventAdmin.sendEvent(new Event(topic, dictionary));
 			messageSent = true;

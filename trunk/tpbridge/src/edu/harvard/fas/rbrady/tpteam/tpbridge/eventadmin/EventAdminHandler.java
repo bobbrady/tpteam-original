@@ -34,7 +34,8 @@ public class EventAdminHandler implements EventHandler, Observer {
 		mEvents = new ArrayList<TPEvent>();
 		mDictionary.put(EventConstants.EVENT_TOPIC,
 				new String[] { ITPBridge.TEST_EXEC_REQ_TOPIC,
-						ITPBridge.TEST_EXEC_RESULT_TOPIC });
+						ITPBridge.TEST_EXEC_RESULT_TOPIC, ITPBridge.PROJ_GET_REQ_TOPIC,
+						ITPBridge.PROJ_GET_RESP_TOPIC});
 
 		context
 				.registerService(EventHandler.class.getName(), this,
@@ -45,7 +46,7 @@ public class EventAdminHandler implements EventHandler, Observer {
 		String eventTopic = null;
 		if((eventTopic = event.getTopic()) == null)
 			return;
-		
+		/*
 		if (eventTopic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC)
 				|| eventTopic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
 			System.out.println("TPBridge EventAdminHandler: Got "
@@ -58,6 +59,21 @@ public class EventAdminHandler implements EventHandler, Observer {
 			Activator.getTPBridge().sendECFTPMsg(event);
 
 		}
+		*/
+		System.out.println("TPBridge EventAdminHandler: Got "
+				+ eventTopic + " Event from "
+				+ event.getProperty(TPEvent.SEND_TO));
+
+		TPEvent tpEvent = new TPEvent(event);
+		mEvents.add(tpEvent);
+
+		String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
+		
+		if(sendTo == null || sendTo.trim().equalsIgnoreCase(""))
+			return;
+
+		Activator.getTPBridge().sendECFTPMsg(event);
+
 	}
 
 	public void update(Observable observable, Object object) {
@@ -69,7 +85,6 @@ public class EventAdminHandler implements EventHandler, Observer {
 			System.out
 					.println("TPBridge: Update from SharedObject Got TPEvent topic "
 							+ tpEvent.getTopic());
-			mEvents.add(tpEvent);
 			// Prevent infinite loops
 			tpEvent.getDictionary().put(TPEvent.SEND_TO, "");
 			Activator.getEventAdminClient().sendEvent(tpEvent.getTopic(),

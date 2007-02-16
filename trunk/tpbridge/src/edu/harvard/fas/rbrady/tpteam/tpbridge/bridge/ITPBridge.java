@@ -23,6 +23,10 @@ public interface ITPBridge {
 	public static final String TEST_EXEC_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/testexecreq";
 
 	public static final String TEST_EXEC_RESULT_TOPIC = "edu/harvard/fas/rbrady/tpteam/testexecresult";
+	
+	public static final String PROJ_GET_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/projgetreq";
+	
+	public static final String PROJ_GET_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/projgetresp";
 
 	public static final String IMPLEMENTATION_TYPE = "IMPLEMENTATION_TYPE";
 

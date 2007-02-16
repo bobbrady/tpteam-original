@@ -49,6 +49,8 @@ public interface ITPBridge {
 	public static final String TPTEAM_MGR = "TPTEAM_MGR";
 	
 	public static final String TPTEAM_BUDDY = "TPTEAM_BUDDY";
+	
+	public static final String BRIDGE_EA_CLIENT_TOPICS_KEY = "tpbridge.eventadminclient.topics";
 
 	public ID createID(String name);
 	

@@ -36,7 +36,6 @@ public class EventAdminClient {
 		if (eventAdmin != null) {
 			
 				System.out.println("TPBridge EventAdminClient: Sent " + topic + " Event for " + dictionary.get(TPEvent.TEST_NAME_KEY));			
-			dictionary.put("MYID", this.toString());
 			eventAdmin.sendEvent(new Event(topic, dictionary));
 			messageSent = true;
 		}

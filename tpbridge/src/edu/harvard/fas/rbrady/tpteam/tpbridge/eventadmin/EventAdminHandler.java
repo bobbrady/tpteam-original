@@ -32,44 +32,30 @@ public class EventAdminHandler implements EventHandler, Observer {
 
 	public EventAdminHandler(BundleContext context) {
 		mEvents = new ArrayList<TPEvent>();
-		mDictionary.put(EventConstants.EVENT_TOPIC,
-				new String[] { ITPBridge.TEST_EXEC_REQ_TOPIC,
-						ITPBridge.TEST_EXEC_RESULT_TOPIC, ITPBridge.PROJ_GET_REQ_TOPIC,
-						ITPBridge.PROJ_GET_RESP_TOPIC});
-
+		// Set topics for events where tpbridge will send out of JVM on ECF SharedObect
+		String topicsProp = Activator.getTPTeamProps().getProperty(
+				ITPBridge.BRIDGE_EA_CLIENT_TOPICS_KEY);
+		String topics[] = topicsProp.split(",");
+		for(String topic : topics)
+			System.out.println(ITPBridge.BRIDGE_EA_CLIENT_TOPICS_KEY + ": " + topic);
+			
+		mDictionary.put(EventConstants.EVENT_TOPIC, topics);
 		context
 				.registerService(EventHandler.class.getName(), this,
 						mDictionary);
 	}
 
 	public void handleEvent(Event event) {
-		String eventTopic = null;
-		if((eventTopic = event.getTopic()) == null)
-			return;
-		/*
-		if (eventTopic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC)
-				|| eventTopic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
-			System.out.println("TPBridge EventAdminHandler: Got "
-					+ eventTopic + " Event for "
-					+ event.getProperty(TPEvent.TEST_NAME_KEY));
 
-			TPEvent tpEvent = new TPEvent(event);
-			mEvents.add(tpEvent);
-
-			Activator.getTPBridge().sendECFTPMsg(event);
-
-		}
-		*/
-		System.out.println("TPBridge EventAdminHandler: Got "
-				+ eventTopic + " Event from "
-				+ event.getProperty(TPEvent.SEND_TO));
+		System.out.println("TPBridge EventAdminHandler: Got " + event.getTopic()
+				+ " Event from " + event.getProperty(TPEvent.SEND_TO));
 
 		TPEvent tpEvent = new TPEvent(event);
 		mEvents.add(tpEvent);
 
 		String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
-		
-		if(sendTo == null || sendTo.trim().equalsIgnoreCase(""))
+
+		if (sendTo == null || sendTo.trim().equalsIgnoreCase(""))
 			return;
 
 		Activator.getTPBridge().sendECFTPMsg(event);
@@ -78,15 +64,14 @@ public class EventAdminHandler implements EventHandler, Observer {
 
 	public void update(Observable observable, Object object) {
 		if (observable instanceof TPSharedObject
-		 && object instanceof ISharedObjectMessageEvent) {
+				&& object instanceof ISharedObjectMessageEvent) {
 
 			ISharedObjectMessageEvent sharedObjEvent = (ISharedObjectMessageEvent) object;
 			TPEvent tpEvent = (TPEvent) sharedObjEvent.getData();
 			System.out
 					.println("TPBridge: Update from SharedObject Got TPEvent topic "
 							+ tpEvent.getTopic());
-			// Prevent infinite loops
-			tpEvent.getDictionary().put(TPEvent.SEND_TO, "");
+
 			Activator.getEventAdminClient().sendEvent(tpEvent.getTopic(),
 					tpEvent.getDictionary());
 

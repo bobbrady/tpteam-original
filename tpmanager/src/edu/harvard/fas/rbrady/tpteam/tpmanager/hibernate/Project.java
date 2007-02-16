@@ -12,6 +12,8 @@ public class Project implements java.io.Serializable {
 
 	// Fields    
 
+	private static final long serialVersionUID = 1L;
+
 	private int id;
 
 	private Product product;

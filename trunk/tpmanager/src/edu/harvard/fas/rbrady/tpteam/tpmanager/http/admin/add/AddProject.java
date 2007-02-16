@@ -21,7 +21,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;

@@ -10,7 +10,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.add;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,7 +20,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 

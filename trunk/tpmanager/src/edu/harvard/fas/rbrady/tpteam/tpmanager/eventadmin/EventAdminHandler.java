@@ -28,19 +28,16 @@ public class EventAdminHandler extends Observable implements EventHandler {
 	public EventAdminHandler(BundleContext context) {
 		mEvents = new ArrayList<Event>();
 		mDictionary.put(EventConstants.EVENT_TOPIC,
-				new String[] {ITPBridge.TEST_EXEC_REQ_TOPIC});
+				new String[] {ITPBridge.TEST_EXEC_REQ_TOPIC, ITPBridge.PROJ_GET_REQ_TOPIC});
 		context.registerService(EventHandler.class.getName(), this, mDictionary);
 		System.out.println("TPManager EventAdminHandler: registered EventAdmin service");
 	}
 
 	public void handleEvent(Event event) {
-		if(event.getTopic().equals(ITPBridge.TEST_EXEC_REQ_TOPIC))
-		{
 			System.out.println("TPManager EventAdminHandler: Got " + event.getTopic() + " Event for " + event.getProperty(TPEvent.TEST_NAME_KEY));
 			TPEvent tpEvent = new TPEvent(event);
 			setChanged();
 			notifyObservers(tpEvent);
-		}
 	}
 
 	public ArrayList getEventLog() {

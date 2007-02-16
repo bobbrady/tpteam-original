@@ -92,7 +92,7 @@ public class Project implements java.io.Serializable {
 		tpTeamUser.getProjects().add(this);
 	}
 
-	public void removeFromTpteaUsers(TpteamUser tpTeamUser) {
+	public void removeFromTpteamUsers(TpteamUser tpTeamUser) {
 		this.getTpteamUsers().remove(tpTeamUser);
 		tpTeamUser.getProjects().remove(this);
 	}

@@ -21,17 +21,19 @@ public class TPEventLabelProvider extends LabelProvider implements
 		TPEvent tpEvent = (TPEvent) element;
 		switch (index) {
 		case 0:
+			return tpEvent.getDictionary().get(TPEvent.FROM);
+		case 1:
+			return tpEvent.getDictionary().get(TPEvent.SEND_TO);
+		case 2:
 			String[] topicPath = tpEvent.getTopic().split("/");
 			return topicPath[topicPath.length-1];
-		case 1:
-			return tpEvent.getProject();
-		case 2:
-			return tpEvent.getTestName();
 		case 3:
-			return tpEvent.getParentContainer();
+			return tpEvent.getProject();
 		case 4:
-			return tpEvent.getID();
+			return tpEvent.getTestName();
 		case 5:
+			return tpEvent.getID();
+		case 6:
 			return tpEvent.getStatus();
 		default:
 			return "unknown " + index;

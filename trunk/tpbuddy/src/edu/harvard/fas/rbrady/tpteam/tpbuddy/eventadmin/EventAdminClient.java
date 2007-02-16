@@ -36,16 +36,12 @@ public class EventAdminClient {
 		EventAdmin eventAdmin = (EventAdmin) mServiceTracker.getService();
 
 		if (eventAdmin != null) {
-			if(topic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC) || topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC))
-			{
 				dictionary.put(ITPBridge.SHARED_OBJECT_ID_KEY, ITPBridge.DEFAULT_SHARED_OBJECT_ID);
 				System.out.println("EventAdminClient: Sent " + topic + " Event for " + dictionary.get(TPEvent.TEST_NAME_KEY) +
 					" with containerID " + dictionary.get(ITPBridge.CONTAINER_ID_KEY) + 
 					" and soID " + dictionary.get(ITPBridge.SHARED_OBJECT_ID_KEY));
 				eventAdmin.sendEvent(new Event(topic, dictionary));
 				messageSent = true;
-			}
-
 		}
 		else
 		{

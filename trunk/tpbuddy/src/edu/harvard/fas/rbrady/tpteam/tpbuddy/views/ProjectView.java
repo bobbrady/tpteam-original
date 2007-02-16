@@ -26,9 +26,9 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.TPBridgeClient;
 
-public class EventHistoryView extends ViewPart implements Observer {
+public class ProjectView extends ViewPart implements Observer {
 
-	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.eventhistview";
+	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.projectview";
 
 	private Table mTable;
 
@@ -38,7 +38,7 @@ public class EventHistoryView extends ViewPart implements Observer {
 
 	private TPBridgeClient mTPBridgeClient;
 
-	public EventHistoryView() {
+	public ProjectView() {
 		mTPBridgeClient = Activator.getDefault().getTPBridgeClient();
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 	}
@@ -68,10 +68,9 @@ public class EventHistoryView extends ViewPart implements Observer {
 	}
 
 	private void initColumns() {
-		String[] columnNames = new String[] { "From", "To", "Topic", "Project", "Test", "ID", "Status" };
-		int[] columnWidths = new int[] { 150, 150, 150, 150, 150, 150, 150 };
-		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT, SWT.LEFT,
-				SWT.LEFT, SWT.LEFT, SWT.LEFT };
+		String[] columnNames = new String[] { "Name", "Description"};
+		int[] columnWidths = new int[] { 150, 300 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT};
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(mTable,
 					columnAlignments[i]);
@@ -103,7 +102,7 @@ public class EventHistoryView extends ViewPart implements Observer {
 		}
 
 		public void run() {
-			mTableViewer.add(mTableViewerObject);
+			//mTableViewer.add(mTableViewerObject);
 		}
 	}
 
@@ -117,6 +116,7 @@ public class EventHistoryView extends ViewPart implements Observer {
 	}
 
 	public void update(Observable observable, Object object) {
+		/*
 		if (observable instanceof EventAdminHandler && object instanceof TPEvent) {
 			TPEvent tpEvent = (TPEvent) object;
 			System.out.println("EventHistoryView: update called for "
@@ -124,5 +124,6 @@ public class EventHistoryView extends ViewPart implements Observer {
 					+ tpEvent.getTestName());
 			mTableUpdater.insertObject(tpEvent);
 		}
+		*/
 	}
 }

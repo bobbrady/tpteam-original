@@ -23,23 +23,19 @@ import org.osgi.framework.BundleContext;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 
 public class TPBridgeClient extends Client{
 	public static final String WORKSPACE_NAME = "<workspace>";
     public static final String GENERIC_CONTAINER_CLIENT_NAME = "ecf.generic.client";
 	static Hashtable clients = new Hashtable();
-	private String mTPMgrECFID = null;
 	PresenceContainerUI presenceContainerUI = null;
 
 	public TPBridgeClient(BundleContext context) {
 		super(context);
-		mTPMgrECFID = getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY);
-		System.out.println("mTPMgrECFID: " + mTPMgrECFID);
-	}
-	
-	public String getTPMgrECFID()
-	{
-		return mTPMgrECFID;
+		setTPMgrECFID(getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY));
+		System.out.println("mTPMgrECFID: " + getTPMgrECFID());
 	}
 	
 	/**
@@ -72,8 +68,16 @@ public class TPBridgeClient extends Client{
 		// Now connect
 		client.connect(targetID, getJoinContext(username, connectData));
 		setContainer(client, targetID.getName(), ITPBridge.TPTEAM_BUDDY);
+		sendProjGetRequest(targetID.getName());
 	}
 
+
+	private void sendProjGetRequest(String ecfID) {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, ecfID);
+		Activator.getDefault().getEventAdminClient().sendEvent(ITPBridge.PROJ_GET_REQ_TOPIC, dictionary);
+	}
 
 	protected IConnectContext getJoinContext(final String username,
 			final Object password) {

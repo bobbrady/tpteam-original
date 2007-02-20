@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType" table="TEST_TYPE">
+        <id name="id" type="int">
+            <column name="ID" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="256" />
+        </property>
+        <set name="tests" inverse="true">
+            <key>
+                <column name="TEST_TYPE_ID" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
+        </set>
+    </class>
+</hibernate-mapping>

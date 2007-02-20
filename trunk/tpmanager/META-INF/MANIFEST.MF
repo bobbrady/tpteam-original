@@ -91,7 +91,7 @@ Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
  org.hibernate.usertype,
  org.hibernate.util
 Bundle-ClassPath: .,
- libs/tptp-automation-client.jar
+ lib/tptp-automation-client.jar
 Require-Bundle: org.eclipse.ecf,
  org.eclipse.core.runtime,
  org.eclipse.ecf.presence,

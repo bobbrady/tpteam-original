@@ -9,13 +9,6 @@
 
 package edu.harvard.fas.rbrady.tpteam.tpmanager;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.hibernate.SessionFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -23,7 +16,6 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminClient;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.HttpServiceTracker;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.tpbridge.TPBridgeClient;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.tptp.TPManager;
@@ -64,7 +56,7 @@ public class Activator implements BundleActivator {
 		mHttpServiceTracker = new HttpServiceTracker(context);
 		mHttpServiceTracker.open();
 
-		mHiberSessionFactory = HibernateUtil.getSessionFactory();
+		mHiberSessionFactory = mTPBridgeClient.getHibernateSessionFactory();
 
 		// OracleTest.dbConnect();
 

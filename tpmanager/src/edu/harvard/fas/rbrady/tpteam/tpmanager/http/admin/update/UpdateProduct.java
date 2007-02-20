@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class UpdateProduct extends ServletUtil {

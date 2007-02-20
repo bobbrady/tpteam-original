@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 

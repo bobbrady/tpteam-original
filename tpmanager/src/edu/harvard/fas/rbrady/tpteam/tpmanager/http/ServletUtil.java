@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 
 public class ServletUtil extends HttpServlet {
 	private static final long serialVersionUID = 1L;

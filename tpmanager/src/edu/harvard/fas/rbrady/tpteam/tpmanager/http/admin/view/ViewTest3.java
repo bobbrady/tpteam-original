@@ -22,10 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class ViewTest3 extends ServletUtil {

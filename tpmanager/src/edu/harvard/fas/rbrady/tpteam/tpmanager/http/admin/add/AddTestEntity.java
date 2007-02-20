@@ -20,12 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestType;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class AddTestEntity extends ServletUtil {

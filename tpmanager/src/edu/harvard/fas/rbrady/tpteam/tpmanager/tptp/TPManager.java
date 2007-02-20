@@ -20,12 +20,12 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test;
 
 public class TPManager implements Observer {
 

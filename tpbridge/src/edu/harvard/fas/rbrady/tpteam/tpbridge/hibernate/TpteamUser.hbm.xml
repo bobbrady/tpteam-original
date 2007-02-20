@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" table="TPTEAM_USER">
+        <id name="id" type="int">
+        			<generator class="sequence">
+				<param name="sequence">seq_user_id</param>
+			</generator>
+        
+        <!-- 
+            <column name="ID" precision="8" scale="0" />
+            <generator class="assigned" />
+             -->
+        </id>
+        <many-to-one name="role" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Role" fetch="select">
+            <column name="ROLE_ID" precision="8" scale="0" />
+        </many-to-one>
+        <property name="userName" type="string">
+            <column name="USER_NAME" length="256" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="256" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="256" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="256" />
+        </property>
+        <property name="ecfId" type="string">
+            <column name="ECF_ID" length="1024" />
+        </property>
+        <property name="phone" type="string">
+            <column name="PHONE" length="15" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="256" />
+        </property>
+        <property name="createdBy" type="java.lang.Integer">
+            <column name="CREATED_BY" precision="8" scale="0" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedBy" type="java.lang.Integer">
+            <column name="MODIFIED_BY" precision="8" scale="0" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <set name="projects" inverse="true" table="PROJ_USER">
+            <key>
+                <column name="USER_ID" precision="8" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project">
+                <column name="PROJ_ID" precision="8" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="testExecutions" inverse="true">
+            <key>
+                <column name="RUN_BY" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution" />
+        </set>
+        <set name="tests" inverse="true">
+            <key>
+                <column name="CREATED_BY" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
+        </set>
+        <set name="tokens" inverse="true">
+            <key>
+                <column name="USER_ID" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Token" />
+        </set>
+    </class>
+</hibernate-mapping>

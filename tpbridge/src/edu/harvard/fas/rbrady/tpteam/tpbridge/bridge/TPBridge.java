@@ -21,12 +21,14 @@ import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.sharedobject.ISharedObjectContainer;
 import org.eclipse.ecf.core.sharedobject.events.ISharedObjectMessageEvent;
 import org.eclipse.ecf.core.util.ECFException;
+import org.hibernate.SessionFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
 public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
@@ -114,6 +116,11 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 
 	public ArrayList<TPEvent> getEventLog() {
 		return Activator.getEventAdminHandler().getEventLog();
+	}
+	
+	public SessionFactory getHibernateSessionFactory()
+	{
+		return HibernateUtil.getSessionFactory();
 	}
 
 	public void stop(BundleContext context) {

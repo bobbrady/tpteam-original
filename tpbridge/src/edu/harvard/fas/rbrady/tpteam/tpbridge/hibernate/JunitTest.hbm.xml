@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+	<class
+		name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest"
+		table="JUNIT_TEST">
+		<!--
+			
+			JUnit table uses the test ID as both primary and foreign key
+			NO SEQUENCE USED
+			
+			<id name="id" type="int">
+			<generator class="sequence">
+			<param name="sequence">seq_junit_id</param>
+			</generator>
+			</id>
+		-->
+
+
+		<id name="id" type="int">
+			<column name="ID" precision="8" scale="0" />
+			<generator class="assigned" />
+		</id>
+
+		<many-to-one name="test"
+			class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test"
+			update="false" insert="false" fetch="select">
+			<column name="ID" precision="8" scale="0" not-null="true"
+				unique="true" />
+		</many-to-one>
+		<property name="eclipseHome" type="string">
+			<column name="ECLIPSE_HOME" length="2048" />
+		</property>
+		<property name="workspace" type="string">
+			<column name="WORKSPACE" length="2048" />
+		</property>
+		<property name="project" type="string">
+			<column name="PROJECT" length="2048" />
+		</property>
+		<property name="reportDir" type="string">
+			<column name="REPORT_DIR" length="2048" />
+		</property>
+		<property name="tptpConnection" type="string">
+			<column name="TPTP_CONNECTION" length="2048" />
+		</property>
+				<property name="testSuite" type="string">
+			<column name="TEST_SUITE" length="1024" />
+		</property>
+	</class>
+</hibernate-mapping>

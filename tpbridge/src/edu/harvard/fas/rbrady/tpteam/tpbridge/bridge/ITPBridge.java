@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
+import org.hibernate.SessionFactory;
 import org.osgi.service.event.Event;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
@@ -59,6 +60,8 @@ public interface ITPBridge {
 	public String getTargetIDName();
 	
 	public String getClientType();
+	
+	public SessionFactory getHibernateSessionFactory();
 	
 	public boolean sendECFTPMsg(Event event);
 	

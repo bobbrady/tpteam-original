@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 5, 2006 8:35:14 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" table="TEST">
+       		<id name="id" type="int">
+			<generator class="sequence">
+				<param name="sequence">seq_test_id</param>
+			</generator>
+			</id>
+    <!-- 
+        <id name="id" type="int">
+            <column name="ID" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+    -->
+        <many-to-one name="project" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project" fetch="select">
+            <column name="PROJ_ID" precision="8" scale="0" />
+        </many-to-one>
+        <many-to-one name="testType" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType" fetch="select">
+            <column name="TEST_TYPE_ID" precision="8" scale="0" />
+        </many-to-one>
+        <many-to-one name="createdBy" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" fetch="select">
+            <column name="CREATED_BY" precision="8" scale="0" />
+        </many-to-one>
+        <many-to-one name="modifiedBy" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" fetch="select">
+            <column name="MODIFIED_BY" precision="8" scale="0" />
+        </many-to-one>
+        <many-to-one name="parent" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" fetch="select">
+            <column name="PARENT_ID" precision="8" scale="0" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="256" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1024" />
+        </property>
+        <property name="isFolder" type="java.lang.Character">
+            <column name="IS_FOLDER" length="1" />
+        </property>
+        <property name="path" type="string">
+            <column name="PATH" length="256" unique="true" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="7" />
+        </property>
+        <set name="testExecutions" inverse="true" cascade="all">
+            <key>
+                <column name="TEST_ID" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution" />
+        </set>
+        <set name="children" inverse="true" cascade="all">
+            <key>
+                <column name="PARENT_ID" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
+        </set>
+        <set name="junitTests" inverse="true" cascade="all">
+            <key>
+                <column name="ID" precision="8" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest" />
+        </set>
+    </class>
+    
+    <sql-query name="mp_depth" callable="true">
+    <return-scalar column="depth" type="integer"/>
+    { ? = call mp_depth() }
+</sql-query>
+</hibernate-mapping>

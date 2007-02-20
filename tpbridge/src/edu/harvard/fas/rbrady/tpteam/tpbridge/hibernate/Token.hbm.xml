@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Token" table="TOKEN">
+        <composite-id name="id" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TokenId">
+            <key-property name="userId" type="int">
+                <column name="USER_ID" precision="8" scale="0" />
+            </key-property>
+            <key-property name="tokenId" type="string">
+                <column name="TOKEN_ID" length="256" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="tpteamUser" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" update="false" insert="false" fetch="select">
+            <column name="USER_ID" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createdDate" type="timestamp">
+            <column name="CREATED_DATE" length="7" />
+        </property>
+        <property name="hostIpAddr" type="string">
+            <column name="HOST_IP_ADDR" length="1024" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.util.ECFException;
+import org.hibernate.SessionFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -57,6 +58,17 @@ public class Client {
 		System.out.println("TPBridgeClient: tpBridge service container was set");
 		return true;
 	}
+	
+	public SessionFactory getHibernateSessionFactory() throws RuntimeException
+	{
+		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
+		if (tpBridge == null) {
+			System.out.println("TPBridgeClient: tpBridge service ref is null");
+			throw new RuntimeException("TPBridge.Client.getHibernateSessionFactory() Error: tpBridge service ref is null.");
+		}
+		return tpBridge.getHibernateSessionFactory();
+	}
+
 
 	public ArrayList<TPEvent> getEventLog()
 	{

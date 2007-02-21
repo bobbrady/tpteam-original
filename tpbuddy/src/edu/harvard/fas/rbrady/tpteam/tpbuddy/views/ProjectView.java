@@ -21,7 +21,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.TPBridgeClient;
@@ -54,9 +58,9 @@ public class ProjectView extends ViewPart implements Observer {
 		initTable();
 		initColumns();
 
-		mTableViewer.setLabelProvider(new TPEventLabelProvider());
+		mTableViewer.setLabelProvider(new ProjectLabelProvider());
 		mTableViewer.setContentProvider(new ArrayContentProvider());
-		mTableViewer.setInput(getTPBridgeEvents());
+		//mTableViewer.setInput(getTPBridgeEvents());
 		// mTableViewer.setInput(TPEvent.getExamples());
 
 	}
@@ -68,9 +72,9 @@ public class ProjectView extends ViewPart implements Observer {
 	}
 
 	private void initColumns() {
-		String[] columnNames = new String[] { "Name", "Description"};
-		int[] columnWidths = new int[] { 150, 300 };
-		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT};
+		String[] columnNames = new String[] { "Name", "Description", "Product" };
+		int[] columnWidths = new int[] { 150, 300, 150 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT };
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(mTable,
 					columnAlignments[i]);
@@ -102,7 +106,7 @@ public class ProjectView extends ViewPart implements Observer {
 		}
 
 		public void run() {
-			//mTableViewer.add(mTableViewerObject);
+			mTableViewer.add(mTableViewerObject);
 		}
 	}
 
@@ -116,14 +120,22 @@ public class ProjectView extends ViewPart implements Observer {
 	}
 
 	public void update(Observable observable, Object object) {
-		/*
-		if (observable instanceof EventAdminHandler && object instanceof TPEvent) {
+
+		if (observable instanceof EventAdminHandler
+				&& object instanceof TPEvent
+				&& ((TPEvent) object).getTopic().equals(
+						ITPBridge.PROJ_GET_RESP_TOPIC)) {
 			TPEvent tpEvent = (TPEvent) object;
-			System.out.println("EventHistoryView: update called for "
-					+ tpEvent.getTopic() + " Event for "
-					+ tpEvent.getTestName());
-			mTableUpdater.insertObject(tpEvent);
+			System.out.println("ProjectView: update called for "
+					+ tpEvent.getTopic());
+
+			ArrayList<Project> projs = ProjectXML.getProjProdFromDoc(XMLUtil
+					.getDocFromXml(tpEvent.getDictionary().get(
+							TPEvent.PROJ_PROD_XML_KEY)));
+
+			for (Project proj : projs) {
+				mTableUpdater.insertObject(proj);
+			}
 		}
-		*/
 	}
 }

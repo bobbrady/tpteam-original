@@ -15,17 +15,19 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
 
 public class TPManager implements Observer {
 
@@ -55,35 +57,37 @@ public class TPManager implements Observer {
 			String tpTopic = tpEvent.getTopic();
 			System.out.println("TPManager Update: got tpEvent w/topic "
 					+ tpTopic);
-			
-			if(tpTopic.equals(ITPBridge.PROJ_GET_REQ_TOPIC))
-			{
-				sendProjGetResponse(tpEvent);
-			}
-
-			if (tpTopic.equalsIgnoreCase(
-					ITPBridge.TEST_EXEC_REQ_TOPIC)) {
-				try {
-					runTest(tpEvent.getID(), tpEvent);
-				} catch (Exception e) {
-					// Should throw TPTeam ExceptionEvent here?
-					e.printStackTrace();
+			try {
+				if (tpTopic.equals(ITPBridge.PROJ_GET_REQ_TOPIC)) {
+					sendProjGetResponse(tpEvent);
 				}
+
+				if (tpTopic.equalsIgnoreCase(ITPBridge.TEST_EXEC_REQ_TOPIC)) {
+
+					runTest(tpEvent.getID(), tpEvent);
+
+				}
+			} catch (Exception e) {
+				// Should throw TPTeam ExceptionEvent here?
+				e.printStackTrace();
 			}
 		}
 
 	}
-	
-	private void sendProjGetResponse(TPEvent tpEvent) {
-		Hashtable<String, String> dictionary = new Hashtable<String, String>();
-		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(TPEvent.FROM));
-		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
-		dictionary.put(TPEvent.PROJECT_KEY, "TEST_PROJ");
-		System.out.println("TPManager.sendProjGetResponse: Send To: " + dictionary.get(TPEvent.SEND_TO) + 
-				", From: " + dictionary.get(TPEvent.FROM));
-		Activator.getDefault().getEventAdminClient().sendEvent(ITPBridge.PROJ_GET_RESP_TOPIC, dictionary);
-	}
 
+	private void sendProjGetResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
+				TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		dictionary.put(TPEvent.PROJ_PROD_XML_KEY, ProjectUtil.getProjProdXML(tpEvent));
+		System.out.println("TPManager.sendProjGetResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.PROJ_GET_RESP_TOPIC, dictionary);
+	}
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;
@@ -154,7 +158,8 @@ public class TPManager implements Observer {
 			// ********************************************************
 			tpEvent.setStatus(status);
 			tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
-			tpEvent.getDictionary().put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
+			tpEvent.getDictionary().put(TPEvent.FROM,
+					Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
 			System.out
 					.println("TPManager runTests(): sending tpEvent w/status "
 							+ status + " & topic " + tpEvent.getTopic());
@@ -168,8 +173,6 @@ public class TPManager implements Observer {
 			throw e;
 		}
 	}
-	
-
 
 	public String getDateTime() {
 		Date now = new Date();

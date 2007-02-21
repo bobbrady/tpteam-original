@@ -23,6 +23,8 @@ public class TPEvent implements Serializable{
 	private static final long serialVersionUID = 7318549536622346381L;
 
 	public static final String PROJECT_KEY = "PROJECT";
+	
+	public static final String PROJ_PROD_XML_KEY = "PROD_PROJ_XML";
 
 	public static final String PARENT_CONTAINER_KEY = "PARENT_CONTAINER";
 

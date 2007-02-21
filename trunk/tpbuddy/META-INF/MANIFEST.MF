@@ -10,7 +10,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ecf
 Eclipse-LazyStart: true
 Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
+ edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model,
+ edu.harvard.fas.rbrady.tpteam.tpbridge.xml,
  org.eclipse.ecf.core.sharedobject,
  org.eclipse.ecf.core.sharedobject.events,
  org.eclipse.ecf.core.sharedobject.util,

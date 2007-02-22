@@ -4,7 +4,7 @@
 <!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
 <hibernate-mapping>
 	<class
-		name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project"
+		name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project"
 		table="PROJECT">
 		<id name="id" type="int">
 			<generator class="sequence">
@@ -17,7 +17,7 @@
 			-->
 		</id>
 		<many-to-one name="product"
-			class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product"
+			class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product"
 			fetch="select">
 			<column name="PROD_ID" precision="8" scale="0" />
 		</many-to-one>
@@ -33,7 +33,7 @@
 					not-null="true" />
 			</key>
 			<many-to-many
-				entity-name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser">
+				entity-name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser">
 				<column name="USER_ID" precision="8" scale="0"
 					not-null="true" />
 			</many-to-many>
@@ -43,7 +43,7 @@
 				<column name="PROJ_ID" precision="8" scale="0" />
 			</key>
 			<one-to-many
-				class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test" />
+				class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
 		</set>
 	</class>
 </hibernate-mapping>

@@ -4,7 +4,7 @@
 <!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
 <hibernate-mapping>
 	<class
-		name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.JunitTest"
+		name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest"
 		table="JUNIT_TEST">
 		<!--
 			
@@ -25,7 +25,7 @@
 		</id>
 
 		<many-to-one name="test"
-			class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test"
+			class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test"
 			update="false" insert="false" fetch="select">
 			<column name="ID" precision="8" scale="0" not-null="true"
 				unique="true" />

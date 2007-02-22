@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Dec 5, 2006 8:35:14 PM by Hibernate Tools 3.2.0.beta8 -->
 <hibernate-mapping>
-    <class name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test" table="TEST">
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" table="TEST">
        		<id name="id" type="int">
 			<generator class="sequence">
 				<param name="sequence">seq_test_id</param>
@@ -15,19 +15,19 @@
             <generator class="assigned" />
         </id>
     -->
-        <many-to-one name="project" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project" fetch="select">
+        <many-to-one name="project" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project" fetch="select">
             <column name="PROJ_ID" precision="8" scale="0" />
         </many-to-one>
-        <many-to-one name="testType" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestType" fetch="select">
+        <many-to-one name="testType" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType" fetch="select">
             <column name="TEST_TYPE_ID" precision="8" scale="0" />
         </many-to-one>
-        <many-to-one name="createdBy" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser" fetch="select">
+        <many-to-one name="createdBy" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" fetch="select">
             <column name="CREATED_BY" precision="8" scale="0" />
         </many-to-one>
-        <many-to-one name="modifiedBy" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser" fetch="select">
+        <many-to-one name="modifiedBy" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" fetch="select">
             <column name="MODIFIED_BY" precision="8" scale="0" />
         </many-to-one>
-        <many-to-one name="parent" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test" fetch="select">
+        <many-to-one name="parent" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" fetch="select">
             <column name="PARENT_ID" precision="8" scale="0" />
         </many-to-one>
         <property name="name" type="string">
@@ -52,19 +52,19 @@
             <key>
                 <column name="TEST_ID" precision="8" scale="0" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecution" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution" />
         </set>
         <set name="children" inverse="true" cascade="all">
             <key>
                 <column name="PARENT_ID" precision="8" scale="0" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
         </set>
         <set name="junitTests" inverse="true" cascade="all">
             <key>
                 <column name="ID" precision="8" scale="0" not-null="true" unique="true" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.JunitTest" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest" />
         </set>
     </class>
     

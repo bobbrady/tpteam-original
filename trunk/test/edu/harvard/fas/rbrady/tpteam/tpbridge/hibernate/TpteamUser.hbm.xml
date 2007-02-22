@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
 <hibernate-mapping>
-    <class name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TpteamUser" table="TPTEAM_USER">
+    <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser" table="TPTEAM_USER">
         <id name="id" type="int">
         			<generator class="sequence">
 				<param name="sequence">seq_user_id</param>
@@ -14,7 +14,7 @@
             <generator class="assigned" />
              -->
         </id>
-        <many-to-one name="role" class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Role" fetch="select">
+        <many-to-one name="role" class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Role" fetch="select">
             <column name="ROLE_ID" precision="8" scale="0" />
         </many-to-one>
         <property name="userName" type="string">
@@ -54,7 +54,7 @@
             <key>
                 <column name="USER_ID" precision="8" scale="0" not-null="true" />
             </key>
-            <many-to-many entity-name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project">
+            <many-to-many entity-name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project">
                 <column name="PROJ_ID" precision="8" scale="0" not-null="true" />
             </many-to-many>
         </set>
@@ -62,19 +62,19 @@
             <key>
                 <column name="RUN_BY" precision="8" scale="0" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecution" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution" />
         </set>
         <set name="tests" inverse="true">
             <key>
                 <column name="CREATED_BY" precision="8" scale="0" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Test" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" />
         </set>
         <set name="tokens" inverse="true">
             <key>
                 <column name="USER_ID" precision="8" scale="0" not-null="true" />
             </key>
-            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Token" />
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Token" />
         </set>
     </class>
 </hibernate-mapping>

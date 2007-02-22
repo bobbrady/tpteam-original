@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 10, 2006 5:22:58 PM by Hibernate Tools 3.2.0.beta8 -->
+<hibernate-mapping>
+    <class name="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product" table="PRODUCT">
+        <id name="id" type="int">
+        	<generator class="sequence">
+                <param name="sequence">seq_product_id</param>
+            </generator>
+            <!--  <column name="ID" precision="8" scale="0" />
+            <generator class="assigned" />-->
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="256" unique="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="1024" />
+        </property>
+        <set name="projects" inverse="true">
+            <key>
+                <column name="PROD_ID" precision="8" scale="0" />
+            </key>
+            <one-to-many class="edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Project" />
+        </set>
+    </class>
+</hibernate-mapping>

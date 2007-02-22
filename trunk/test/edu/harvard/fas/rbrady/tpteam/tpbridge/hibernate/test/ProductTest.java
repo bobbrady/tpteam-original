@@ -1,4 +1,4 @@
-package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.test;
+package edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.test;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.eclipse.hyades.test.common.junit.HyadesTestSuite;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.HibernateUtil;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.Product;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 
 /**
  * Generated code for the test suite <b>ProductTest</b> located at

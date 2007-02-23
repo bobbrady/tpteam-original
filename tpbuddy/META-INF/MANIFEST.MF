@@ -5,14 +5,15 @@ Bundle-SymbolicName: edu.harvard.fas.rbrady.tpteam.tpbuddy;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.ecf
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ecf,
+ org.eclipse.ui
 Eclipse-LazyStart: true
 Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
  edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model,
  edu.harvard.fas.rbrady.tpteam.tpbridge.xml,
+ org.eclipse.core.commands.common,
  org.eclipse.ecf.core.sharedobject,
  org.eclipse.ecf.core.sharedobject.events,
  org.eclipse.ecf.core.sharedobject.util,
@@ -21,9 +22,7 @@ Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
  org.eclipse.ecf.presence.roster,
  org.eclipse.ecf.presence.ui,
  org.eclipse.ecf.ui,
- org.eclipse.ecf.ui.actions,
  org.eclipse.ecf.ui.dialogs,
- org.eclipse.ecf.ui.util,
  org.eclipse.ecf.ui.views,
  org.eclipse.ecf.ui.wizards,
  org.osgi.service.event;version="1.0.1"

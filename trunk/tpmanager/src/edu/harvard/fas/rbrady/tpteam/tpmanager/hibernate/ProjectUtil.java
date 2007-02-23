@@ -10,12 +10,12 @@ import org.hibernate.Transaction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ProjectUtil {
 	public static Set<Project> getProjByECFID(String ecfID) throws Exception {
@@ -23,11 +23,11 @@ public class ProjectUtil {
 		Session s = null;
 		Transaction tx = null;
 		try {
-			/*
-			 * s = Activator.getDefault().getHiberSessionFactory()
-			 * .getCurrentSession();
-			 */
-			s = HibernateUtil.getSessionFactory().getCurrentSession();
+
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+
+			// s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";

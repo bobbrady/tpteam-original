@@ -100,8 +100,8 @@
 				minOccurs="0" />
 			<element name="projectId" nillable="true" type="int"
 				minOccurs="0" />
-			<element name="testType" nillable="true"
-				type="tns:TestTypeType" minOccurs="0" />
+			<element name="testTypeName" nillable="true"
+				type="string" minOccurs="0" />
 			<element name="path" nillable="true" type="string"
 				minOccurs="0" />
 			<element name="createdBy" nillable="true"
@@ -123,6 +123,15 @@
 	</complexType>
 
 	<element name="test" type="tns:TestType"></element>
+
+	<complexType name="TestsType">
+		<sequence>
+			<element name="test" nillable="true" type="tns:TestType" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+
+	<element name="tests" type="tns:TestsType"></element>
+	
 
 	<complexType name="JunitTestType">
 		<sequence>

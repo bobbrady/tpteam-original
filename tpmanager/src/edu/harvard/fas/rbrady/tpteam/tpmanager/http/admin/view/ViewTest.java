@@ -72,7 +72,7 @@ public class ViewTest extends ServletUtil {
 
 	protected String getProjRows() throws Exception {
 		Transaction tx = null;
-		Set<Project> projs = null;
+		Set<Project> projs = new HashSet<Project>(0);
 		StringBuffer projRows = new StringBuffer();
 		int remoteUserId = -1;
 		try {
@@ -81,11 +81,10 @@ public class ViewTest extends ServletUtil {
 			}
 
 			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
+				.getCurrentSession();
 			// For standalone
-			// Session s =
-			// HibernateUtil.getSessionFactory().getCurrentSession();
-
+			 //Session s =
+			//HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 
 			if (remoteUserId == -1) {
@@ -119,5 +118,5 @@ public class ViewTest extends ServletUtil {
 			mIsProjAvailable = true;
 		mProjRows = projRows.toString();
 		return mProjRows;
-	}
+	}	
 }

@@ -83,5 +83,14 @@ public class Client {
 	{
 		return Activator.getTPTeamProps();
 	}
+	
+	public String getTargetIDName()
+	{
+		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
+		if (tpBridge == null) {
+			System.out.println("TPBridgeClient: tpBridge service ref is null");
+		}
+		return tpBridge.getTargetIDName();
+	}
 
 }

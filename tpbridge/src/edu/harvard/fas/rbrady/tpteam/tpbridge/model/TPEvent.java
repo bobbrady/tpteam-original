@@ -27,6 +27,8 @@ public class TPEvent implements Serializable{
 	public static final String PROJECT_ID_KEY = "PROJ_ID";
 	
 	public static final String PROJ_PROD_XML_KEY = "PROD_PROJ_XML";
+	
+	public static final String TEST_TREE_XML_KEY = "TEST_TREE_XML";
 
 	public static final String PARENT_CONTAINER_KEY = "PARENT_CONTAINER";
 

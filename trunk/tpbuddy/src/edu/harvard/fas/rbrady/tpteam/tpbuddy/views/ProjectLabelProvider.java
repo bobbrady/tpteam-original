@@ -21,10 +21,12 @@ public class ProjectLabelProvider extends LabelProvider implements
 		Project proj = (Project) element;
 		switch (index) {
 		case 0:
-			return proj.getName();
+			return String.valueOf(proj.getId());
 		case 1:
-			return proj.getDescription();
+			return proj.getName();
 		case 2:
+			return proj.getDescription();
+		case 3:
 			return proj.getProduct().getName();
 		default:
 			return "unknown " + index;

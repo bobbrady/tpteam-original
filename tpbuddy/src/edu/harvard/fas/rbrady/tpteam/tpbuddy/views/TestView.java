@@ -36,28 +36,11 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.model.TreeParent;
 public class TestView extends ViewPart implements Observer {
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview";
 
-	private Action exitAction;
+	private Action runTest;
 
 	private TreeViewer viewer;
 
 	private HashMap<String, TPTestEntity> mTPEntities;
-
-	public TestView() {
-
-		/***********************************************************************
-		 * For demo purposes only! This should be done only after connection
-		 * established with bridge via some sort of dialog
-		 **********************************************************************/
-		Activator.getDefault().getEventAdminHandler().addObserver(this);
-
-		mTPEntities = new HashMap<String, TPTestEntity>();
-
-		exitAction = new Action("Add...") {
-			public void run() {
-				updateAction();
-			}
-		};
-	}
 
 	private void updateAction() {
 		IStructuredSelection selection = (IStructuredSelection) viewer
@@ -84,8 +67,8 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void createActions() {
-		exitAction.setEnabled(true);
-		exitAction.setImageDescriptor(Activator
+		runTest.setEnabled(true);
+		runTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/runjunit.gif"));
 
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -95,7 +78,7 @@ public class TestView extends ViewPart implements Observer {
 		});
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-		mgr.add(exitAction);
+		mgr.add(runTest);
 
 	}
 
@@ -160,6 +143,17 @@ public class TestView extends ViewPart implements Observer {
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
+
+		Activator.getDefault().getEventAdminHandler().addObserver(this);
+
+		mTPEntities = new HashMap<String, TPTestEntity>();
+
+		runTest = new Action("Run...") {
+			public void run() {
+				updateAction();
+			}
+		};
+
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.BORDER);
 		viewer.setContentProvider(new TestContentProvider());
@@ -181,11 +175,12 @@ public class TestView extends ViewPart implements Observer {
 		if (observable instanceof EventAdminHandler
 				&& object instanceof TPEvent) {
 			TPEvent tpEvent = (TPEvent) object;
-			final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
+			// final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
 
-			if (tpEntity != null
-					& tpEvent.getTopic().equals(
-							ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
+			System.out.println("TestView Got Update: " + tpEvent.getTopic());
+			if (/*
+				 * tpEntity != null &
+				 */tpEvent.getTopic().equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
 				System.out.println("TestView: update called for "
 						+ tpEvent.getTopic() + " Event for "
 						+ tpEvent.getTestName());
@@ -194,6 +189,7 @@ public class TestView extends ViewPart implements Observer {
 				if (status.indexOf("pass") < 0) {
 					successPath = TreeObject.TEST_FAIL_IMAGE;
 				}
+				final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
 				tpEntity.setStatus(tpEvent.getStatus(), successPath);
 				Display.getDefault().syncExec(new Runnable() {
 
@@ -203,6 +199,10 @@ public class TestView extends ViewPart implements Observer {
 					}
 
 				});
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
+					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
+				System.out.println(tpEvent.getDictionary().get(
+						TPEvent.TEST_TREE_XML_KEY));
 			}
 
 		}

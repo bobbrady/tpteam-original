@@ -9,16 +9,26 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
@@ -28,7 +38,6 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.TPBridgeClient;
 
 public class ProjectView extends ViewPart implements Observer {
 
@@ -40,17 +49,79 @@ public class ProjectView extends ViewPart implements Observer {
 
 	private TableUpdater mTableUpdater;
 
-	private TPBridgeClient mTPBridgeClient;
+	private Action mGetTestTree;
 
 	public ProjectView() {
-		mTPBridgeClient = Activator.getDefault().getTPBridgeClient();
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
+		mGetTestTree = new Action("Get Proj TestTree") {
+			public void run() {
+				updateAction();
+			}
+		};
+	}
+
+	private void updateAction() {
+		IStructuredSelection selection = (IStructuredSelection) mTableViewer
+				.getSelection();
+		Iterator selectionIter = selection.iterator();
+		while (selectionIter.hasNext()) {
+			Project proj = (Project) selectionIter.next();
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, Activator.getDefault()
+					.getTPBridgeClient().getTargetIDName());
+			dictionary
+					.put(TPEvent.PROJECT_ID_KEY, String.valueOf(proj.getId()));
+			showTestView();
+			Activator.getDefault().getEventAdminClient().sendEvent(
+					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
+		}
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
 		initTableViewer(parent);
 		mTableUpdater = new TableUpdater(mTableViewer);
+		createActions();
+		// showTestView(IWorkbenchPage.VIEW_VISIBLE);
+	}
+	
+	@Override
+	public void setFocus() {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	private void showTestView() {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			try {
+				page.showView(TestView.ID);
+			} catch (PartInitException e) {
+
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void createActions() {
+		mGetTestTree.setEnabled(true);
+		mGetTestTree.setImageDescriptor(Activator
+				.getImageDescriptor("icons/testhier.gif"));
+
+		mTableViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent event) {
+						// updateAction();
+					}
+				});
+
+		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+		mgr.add(mGetTestTree);
+
 	}
 
 	private void initTableViewer(Composite parent) {
@@ -60,7 +131,7 @@ public class ProjectView extends ViewPart implements Observer {
 
 		mTableViewer.setLabelProvider(new ProjectLabelProvider());
 		mTableViewer.setContentProvider(new ArrayContentProvider());
-		//mTableViewer.setInput(getTPBridgeEvents());
+		// mTableViewer.setInput(getTPBridgeEvents());
 		// mTableViewer.setInput(TPEvent.getExamples());
 
 	}
@@ -72,9 +143,11 @@ public class ProjectView extends ViewPart implements Observer {
 	}
 
 	private void initColumns() {
-		String[] columnNames = new String[] { "Name", "Description", "Product" };
-		int[] columnWidths = new int[] { 150, 300, 150 };
-		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT };
+		String[] columnNames = new String[] { "ID", "Name", "Description",
+				"Product" };
+		int[] columnWidths = new int[] { 50, 150, 300, 150 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT,
+				SWT.LEFT };
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(mTable,
 					columnAlignments[i]);
@@ -84,11 +157,6 @@ public class ProjectView extends ViewPart implements Observer {
 
 	}
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
-
-	}
 
 	private static class TableUpdater implements Runnable {
 
@@ -110,9 +178,6 @@ public class ProjectView extends ViewPart implements Observer {
 		}
 	}
 
-	private ArrayList<TPEvent> getTPBridgeEvents() {
-		return mTPBridgeClient.getEventLog();
-	}
 
 	public void dispose() {
 		super.dispose();

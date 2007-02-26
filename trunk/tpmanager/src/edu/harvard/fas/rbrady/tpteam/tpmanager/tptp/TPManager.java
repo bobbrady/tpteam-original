@@ -15,19 +15,18 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestUtil;
 
 public class TPManager implements Observer {
 
@@ -62,10 +61,14 @@ public class TPManager implements Observer {
 					sendProjGetResponse(tpEvent);
 				}
 
-				if (tpTopic.equalsIgnoreCase(ITPBridge.TEST_EXEC_REQ_TOPIC)) {
+				else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_EXEC_REQ_TOPIC)) {
 
 					runTest(tpEvent.getID(), tpEvent);
 
+				} else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
+					sendTestTreeGetResponse(tpEvent);
 				}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
@@ -81,12 +84,28 @@ public class TPManager implements Observer {
 				TPEvent.FROM));
 		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
 				.getTPMgrECFID());
-		dictionary.put(TPEvent.PROJ_PROD_XML_KEY, ProjectUtil.getProjProdXML(tpEvent));
+		dictionary.put(TPEvent.PROJ_PROD_XML_KEY, ProjectUtil
+				.getProjProdXML(tpEvent));
 		System.out.println("TPManager.sendProjGetResponse: Send To: "
 				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
 				+ dictionary.get(TPEvent.FROM));
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.PROJ_GET_RESP_TOPIC, dictionary);
+	}
+
+	private void sendTestTreeGetResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
+				TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		dictionary.put(TPEvent.TEST_TREE_XML_KEY, TestUtil
+				.getTestTreeXML(tpEvent));
+		System.out.println("TPManager.sendTestTreeGetResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_TREE_GET_RESP_TOPIC, dictionary);
 	}
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {

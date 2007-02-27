@@ -17,8 +17,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.model.TreeObject;
 
 public class TestLabelProvider extends LabelProvider {
 
@@ -32,6 +32,10 @@ public class TestLabelProvider extends LabelProvider {
     }
 
     public String getText(Object obj) {
+    	if(obj instanceof TPEntity)
+    	{
+    		return ((TPEntity)obj).getName();
+    	}
         return obj.toString();
     }
 
@@ -48,16 +52,17 @@ public class TestLabelProvider extends LabelProvider {
 
         Image image = null;
         
-        TreeObject treeObj = (TreeObject)element;
+        TPEntity treeEnt = (TPEntity)element;
 
-        if (treeObj.getType() == TreeObject.FOLDER_TYPE)
+        
+        if (treeEnt.getType() == TPEntity.TPEntityType.FOLDER)
         {
             image = PlatformUI.getWorkbench().getSharedImages().getImage(
                     ISharedImages.IMG_OBJ_FOLDER );
         }
-        else if(!treeObj.getImagePath().equals(TreeObject.NO_IMAGE))
+        else if(treeEnt.getType() == TPEntity.TPEntityType.JUNIT_TEST)
         {
-            image = getImageFromString(treeObj.getImagePath());
+            image = getImageFromString("icons/junit.gif");
         }
 
         return image;

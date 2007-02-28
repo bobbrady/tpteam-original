@@ -1,5 +1,9 @@
 package edu.harvard.fas.rbrady.tpteam.tpbridge.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TPEntity {
 	
 	public enum TPEntityType  {FOLDER, JUNIT_TEST, EXEC_PASS, EXEC_FAIL};
@@ -12,7 +16,7 @@ public class TPEntity {
 	
 	private TPEntityType mType;
 	
-	private TPEntity[] mChildren = new TPEntity[0];
+	private List<TPEntity> mChildren = new ArrayList<TPEntity>();
 
 	private TPEntity mParent = null;
 	
@@ -66,12 +70,13 @@ public class TPEntity {
 	
 	public TPEntity[] getChildren()
 	{
-		return mChildren;
+		return mChildren.toArray(new TPEntity[0]);
 	}
 	
 	public void setChildren(TPEntity[] children)
 	{
-		mChildren = children;
+		for(TPEntity child : children)
+			mChildren.add(child);
 	}
 	
 	public TPEntity getParent()
@@ -86,9 +91,29 @@ public class TPEntity {
 
 	public boolean hasChildren()
 	{
-		if(mChildren == null || mChildren.length == 0)
+		if(mChildren == null || mChildren.size() < 1)
 			return false;
 		return true;
+	}
+	
+	public void addChild(TPEntity child)
+	{
+		mChildren.add(child);
+	}
+	
+	public boolean removeChild(TPEntity child)
+	{
+		return mChildren.remove(child);
+	}
+	
+	public boolean removeChild(int childID)
+	{
+		for(TPEntity childEnt : mChildren)
+		{
+			if(childEnt.getID() == childID)
+				return removeChild(childEnt);
+		}
+		return false;
 	}
 	
 	public String toString()

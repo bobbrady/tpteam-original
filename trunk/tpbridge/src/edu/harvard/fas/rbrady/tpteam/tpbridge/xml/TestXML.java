@@ -68,13 +68,6 @@ public class TestXML {
 		HashMap<Integer, TPEntity> tpEntities = new HashMap<Integer, TPEntity>();
 		HashMap<Integer, ArrayList<TPEntity>> childEntities = new HashMap<Integer, ArrayList<TPEntity>>();
 		try {
-
-			/*
-			DocumentBuilderFactory domFactory = DocumentBuilderFactory
-					.newInstance(); // domFactory.setNamespaceAware(true);
-			DocumentBuilder builder = domFactory.newDocumentBuilder();
-			Document doc = builder.parse("c:/Tests.xml");
-	        */
 			
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath xpath = factory.newXPath();
@@ -136,8 +129,15 @@ public class TestXML {
 		return tpEntity;
 	}
 
-	public static TPEntity[] getExample() {
-		TPEntity[] tpEnts = TestXML.getTPEntityFromDoc(null);
+	public static TPEntity[] getExample() throws Exception {
+	
+		DocumentBuilderFactory domFactory = DocumentBuilderFactory
+				.newInstance(); // domFactory.setNamespaceAware(true);
+		DocumentBuilder builder = domFactory.newDocumentBuilder();
+		Document dom = builder.parse("c:/Tests.xml");
+        
+
+		TPEntity[] tpEnts = TestXML.getTPEntityFromDoc(dom);
 		for(TPEntity tpEnt : tpEnts)
 		{
 			System.out.println("ID: " + tpEnt.getID() + ", Name: " + tpEnt.getName());

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Stack;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -38,29 +39,71 @@ public class TestView extends ViewPart implements Observer {
 
 	private Action runTest;
 
-	private TreeViewer viewer;
+	private TreeViewer mViewer;
+
+	private TestContentProvider mTestContentProvider;
 
 	private HashMap<String, TPEntity> mTPEntities;
 
 	private void updateAction() {
-		IStructuredSelection selection = (IStructuredSelection) viewer
+		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		Iterator selectionIter = selection.iterator();
 		while (selectionIter.hasNext()) {
 			TPEntity treeEnt = (TPEntity) selectionIter.next();
-			System.out.println("\n\nTestView: Selection "
-					+ treeEnt.getName());
+			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
 			/*
-			if (treeObject instanceof TPTestEntity) {
-				Hashtable<String, String> dictionary = ((TPTestEntity) treeObject)
-						.getDictionary();
-				TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
-						dictionary);
-				sendMsgToEventAdmin(tpEvent);
-			}
-			*/
-		}
+			 * if (treeObject instanceof TPTestEntity) { Hashtable<String,
+			 * String> dictionary = ((TPTestEntity) treeObject)
+			 * .getDictionary(); TPEvent tpEvent = new
+			 * TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC, dictionary);
+			 * sendMsgToEventAdmin(tpEvent); }
+			 */
+			int nodeID = treeEnt.getID();
 
+			TPEntity[] topLevelEnts = (TPEntity[]) mTestContentProvider
+					.getElements(mViewer.getInput());
+			removeNode(topLevelEnts, nodeID);
+		}
+	}
+
+	private void removeNode(TPEntity[] topLevelEnts, int nodeID) {
+		Stack<TPEntity> tpEntities = new Stack<TPEntity>();
+		for (TPEntity topLevelEnt : topLevelEnts) {
+			tpEntities.add(topLevelEnt);
+		}
+		while (tpEntities.size() > 0) {
+			final TPEntity tpEnt = tpEntities.pop();
+
+			if (tpEnt.getID() == nodeID) {
+				final TPEntity tpParent = tpEnt.getParent();
+				if (tpParent != null) {
+					tpParent.removeChild(tpEnt);
+					Display.getDefault().syncExec(new Runnable() {
+						public void run() {
+							mViewer.refresh(tpParent, false);
+						}
+					});
+					return;
+				} else {
+					Display.getDefault().syncExec(new Runnable() {
+						public void run() {
+							mViewer.remove(tpEnt);
+						}
+					});
+					return;
+				}
+
+			} else {
+				TPEntity[] children = tpEnt.getChildren();
+				if (children != null && children.length > 0) {
+					for(TPEntity child : children)
+					{
+						tpEntities.add(child);
+					}
+				}
+			}
+		}
 	}
 
 	private void sendMsgToEventAdmin(TPEvent tpEvent) {
@@ -73,7 +116,7 @@ public class TestView extends ViewPart implements Observer {
 		runTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/runjunit.gif"));
 
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				// updateAction();
 			}
@@ -83,9 +126,10 @@ public class TestView extends ViewPart implements Observer {
 		mgr.add(runTest);
 
 	}
+
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
+	 * This is a callback that will allow us to create the mViewer and
+	 * initialize it.
 	 */
 	public void createPartControl(Composite parent) {
 
@@ -99,21 +143,26 @@ public class TestView extends ViewPart implements Observer {
 			}
 		};
 
-		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL
-				| SWT.BORDER);
-		viewer.setContentProvider(new TestContentProvider());
-		viewer.setLabelProvider(new TestLabelProvider());
-		viewer.setInput(null);
-		getSite().setSelectionProvider(viewer);
+		mViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.BORDER);
+		mTestContentProvider = new TestContentProvider();
+		mViewer.setContentProvider(mTestContentProvider);
+		mViewer.setLabelProvider(new TestLabelProvider());
+		try {
+			mViewer.setInput(null/*TestXML.getExample()*/);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		getSite().setSelectionProvider(mViewer);
 
 		createActions();
 	}
 
 	/**
-	 * Passing the focus request to the viewer's control.
+	 * Passing the focus request to the mViewer's control.
 	 */
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		mViewer.getControl().setFocus();
 	}
 
 	public void update(Observable observable, Object object) {
@@ -126,27 +175,23 @@ public class TestView extends ViewPart implements Observer {
 			if (/*
 				 * tpEntity != null &
 				 */tpEvent.getTopic().equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
-				
+
 				System.out.println("TestView: update called for "
 						+ tpEvent.getTopic() + " Event for "
 						+ tpEvent.getTestName());
 				/*
-				String status = tpEvent.getStatus();
-				String successPath = TreeObject.TEST_OK_IMAGE;
-				if (status.indexOf("pass") < 0) {
-					successPath = TreeObject.TEST_FAIL_IMAGE;
-				}
-				final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
-				tpEntity.setStatus(tpEvent.getStatus(), successPath);
-				Display.getDefault().syncExec(new Runnable() {
-
-					public void run() {
-						viewer.refresh(tpEntity, true);
-						// viewer.update(tpEntity, null);
-					}
-
-				});
-				*/
+				 * String status = tpEvent.getStatus(); String successPath =
+				 * TreeObject.TEST_OK_IMAGE; if (status.indexOf("pass") < 0) {
+				 * successPath = TreeObject.TEST_FAIL_IMAGE; } final
+				 * TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
+				 * tpEntity.setStatus(tpEvent.getStatus(), successPath);
+				 * Display.getDefault().syncExec(new Runnable() {
+				 * 
+				 * public void run() { mViewer.refresh(tpEntity, true); //
+				 * mViewer.update(tpEntity, null); }
+				 * 
+				 * });
+				 */
 			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
@@ -156,9 +201,7 @@ public class TestView extends ViewPart implements Observer {
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						//viewer.refresh(TestXML.getTPEntityFromDoc(dom), true);
-						// viewer.update(tpEntity, null);
-						viewer.setInput(TestXML.getTPEntityFromDoc(dom));
+						mViewer.setInput(TestXML.getTPEntityFromDoc(dom));
 					}
 				});
 			}

@@ -9,6 +9,7 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -36,14 +37,14 @@ public class TestView extends ViewPart implements Observer {
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview";
 
 	private Action mExecTest;
-	
+
 	private Action mDelTest;
 
 	private TreeViewer mViewer;
 
 	private TestContentProvider mTestContentProvider;
 
-	private HashMap<String, TPEntity> mTPEntities;
+	private HashMap<Integer, TPEntity> mTPEntities;
 
 	private void execTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -52,79 +53,30 @@ public class TestView extends ViewPart implements Observer {
 		while (selectionIter.hasNext()) {
 			TPEntity treeEnt = (TPEntity) selectionIter.next();
 			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-			/*
-			 * if (treeObject instanceof TPTestEntity) { Hashtable<String,
-			 * String> dictionary = ((TPTestEntity) treeObject)
-			 * .getDictionary(); TPEvent tpEvent = new
-			 * TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC, dictionary);
-			 * sendMsgToEventAdmin(tpEvent); }
-			 */
-			int nodeID = treeEnt.getID();
-
-			TPEntity[] topLevelEnts = (TPEntity[]) mTestContentProvider
-					.getElements(mViewer.getInput());
-			removeNode(topLevelEnts, nodeID);
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, Activator.getDefault()
+					.getTPBridgeClient().getTargetIDName());
+			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_REQ_TOPIC,
+					dictionary);
+			sendMsgToEventAdmin(tpEvent);
 		}
 	}
-	
+
 	private void delTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		Iterator selectionIter = selection.iterator();
 		while (selectionIter.hasNext()) {
-			TPEntity treeEnt = (TPEntity) selectionIter.next();
+			final TPEntity treeEnt = (TPEntity) selectionIter.next();
 			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-			/*
-			 * if (treeObject instanceof TPTestEntity) { Hashtable<String,
-			 * String> dictionary = ((TPTestEntity) treeObject)
-			 * .getDictionary(); TPEvent tpEvent = new
-			 * TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC, dictionary);
-			 * sendMsgToEventAdmin(tpEvent); }
-			 */
-			int nodeID = treeEnt.getID();
-
-			TPEntity[] topLevelEnts = (TPEntity[]) mTestContentProvider
-					.getElements(mViewer.getInput());
-			removeNode(topLevelEnts, nodeID);
-		}
-	}
-
-	private void removeNode(TPEntity[] topLevelEnts, int nodeID) {
-		Stack<TPEntity> tpEntities = new Stack<TPEntity>();
-		for (TPEntity topLevelEnt : topLevelEnts) {
-			tpEntities.add(topLevelEnt);
-		}
-		while (tpEntities.size() > 0) {
-			final TPEntity tpEnt = tpEntities.pop();
-
-			if (tpEnt.getID() == nodeID) {
-				final TPEntity tpParent = tpEnt.getParent();
-				if (tpParent != null) {
-					tpParent.removeChild(tpEnt);
-					Display.getDefault().syncExec(new Runnable() {
-						public void run() {
-							mViewer.refresh(tpParent, false);
-						}
-					});
-					return;
-				} else {
-					Display.getDefault().syncExec(new Runnable() {
-						public void run() {
-							mViewer.remove(tpEnt);
-						}
-					});
-					return;
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					mViewer.remove(mTPEntities.get(treeEnt.getID()));
 				}
-
-			} else {
-				TPEntity[] children = tpEnt.getChildren();
-				if (children != null && children.length > 0) {
-					for(TPEntity child : children)
-					{
-						tpEntities.add(child);
-					}
-				}
-			}
+			});
 		}
 	}
 
@@ -137,11 +89,10 @@ public class TestView extends ViewPart implements Observer {
 		mExecTest.setEnabled(true);
 		mExecTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/runjunit.gif"));
-		
+
 		mDelTest.setEnabled(true);
 		mDelTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/delete.gif"));
-
 
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -163,20 +114,19 @@ public class TestView extends ViewPart implements Observer {
 
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 
-		mTPEntities = new HashMap<String, TPEntity>();
+		mTPEntities = new HashMap<Integer, TPEntity>();
 
 		mExecTest = new Action("Run...") {
 			public void run() {
 				execTestAction();
 			}
 		};
-		
+
 		mDelTest = new Action("Delete...") {
 			public void run() {
 				delTestAction();
 			}
 		};
-		
 
 		mViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER);
@@ -184,7 +134,7 @@ public class TestView extends ViewPart implements Observer {
 		mViewer.setContentProvider(mTestContentProvider);
 		mViewer.setLabelProvider(new TestLabelProvider());
 		try {
-			mViewer.setInput(null/*TestXML.getExample()*/);
+			mViewer.setInput(null/* TestXML.getExample() */);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,17 +182,29 @@ public class TestView extends ViewPart implements Observer {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);
 				System.out.println(testTreeXML);
-				final TPEntity projRoot = TestXML.getTPEntityFromXML(testTreeXML); 
+				final TPEntity projRoot = TestXML
+						.getTPEntityFromXML(testTreeXML);
+				
+				mTPEntities.clear();
+				populateModel(projRoot);
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						mViewer.setInput(new TPEntity[]{projRoot} /*projRoot.getChildren()*/);
+						mViewer
+								.setInput(new TPEntity[] { projRoot } /* projRoot.getChildren() */);
 					}
 				});
 			}
 
 		}
 
+	}
+	
+	private void populateModel(TPEntity tpEntity)
+	{
+		mTPEntities.put(tpEntity.getID(), tpEntity);
+		for(TPEntity childEntity : tpEntity.getChildren())
+			populateModel(childEntity);
 	}
 
 	public void dispose() {

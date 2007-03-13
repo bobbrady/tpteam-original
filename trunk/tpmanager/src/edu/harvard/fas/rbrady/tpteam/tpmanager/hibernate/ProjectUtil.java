@@ -1,21 +1,20 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
+import java.io.ByteArrayOutputStream;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ProjectUtil {
 	public static Set<Project> getProjByECFID(String ecfID) throws Exception {
@@ -24,10 +23,10 @@ public class ProjectUtil {
 		Transaction tx = null;
 		try {
 
-			s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
+			//s = Activator.getDefault().getHiberSessionFactory()
+			//		.getCurrentSession();
 
-			// s = HibernateUtil.getSessionFactory().getCurrentSession();
+			 s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
@@ -36,9 +35,7 @@ public class ProjectUtil {
 			TpteamUser user = (TpteamUser) query.uniqueResult();
 			projs = user.getProjects();
 			for (Project proj : projs) {
-				Hibernate.initialize(proj);
-				Hibernate.initialize(proj.getProduct());
-				Hibernate.initialize(proj.getTpteamUsers());
+				proj.initSkeleton();
 			}
 			tx.commit();
 		} catch (Exception e) {
@@ -52,14 +49,24 @@ public class ProjectUtil {
 	public static String getProjProdXML(TPEvent tpEvent) throws Exception {
 		Set<Project> projs = getProjByECFID(tpEvent.getDictionary().get(
 				TPEvent.FROM));
-		Document dom = XMLUtil.getDocument();
-		Element rootEle = dom.createElement("projects");
-		dom.appendChild(rootEle);
-		for (Project proj : projs) {
-			rootEle.appendChild(ProjectXML.getProjProdElement(dom, proj));
+		/****************************************************************
+		 * Create stub Projects
+		 * 
+		 * Betwixt will call all getter methods objects as part of its
+		 * introspection.  This will cause non-initialized objects loaded
+		 * by Hibernate to throw init errors outside of Hibernate session.
+		 * Stub objects allow us to use lazy loading and avoid this error. 
+		 ******************************************************************/
+		HashSet<Project> stubProjs = new HashSet<Project>();
+		for(Project proj : projs)
+		{
+			Product stubProd = new Product(proj.getProduct().getId(), proj.getProduct().getName(), null, null);
+			Project stubProj = new Project(proj.getId(), stubProd, proj.getName(), proj.getDescription(), null, null);
+			stubProjs.add(stubProj);
 		}
-		return XMLUtil.getXML(dom);
+		return ProjectXML.getXML(stubProjs);
 	}
+	
 
 	public static void main(String[] args) {
 		Set<Project> projs;

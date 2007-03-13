@@ -70,6 +70,8 @@ public class ProjectView extends ViewPart implements Observer {
 					.getTPBridgeClient().getTargetIDName());
 			dictionary
 					.put(TPEvent.PROJECT_ID_KEY, String.valueOf(proj.getId()));
+			dictionary.put(TPEvent.PROJECT_KEY, proj.getName());
+			System.out.println("Project Name: " + dictionary.get(TPEvent.PROJECT_KEY));
 			showTestView();
 			Activator.getDefault().getEventAdminClient().sendEvent(
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);

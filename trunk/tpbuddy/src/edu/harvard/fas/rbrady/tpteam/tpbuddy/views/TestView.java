@@ -35,7 +35,9 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 public class TestView extends ViewPart implements Observer {
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview";
 
-	private Action runTest;
+	private Action mExecTest;
+	
+	private Action mDelTest;
 
 	private TreeViewer mViewer;
 
@@ -43,7 +45,29 @@ public class TestView extends ViewPart implements Observer {
 
 	private HashMap<String, TPEntity> mTPEntities;
 
-	private void updateAction() {
+	private void execTestAction() {
+		IStructuredSelection selection = (IStructuredSelection) mViewer
+				.getSelection();
+		Iterator selectionIter = selection.iterator();
+		while (selectionIter.hasNext()) {
+			TPEntity treeEnt = (TPEntity) selectionIter.next();
+			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+			/*
+			 * if (treeObject instanceof TPTestEntity) { Hashtable<String,
+			 * String> dictionary = ((TPTestEntity) treeObject)
+			 * .getDictionary(); TPEvent tpEvent = new
+			 * TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC, dictionary);
+			 * sendMsgToEventAdmin(tpEvent); }
+			 */
+			int nodeID = treeEnt.getID();
+
+			TPEntity[] topLevelEnts = (TPEntity[]) mTestContentProvider
+					.getElements(mViewer.getInput());
+			removeNode(topLevelEnts, nodeID);
+		}
+	}
+	
+	private void delTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		Iterator selectionIter = selection.iterator();
@@ -110,9 +134,14 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void createActions() {
-		runTest.setEnabled(true);
-		runTest.setImageDescriptor(Activator
+		mExecTest.setEnabled(true);
+		mExecTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/runjunit.gif"));
+		
+		mDelTest.setEnabled(true);
+		mDelTest.setImageDescriptor(Activator
+				.getImageDescriptor("icons/delete.gif"));
+
 
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -121,7 +150,8 @@ public class TestView extends ViewPart implements Observer {
 		});
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-		mgr.add(runTest);
+		mgr.add(mDelTest);
+		mgr.add(mExecTest);
 
 	}
 
@@ -135,11 +165,18 @@ public class TestView extends ViewPart implements Observer {
 
 		mTPEntities = new HashMap<String, TPEntity>();
 
-		runTest = new Action("Run...") {
+		mExecTest = new Action("Run...") {
 			public void run() {
-				updateAction();
+				execTestAction();
 			}
 		};
+		
+		mDelTest = new Action("Delete...") {
+			public void run() {
+				delTestAction();
+			}
+		};
+		
 
 		mViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER);
@@ -199,7 +236,7 @@ public class TestView extends ViewPart implements Observer {
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						mViewer.setInput(projRoot.getChildren());
+						mViewer.setInput(new TPEntity[]{projRoot} /*projRoot.getChildren()*/);
 					}
 				});
 			}

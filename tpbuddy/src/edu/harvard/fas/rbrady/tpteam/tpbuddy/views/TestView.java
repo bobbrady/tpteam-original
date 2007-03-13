@@ -24,13 +24,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
-import org.w3c.dom.Document;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
@@ -197,11 +195,11 @@ public class TestView extends ViewPart implements Observer {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);
 				System.out.println(testTreeXML);
-				final Document dom = XMLUtil.getDocFromXml(testTreeXML);
+				final TPEntity projRoot = TestXML.getTPEntityFromXML(testTreeXML); 
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						mViewer.setInput(TestXML.getTPEntityFromDoc(dom));
+						mViewer.setInput(projRoot.getChildren());
 					}
 				});
 			}

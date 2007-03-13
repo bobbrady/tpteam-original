@@ -8,9 +8,9 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,7 +35,6 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.XMLUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
@@ -86,13 +85,12 @@ public class ProjectView extends ViewPart implements Observer {
 		createActions();
 		// showTestView(IWorkbenchPage.VIEW_VISIBLE);
 	}
-	
+
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
 
 	}
-
 
 	private void showTestView() {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
@@ -157,7 +155,6 @@ public class ProjectView extends ViewPart implements Observer {
 
 	}
 
-
 	private static class TableUpdater implements Runnable {
 
 		private Object mTableViewerObject = null;
@@ -178,7 +175,6 @@ public class ProjectView extends ViewPart implements Observer {
 		}
 	}
 
-
 	public void dispose() {
 		super.dispose();
 		Activator.getDefault().getEventAdminHandler().deleteObserver(this);
@@ -194,9 +190,8 @@ public class ProjectView extends ViewPart implements Observer {
 			System.out.println("ProjectView: update called for "
 					+ tpEvent.getTopic());
 
-			ArrayList<Project> projs = ProjectXML.getProjProdFromDoc(XMLUtil
-					.getDocFromXml(tpEvent.getDictionary().get(
-							TPEvent.PROJ_PROD_XML_KEY)));
+			List<Project> projs = ProjectXML.getProjsFromXML(tpEvent
+					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
 
 			for (Project proj : projs) {
 				mTableUpdater.insertObject(proj);

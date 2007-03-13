@@ -52,12 +52,12 @@ public class ProjectView extends ViewPart implements Observer {
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 		mGetTestTree = new Action("Get Proj TestTree") {
 			public void run() {
-				updateAction();
+				getTestTreeAction();
 			}
 		};
 	}
 
-	private void updateAction() {
+	private void getTestTreeAction() {
 		IStructuredSelection selection = (IStructuredSelection) mTableViewer
 				.getSelection();
 		Iterator selectionIter = selection.iterator();

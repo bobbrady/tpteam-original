@@ -53,14 +53,13 @@ public class TestLabelProvider extends LabelProvider {
         Image image = null;
         
         TPEntity treeEnt = (TPEntity)element;
-
         
-        if (treeEnt.getType() == TPEntity.TPEntityType.FOLDER)
+        if (treeEnt.getType().equals(TPEntity.FOLDER))
         {
             image = PlatformUI.getWorkbench().getSharedImages().getImage(
                     ISharedImages.IMG_OBJ_FOLDER );
         }
-        else if(treeEnt.getType() == TPEntity.TPEntityType.JUNIT_TEST)
+        else if(treeEnt.getType().equals(TPEntity.JUNIT_TEST))
         {
             image = getImageFromString("icons/junit.gif");
         }

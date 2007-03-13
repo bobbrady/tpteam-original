@@ -44,7 +44,7 @@ public class TestView extends ViewPart implements Observer {
 
 	private TestContentProvider mTestContentProvider;
 
-	private HashMap<Integer, TPEntity> mTPEntities;
+	private HashMap<String, TPEntity> mTPEntities;
 
 	private void execTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -74,7 +74,7 @@ public class TestView extends ViewPart implements Observer {
 			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-					mViewer.remove(mTPEntities.get(treeEnt.getID()));
+					mViewer.remove(mTPEntities.get(String.valueOf(treeEnt.getID())));
 				}
 			});
 		}
@@ -114,7 +114,7 @@ public class TestView extends ViewPart implements Observer {
 
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 
-		mTPEntities = new HashMap<Integer, TPEntity>();
+		mTPEntities = new HashMap<String, TPEntity>();
 
 		mExecTest = new Action("Run...") {
 			public void run() {
@@ -202,7 +202,7 @@ public class TestView extends ViewPart implements Observer {
 	
 	private void populateModel(TPEntity tpEntity)
 	{
-		mTPEntities.put(tpEntity.getID(), tpEntity);
+		mTPEntities.put(String.valueOf(tpEntity.getID()), tpEntity);
 		for(TPEntity childEntity : tpEntity.getChildren())
 			populateModel(childEntity);
 	}

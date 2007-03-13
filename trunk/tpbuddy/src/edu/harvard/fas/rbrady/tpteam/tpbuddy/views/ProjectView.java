@@ -46,8 +46,6 @@ public class ProjectView extends ViewPart implements Observer {
 
 	private TableViewer mTableViewer;
 
-	private TableUpdater mTableUpdater;
-
 	private Action mGetTestTree;
 
 	public ProjectView() {
@@ -81,9 +79,7 @@ public class ProjectView extends ViewPart implements Observer {
 	@Override
 	public void createPartControl(Composite parent) {
 		initTableViewer(parent);
-		mTableUpdater = new TableUpdater(mTableViewer);
 		createActions();
-		// showTestView(IWorkbenchPage.VIEW_VISIBLE);
 	}
 
 	@Override
@@ -129,9 +125,6 @@ public class ProjectView extends ViewPart implements Observer {
 
 		mTableViewer.setLabelProvider(new ProjectLabelProvider());
 		mTableViewer.setContentProvider(new ArrayContentProvider());
-		// mTableViewer.setInput(getTPBridgeEvents());
-		// mTableViewer.setInput(TPEvent.getExamples());
-
 	}
 
 	private void initTable() {
@@ -155,26 +148,6 @@ public class ProjectView extends ViewPart implements Observer {
 
 	}
 
-	private static class TableUpdater implements Runnable {
-
-		private Object mTableViewerObject = null;
-
-		private TableViewer mTableViewer;
-
-		public TableUpdater(TableViewer tableViewer) {
-			mTableViewer = tableViewer;
-		}
-
-		public void insertObject(Object objectToInsert) {
-			mTableViewerObject = objectToInsert;
-			Display.getDefault().syncExec(this);
-		}
-
-		public void run() {
-			mTableViewer.add(mTableViewerObject);
-		}
-	}
-
 	public void dispose() {
 		super.dispose();
 		Activator.getDefault().getEventAdminHandler().deleteObserver(this);
@@ -190,12 +163,14 @@ public class ProjectView extends ViewPart implements Observer {
 			System.out.println("ProjectView: update called for "
 					+ tpEvent.getTopic());
 
-			List<Project> projs = ProjectXML.getProjsFromXML(tpEvent
+			final List<Project> projs = ProjectXML.getProjsFromXML(tpEvent
 					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
 
-			for (Project proj : projs) {
-				mTableUpdater.insertObject(proj);
-			}
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					mTableViewer.setInput(projs);
+				}
+			});
 		}
 	}
 }

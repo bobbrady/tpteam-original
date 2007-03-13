@@ -66,14 +66,15 @@ public class TestXML {
 		return  baos.toString();
 	}
 	
-	public static String getTPEntityXML(List<Test> tests)
+	public static String getTPEntityXML(List<Test> tests, String projName)
 	{
 		ArrayList<TPEntity> tpEntities = new ArrayList<TPEntity>();
+		TPEntity rootEntity = new TPEntity(0, projName, projName, TPEntity.FOLDER);
+
 		for(Test test : tests)
 		{
-			tpEntities.add(getTPEntity(test, null));
+			tpEntities.add(getTPEntity(test, rootEntity));
 		}
-		TPEntity rootEntity = new TPEntity(0, "rootEntity", null, null);
 		rootEntity.setChildren((TPEntity[])tpEntities.toArray(new TPEntity[0]));
 		
 		ByteArrayOutputStream baos = null;

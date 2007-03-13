@@ -46,7 +46,7 @@ public class TestUtil {
 
 	public static String getTestTreeXML(TPEvent tpEvent) throws Exception {
 		List<Test> tests = getTestByProjID(tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY));
-		return TestXML.getTPEntityXML(tests);
+		return TestXML.getTPEntityXML(tests, tpEvent.getDictionary().get(TPEvent.PROJECT_KEY));
 	}
 	
 	

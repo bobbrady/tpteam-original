@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<info primitiveTypes="attribute">
+<hide property="tests" />
+<hide property="id" />
+<hide property="description" />
+<element name='testType'>
+<addDefaults/>
+</element>
+</info>

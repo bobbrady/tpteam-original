@@ -107,5 +107,20 @@ public class Project implements java.io.Serializable {
 	public void setTests(Set<Test> tests) {
 		this.tests = tests;
 	}
+	
+	/**
+	 * Initializes Project skeleton values
+	 * once Project object is loaded by Hibernate.
+	 * 
+	 * For use outside of Hibernate session.
+	 */
+	public void initSkeleton()
+	{
+		getId();
+		getName();
+		getDescription();
+		getProduct().getId();
+		getProduct().getName();
+	}
 
 }

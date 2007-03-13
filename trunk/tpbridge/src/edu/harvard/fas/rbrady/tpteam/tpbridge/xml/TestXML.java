@@ -1,8 +1,10 @@
 package edu.harvard.fas.rbrady.tpteam.tpbridge.xml;
 
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Stack;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +14,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.betwixt.io.BeanReader;
+import org.apache.commons.betwixt.io.BeanWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,128 +27,115 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 
 public class TestXML {
 
-	public static Element getTestTreeElement(Document dom, Test test) {
-		Element testEle = dom.createElement("test");
-		testEle.setAttribute("id", String.valueOf(test.getId()));
-
-		Element nameEle = dom.createElement("name");
-		Text nameText = dom.createTextNode(test.getName());
-		nameEle.appendChild(nameText);
-		testEle.appendChild(nameEle);
-
-		Element descEle = dom.createElement("description");
-		Text descText = dom.createTextNode(test.getDescription());
-		descEle.appendChild(descText);
-		testEle.appendChild(descEle);
-
-		Element isFolderEle = dom.createElement("isFolder");
-		Text isFolderText = dom.createTextNode(test.getIsFolder().toString());
-		isFolderEle.appendChild(isFolderText);
-		testEle.appendChild(isFolderEle);
-
-		Element parentIdEle = dom.createElement("parentId");
-		Text parentIdText;
-		if (test.getParent() != null)
-			parentIdText = dom.createTextNode(String.valueOf(test.getParent()
-					.getId()));
-		else
-			parentIdText = dom.createTextNode("0");
-		parentIdEle.appendChild(parentIdText);
-		testEle.appendChild(parentIdEle);
-
-		Element testTypeEle = dom.createElement("testTypeName");
-		Text testTypeText;
-		if (test.getTestType() != null)
-			testTypeText = dom.createTextNode(test.getTestType().getName());
-		else
-			testTypeText = dom.createTextNode(null);
-		testTypeEle.appendChild(testTypeText);
-		testEle.appendChild(testTypeEle);
-
-		return testEle;
-	}
-
-	public static TPEntity[] getTPEntityFromDoc(Document dom) {
-		HashMap<Integer, TPEntity> tpEntities = new HashMap<Integer, TPEntity>();
-		HashMap<Integer, ArrayList<TPEntity>> childEntities = new HashMap<Integer, ArrayList<TPEntity>>();
-		try {
-			
-			XPathFactory factory = XPathFactory.newInstance();
-			XPath xpath = factory.newXPath();
-
-			XPathExpression expr = xpath.compile("/tests/test");
-			NodeList nodes = (NodeList) expr.evaluate(dom,
-					XPathConstants.NODESET);
-
-
-		
-
-			for (int idx = 0; idx < nodes.getLength(); idx++) {
-				int parentId = Integer.parseInt(xpath.evaluate("./parentId",
-						nodes.item(idx)));
-				TPEntity tpEntity = getTPEntityFromNode(xpath, nodes.item(idx));
-				tpEntities.put(tpEntity.getID(), tpEntity);
-				if (childEntities.get(Integer.valueOf(parentId)) == null) {
-					ArrayList<TPEntity> children = new ArrayList<TPEntity>();
-					children.add(tpEntity);
-					childEntities.put(parentId, children);
-				} else {
-					childEntities.get(parentId).add(tpEntity);
-				}
-			}
-
-			for (Integer key : tpEntities.keySet()) {
-				TPEntity parentEnt = tpEntities.get(key);
-				ArrayList<TPEntity> children = null;
-				if ((children = childEntities.get(key)) != null) {
-					for (TPEntity childEntity : children) {
-						childEntity.setParent(parentEnt);
-					}
-					parentEnt.setChildren(children.toArray(new TPEntity[0]));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return childEntities.get(0).toArray(new TPEntity[0]);
-	}
-
-	public static TPEntity getTPEntityFromNode(XPath xpath, Node node)
-			throws XPathExpressionException {
+	public static TPEntity getTPEntityFromTest(Test test)
+	{
 		TPEntity tpEntity = null;
-		String id = xpath.evaluate("./@id", node);
-		String name = xpath.evaluate("./name", node);
-		String desc = xpath.evaluate("./description", node);
-		String isFolder = xpath.evaluate("./isFolder", node);
-		String testTypeName = xpath.evaluate("./testTypeName", node);
+		String id = String.valueOf(test.getId());
+		String name = test.getName();
+		String desc = test.getDescription();
+		String isFolder = String.valueOf(test.getIsFolder());
+		String testTypeName = test.getTestType().getName();
 
 		if (isFolder != null && isFolder.equalsIgnoreCase("Y")) {
 			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
-					TPEntity.TPEntityType.FOLDER);
+					TPEntity.FOLDER);
 		} else if (testTypeName != null
 				&& testTypeName.equalsIgnoreCase("JUnit")) {
 			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
-					TPEntity.TPEntityType.JUNIT_TEST);
+					TPEntity.JUNIT_TEST);
+		}
+		return tpEntity;
+		
+	}
+	
+	public static String getXML(Test test)
+	{
+		ByteArrayOutputStream baos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			BeanWriter bWriter = new BeanWriter(baos);
+			bWriter.setWriteEmptyElements(false);
+			bWriter.enablePrettyPrint();
+			bWriter.writeXmlDeclaration("<?xml version='1.0' ?>");
+			bWriter.write("test", test);
+			bWriter.flush();
+			bWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  baos.toString();
+	}
+	
+	public static String getTPEntityXML(List<Test> tests)
+	{
+		ArrayList<TPEntity> tpEntities = new ArrayList<TPEntity>();
+		for(Test test : tests)
+		{
+			tpEntities.add(getTPEntity(test, null));
+		}
+		TPEntity rootEntity = new TPEntity(0, "rootEntity", null, null);
+		rootEntity.setChildren((TPEntity[])tpEntities.toArray(new TPEntity[0]));
+		
+		ByteArrayOutputStream baos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			BeanWriter bWriter = new BeanWriter(baos);
+			bWriter.setWriteEmptyElements(false);
+			bWriter.enablePrettyPrint();
+			bWriter.writeXmlDeclaration("<?xml version='1.0' ?>");
+			bWriter.write("tpEntity", rootEntity);
+			bWriter.flush();
+			bWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return baos.toString();
+	}
+	
+	public static TPEntity getTPEntity(Test test, TPEntity parent)
+	{
+		TPEntity tpEntity = null;
+		int id = test.getId();
+		String name = test.getName();
+		String desc = null /*test.getDescription()*/;
+		String isFolder = String.valueOf(test.getIsFolder());
+		String testTypeName = null;
+		if(test.getTestType() !=null)
+			testTypeName = test.getTestType().getName();
+
+		if (isFolder != null && isFolder.equalsIgnoreCase("Y")) {
+			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+					TPEntity.FOLDER);
+		} else if (testTypeName != null
+				&& testTypeName.equalsIgnoreCase("JUnit")) {
+			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+					TPEntity.JUNIT_TEST);
+		}
+		tpEntity.setParent(parent);
+		for(Test childTest : test.getChildren())
+		{
+			TPEntity childEntity = getTPEntity(childTest, tpEntity);
+			tpEntity.addChild(childEntity);
 		}
 		return tpEntity;
 	}
 
-	public static TPEntity[] getExample() throws Exception {
 	
-		DocumentBuilderFactory domFactory = DocumentBuilderFactory
-				.newInstance(); // domFactory.setNamespaceAware(true);
-		DocumentBuilder builder = domFactory.newDocumentBuilder();
-		Document dom = builder.parse("c:/Tests.xml");
-        
-
-		TPEntity[] tpEnts = TestXML.getTPEntityFromDoc(dom);
-		for(TPEntity tpEnt : tpEnts)
+	public static TPEntity getTPEntityFromXML(String entityXML)
+	{
+		TPEntity tpEntity = null;
+		try
 		{
-			System.out.println("ID: " + tpEnt.getID() + ", Name: " + tpEnt.getName());
-			for(TPEntity child : tpEnt.getChildren())
-				System.out.println("\tID: " + child.getID() + ", Name: " + child.getName());
+		BeanReader reader = new BeanReader();
+		reader.registerBeanClass("tpEntity", TPEntity.class);
+		StringReader xmlReader = new StringReader(entityXML);
+		tpEntity = (TPEntity)reader.parse(xmlReader);
 		}
-		return tpEnts;
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return tpEntity;
 	}
 
 }

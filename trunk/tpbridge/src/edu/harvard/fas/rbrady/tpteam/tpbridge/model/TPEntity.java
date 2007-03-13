@@ -6,7 +6,13 @@ import java.util.List;
 
 public class TPEntity {
 	
-	public enum TPEntityType  {FOLDER, JUNIT_TEST, EXEC_PASS, EXEC_FAIL};
+	public static final String FOLDER = "FOLDER";
+	
+	public static final String JUNIT_TEST = "JUNIT";
+	
+	public static final String EXEC_PASS = "EXEC_PASS";
+	
+	public static final String EXEC_FAIL = "EXEC_FAIL";
 	
 	private int mID;
 	
@@ -14,13 +20,18 @@ public class TPEntity {
 	
 	private String mDescription;
 	
-	private TPEntityType mType;
+	private String mType;
 	
 	private List<TPEntity> mChildren = new ArrayList<TPEntity>();
 
 	private TPEntity mParent = null;
 	
-	public TPEntity(int id, String name, String description, TPEntityType type)
+	public TPEntity()
+	{
+		
+	}
+	
+	public TPEntity(int id, String name, String description, String type)
 	{
 		mID = id;
 		mName = name;
@@ -58,12 +69,12 @@ public class TPEntity {
 		mDescription = description;
 	}
 	
-	public TPEntityType getType()
+	public String getType()
 	{
 		return mType;
 	}
 	
-	public void setType(TPEntityType type)
+	public void setType(String type)
 	{
 		mType = type;
 	}

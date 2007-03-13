@@ -185,6 +185,11 @@ public class Test implements java.io.Serializable {
 	public void setChildren(Set<Test> children) {
 		this.children = children;
 	}
+	
+	public void addChild(Test child)
+	{
+		this.children.add(child);
+	}
 
 	public Set<JunitTest> getJunitTests() {
 		return this.junitTests;
@@ -202,6 +207,30 @@ public class Test implements java.io.Serializable {
 		System.out.println(pad + "printNode: " + name);
 		for(Test child : getChildren())
 			child.printNode(depth + 1);
+	}
+	
+	/**
+	 * Initializes a Test "Skeleton" for use in displaying
+	 * Tests in GUI trees
+	 *
+	 * Recursively initializes ID, Name, Description,
+	 * isFolder,  testType, parent, for this Test and 
+	 * all its children
+	 */
+	public void initSkeleton()
+	{
+		getId();
+		getName();
+		getDescription();
+		getIsFolder();
+		Test parent = getParent();
+		TestType testType = getTestType();
+		if(parent != null)
+			parent.getId();
+		if(testType != null)
+			testType.getName();
+		for(Test child : getChildren())
+			child.initSkeleton();
 	}
 	
 }

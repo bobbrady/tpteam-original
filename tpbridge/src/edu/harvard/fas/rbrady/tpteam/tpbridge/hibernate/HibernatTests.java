@@ -1,10 +1,12 @@
 package edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.osgi.service.event.Event;
@@ -34,7 +36,9 @@ public class HibernatTests {
 			//insertTestExec(45);
 			//deleteProj(41);
 			//getTPEventSendTo(62);
-			getProjByUser(101);
+			//getProjByUser(101);
+		    Test test = getInitTopLevelTests(1);
+			printTest(test);
 			HibernateUtil.getSessionFactory().close();
 			
 		} catch (Exception e) {
@@ -709,6 +713,44 @@ public class HibernatTests {
 			throw e;
 		}
 
+	}
+	
+	public static Test getInitTopLevelTests(int projID) throws Exception
+	{
+			Test root = new Test();
+			List<Test> tests = null;
+			Session s = null;
+			Transaction tx = null;
+			try {
+				s = HibernateUtil.getSessionFactory().getCurrentSession();
+				tx = s.beginTransaction();
+
+				String hql = "from Test as test where test.parent is null and test.project.id =:projID";
+				Query query = s.createQuery(hql);
+				query.setString("projID", String.valueOf(projID));
+				tests = query.list();
+
+				// Initialize fields of interest
+				for (Test test : tests) {
+					test.initSkeleton();
+				}
+				root.setName("root");
+				root.setId(0);
+				root.setChildren(new HashSet<Test>(tests));
+				tx.commit();
+			} catch (Exception e) {
+				if (tx != null)
+					tx.rollback();
+				throw e;
+			}
+			return root;
+		}
+	
+	public static void printTest(Test test)
+	{
+		System.out.println("Test Name: " + test.getName() + "id: " + test.getId());
+		for(Test child : test.getChildren())
+			printTest(child);
 	}
 
 }

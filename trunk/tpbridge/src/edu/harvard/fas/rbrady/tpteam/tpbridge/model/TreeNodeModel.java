@@ -2,61 +2,59 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.model;
 
 import java.util.HashMap;
 
-public class TreeNodeModel extends HashMap<String, ITreeNode> implements ITreeNodeChangeListener {
+public class TreeNodeModel extends HashMap<String, ITreeNode> implements
+		ITreeNodeChangeListener {
 
 	private static final long serialVersionUID = 1L;
-	
-	public ITreeNode put(String key, ITreeNode node)
-	{
+
+	public ITreeNode put(String key, ITreeNode node) {
 		node.addChangeListener(this);
 		return super.put(key, node);
 	}
-	
-	public ITreeNode remove(String key, ITreeNode node)
-	{
+
+	public ITreeNode remove(String key, ITreeNode node) {
 		node.removeChangeListener(this);
 		return super.remove(key);
 	}
 
 	public void addNode(ITreeNode node) {
 		addListenerTo(node);
-		put(String.valueOf(((TPEntity)node).getID()), node);
+		put(String.valueOf(node.getID()), node);
+		for (ITreeNode child : node.getChildren()) {
+			addNode(child);
+		}
 	}
 
 	public void deleteNode(ITreeNode node) {
-		if(get(String.valueOf(((TPEntity)node).getID())) != null)
-		{
-			System.out.println("TreeNodeModel Got message to delete node: " + node.getName());
+		if (get(String.valueOf(node.getID())) != null) {
+			System.out.println("TreeNodeModel Got message to delete node: "
+					+ node.getName());
 			removeListenerFrom(node);
-			remove(String.valueOf(((TPEntity)node).getID()));
-			for(ITreeNode child : node.getChildren())
-			{
+			remove(String.valueOf(node.getID()));
+			for (ITreeNode child : node.getChildren()) {
 				deleteNode(child);
 			}
 		}
 	}
 
 	public void updateNode(ITreeNode node) {
-		//NOOP
+		// NOOP
 	}
-	
-	public void clear()
-	{
-		for(String key : keySet())
-		{
+
+	public void clear() {
+		for (String key : keySet()) {
 			removeListenerFrom(get(key));
 		}
 		super.clear();
 	}
-	
+
 	protected void removeListenerFrom(ITreeNode node) {
 		node.removeChangeListener(this);
 		for (ITreeNode child : node.getChildren()) {
 			removeListenerFrom(child);
 		}
 	}
-	
-	
+
 	protected void addListenerTo(ITreeNode node) {
 		node.addChangeListener(this);
 		for (ITreeNode child : node.getChildren()) {

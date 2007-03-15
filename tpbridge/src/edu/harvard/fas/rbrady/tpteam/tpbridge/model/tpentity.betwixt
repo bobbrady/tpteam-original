@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <info primitiveTypes="attribute">
 <element name='tpEntity'>
+<element name='children' property='children' class='edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity'/>
 <addDefaults/>
 </element>
 </info>

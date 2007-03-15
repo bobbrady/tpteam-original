@@ -8,12 +8,10 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Stack;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -27,8 +25,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
@@ -44,7 +44,7 @@ public class TestView extends ViewPart implements Observer {
 
 	private TestContentProvider mTestContentProvider;
 
-	private HashMap<String, TPEntity> mTPEntities;
+	private TreeNodeModel mTreeNodeModel;
 
 	private void execTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -74,7 +74,12 @@ public class TestView extends ViewPart implements Observer {
 			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-					mViewer.remove(mTPEntities.get(String.valueOf(treeEnt.getID())));
+					ITreeNode delNode = mTreeNodeModel.get(String.valueOf(treeEnt.getID()));
+					ITreeNode parent;
+					if(delNode != null && (parent = delNode.getParent()) != null)
+					{
+						parent.removeChild(treeEnt);
+					}
 				}
 			});
 		}
@@ -114,7 +119,7 @@ public class TestView extends ViewPart implements Observer {
 
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 
-		mTPEntities = new HashMap<String, TPEntity>();
+		mTreeNodeModel = new TreeNodeModel();
 
 		mExecTest = new Action("Run...") {
 			public void run() {
@@ -185,7 +190,7 @@ public class TestView extends ViewPart implements Observer {
 				final TPEntity projRoot = TestXML
 						.getTPEntityFromXML(testTreeXML);
 				
-				mTPEntities.clear();
+				mTreeNodeModel.clear();
 				populateModel(projRoot);
 
 				Display.getDefault().syncExec(new Runnable() {
@@ -200,11 +205,11 @@ public class TestView extends ViewPart implements Observer {
 
 	}
 	
-	private void populateModel(TPEntity tpEntity)
+	private void populateModel(ITreeNode treeNode)
 	{
-		mTPEntities.put(String.valueOf(tpEntity.getID()), tpEntity);
-		for(TPEntity childEntity : tpEntity.getChildren())
-			populateModel(childEntity);
+		mTreeNodeModel.put(String.valueOf(treeNode.getID()), treeNode);
+		for(ITreeNode child : treeNode.getChildren())
+			populateModel(child);
 	}
 
 	public void dispose() {

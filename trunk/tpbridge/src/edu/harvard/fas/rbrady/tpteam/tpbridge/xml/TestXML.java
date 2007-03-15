@@ -3,26 +3,15 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.betwixt.io.BeanWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.AbstractTreeNode;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNodeChangeListener;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 
 public class TestXML {
@@ -68,14 +57,14 @@ public class TestXML {
 	
 	public static String getTPEntityXML(List<Test> tests, String projName)
 	{
-		ArrayList<TPEntity> tpEntities = new ArrayList<TPEntity>();
+		ArrayList<ITreeNode> tpEntities = new ArrayList<ITreeNode>();
 		TPEntity rootEntity = new TPEntity(0, projName, projName, TPEntity.FOLDER);
 
 		for(Test test : tests)
 		{
 			tpEntities.add(getTPEntity(test, rootEntity));
 		}
-		rootEntity.setChildren((TPEntity[])tpEntities.toArray(new TPEntity[0]));
+		rootEntity.setChildren(tpEntities);
 		
 		ByteArrayOutputStream baos = null;
 		try {
@@ -128,6 +117,9 @@ public class TestXML {
 		try
 		{
 		BeanReader reader = new BeanReader();
+		reader.registerBeanClass(AbstractTreeNode.class);
+		reader.registerBeanClass(ITreeNode.class);
+		reader.registerBeanClass(ITreeNodeChangeListener.class);
 		reader.registerBeanClass("tpEntity", TPEntity.class);
 		StringReader xmlReader = new StringReader(entityXML);
 		tpEntity = (TPEntity)reader.parse(xmlReader);

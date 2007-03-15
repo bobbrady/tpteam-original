@@ -22,61 +22,47 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 
 public class TestLabelProvider extends LabelProvider {
 
-    private HashMap<ImageDescriptor, Image> imageCache = new HashMap<ImageDescriptor, Image>();
+	private HashMap<ImageDescriptor, Image> imageCache = new HashMap<ImageDescriptor, Image>();
 
-    public void dispose() {
-        for (Iterator i = imageCache.values().iterator(); i.hasNext();) {
-            ((Image) i.next()).dispose();
-        }
-        imageCache.clear();
-    }
+	public void dispose() {
+		for (Iterator i = imageCache.values().iterator(); i.hasNext();) {
+			((Image) i.next()).dispose();
+		}
+		imageCache.clear();
+	}
 
-    public String getText(Object obj) {
-    	if(obj instanceof TPEntity)
-    	{
-    		return ((TPEntity)obj).getName();
-    	}
-        return obj.toString();
-    }
+	public String getText(Object obj) {
+		if (obj instanceof TPEntity) {
+			return ((TPEntity) obj).getName();
+		}
+		return obj.toString();
+	}
 
-    /*
-     * public Image getImage(Object obj) { String imageKey =
-     * ISharedImages.IMG_OBJ_ELEMENT; if (obj instanceof TreeParent)
-     * imageKey = ISharedImages.IMG_OBJ_FOLDER; return
-     * AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
-     * "icons/sample.gif"); //return
-     * PlatformUI.getWorkbench().getSharedImages().getImage(imageKey*); }
-     */
+	public Image getImage(Object element) {
 
-    public Image getImage(Object element) {
+		Image image = null;
 
-        Image image = null;
-        
-        TPEntity treeEnt = (TPEntity)element;
-        
-        if (treeEnt.getType().equals(TPEntity.FOLDER))
-        {
-            image = PlatformUI.getWorkbench().getSharedImages().getImage(
-                    ISharedImages.IMG_OBJ_FOLDER );
-        }
-        else if(treeEnt.getType().equals(TPEntity.JUNIT_TEST))
-        {
-            image = getImageFromString("icons/junit.gif");
-        }
+		TPEntity treeEnt = (TPEntity) element;
 
-        return image;
-    }
-    
-    private Image getImageFromString(String type)
-    {
-        ImageDescriptor descriptor = Activator.getImageDescriptor(type);
-        // obtain the cached image corresponding to the descriptor
-        Image image = (Image) imageCache.get(descriptor);
-        if (image == null) {
-            image = descriptor.createImage();
-            imageCache.put(descriptor, image);
-        }    
-        return image;
-    }
+		if (treeEnt.getType().equals(TPEntity.FOLDER)) {
+			image = PlatformUI.getWorkbench().getSharedImages().getImage(
+					ISharedImages.IMG_OBJ_FOLDER);
+		} else if (treeEnt.getType().equals(TPEntity.JUNIT_TEST)) {
+			image = getImageFromString("icons/junit.gif");
+		}
+
+		return image;
+	}
+
+	private Image getImageFromString(String type) {
+		ImageDescriptor descriptor = Activator.getImageDescriptor(type);
+		// obtain the cached image corresponding to the descriptor
+		Image image = (Image) imageCache.get(descriptor);
+		if (image == null) {
+			image = descriptor.createImage();
+			imageCache.put(descriptor, image);
+		}
+		return image;
+	}
 
 }

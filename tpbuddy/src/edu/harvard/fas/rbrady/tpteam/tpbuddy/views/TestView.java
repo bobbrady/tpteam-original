@@ -72,16 +72,15 @@ public class TestView extends ViewPart implements Observer {
 		while (selectionIter.hasNext()) {
 			final TPEntity treeEnt = (TPEntity) selectionIter.next();
 			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					ITreeNode delNode = mTreeNodeModel.get(String.valueOf(treeEnt.getID()));
-					ITreeNode parent;
-					if(delNode != null && (parent = delNode.getParent()) != null)
-					{
-						parent.removeChild(treeEnt);
-					}
-				}
-			});
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, Activator.getDefault()
+					.getTPBridgeClient().getTargetIDName());
+			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC,
+					dictionary);
+			sendMsgToEventAdmin(tpEvent);
 		}
 	}
 
@@ -189,7 +188,7 @@ public class TestView extends ViewPart implements Observer {
 				System.out.println(testTreeXML);
 				final TPEntity projRoot = TestXML
 						.getTPEntityFromXML(testTreeXML);
-				
+
 				mTreeNodeModel.clear();
 				populateModel(projRoot);
 
@@ -199,16 +198,28 @@ public class TestView extends ViewPart implements Observer {
 								.setInput(new TPEntity[] { projRoot } /* projRoot.getChildren() */);
 					}
 				});
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
+					ITPBridge.TEST_DEL_RESP_TOPIC)) {
+				final String nodeID = tpEvent.getID();
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						ITreeNode delNode = mTreeNodeModel.get(nodeID);
+						ITreeNode parent;
+						if (delNode != null
+								&& (parent = delNode.getParent()) != null) {
+							parent.removeChild(delNode);
+						}
+					}
+				});
 			}
 
 		}
 
 	}
-	
-	private void populateModel(ITreeNode treeNode)
-	{
+
+	private void populateModel(ITreeNode treeNode) {
 		mTreeNodeModel.put(String.valueOf(treeNode.getID()), treeNode);
-		for(ITreeNode child : treeNode.getChildren())
+		for (ITreeNode child : treeNode.getChildren())
 			populateModel(child);
 	}
 

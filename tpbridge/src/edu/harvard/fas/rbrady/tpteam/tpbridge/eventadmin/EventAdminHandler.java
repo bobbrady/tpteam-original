@@ -32,13 +32,15 @@ public class EventAdminHandler implements EventHandler, Observer {
 
 	public EventAdminHandler(BundleContext context) {
 		mEvents = new ArrayList<TPEvent>();
-		// Set topics for events where tpbridge will send out of JVM on ECF SharedObect
+		// Set topics for events where tpbridge will send out of JVM on ECF
+		// SharedObect
 		String topicsProp = Activator.getTPTeamProps().getProperty(
 				ITPBridge.BRIDGE_EA_CLIENT_TOPICS_KEY);
 		String topics[] = topicsProp.split(",");
-		for(String topic : topics)
-			System.out.println(ITPBridge.BRIDGE_EA_CLIENT_TOPICS_KEY + ": " + topic);
-			
+		for (String topic : topics)
+			System.out.println(ITPBridge.BRIDGE_EA_CLIENT_TOPICS_KEY + ": "
+					+ topic);
+
 		mDictionary.put(EventConstants.EVENT_TOPIC, topics);
 		context
 				.registerService(EventHandler.class.getName(), this,
@@ -47,8 +49,9 @@ public class EventAdminHandler implements EventHandler, Observer {
 
 	public void handleEvent(Event event) {
 
-		System.out.println("TPBridge EventAdminHandler: Got " + event.getTopic()
-				+ " Event from " + event.getProperty(TPEvent.SEND_TO));
+		System.out.println("TPBridge EventAdminHandler: Got "
+				+ event.getTopic() + " Event from "
+				+ event.getProperty(TPEvent.SEND_TO));
 
 		TPEvent tpEvent = new TPEvent(event);
 		mEvents.add(tpEvent);
@@ -81,5 +84,4 @@ public class EventAdminHandler implements EventHandler, Observer {
 	public ArrayList<TPEvent> getEventLog() {
 		return mEvents;
 	}
-
 }

@@ -16,7 +16,6 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
 public class EventAdminClient {
 

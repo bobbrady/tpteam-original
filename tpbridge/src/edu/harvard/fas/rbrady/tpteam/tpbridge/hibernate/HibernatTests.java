@@ -32,13 +32,13 @@ public class HibernatTests {
 			//getProject("21");
 			//deleteUser(81);
 			//updateProj(1);
-			//deleteTest(22);
+			deleteTest(33);
 			//insertTestExec(45);
 			//deleteProj(41);
 			//getTPEventSendTo(62);
 			//getProjByUser(101);
-		    Test test = getInitTopLevelTests(1);
-			printTest(test);
+		    //Test test = getInitTopLevelTests(1);
+			//printTest(test);
 			HibernateUtil.getSessionFactory().close();
 			
 		} catch (Exception e) {

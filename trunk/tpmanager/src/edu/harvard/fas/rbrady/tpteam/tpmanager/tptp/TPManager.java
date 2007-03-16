@@ -69,6 +69,13 @@ public class TPManager implements Observer {
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
 					sendTestTreeGetResponse(tpEvent);
+				} else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_DEL_REQ_TOPIC)) {
+					System.out.println("TPManager.update(): Recv'd event "
+							+ tpTopic + " from "
+							+ tpEvent.getDictionary().get(TPEvent.FROM));
+					deleteTest(tpEvent);
+					sendDelTestResponse(tpEvent);
 				}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
@@ -107,6 +114,21 @@ public class TPManager implements Observer {
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_TREE_GET_RESP_TOPIC, dictionary);
 	}
+	
+	private void sendDelTestResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
+				TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		dictionary.put(TPEvent.ID_KEY, tpEvent.getID());
+		System.out.println("TPManager.sendTestDelResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_DEL_RESP_TOPIC, dictionary);
+	}
+
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;
@@ -191,6 +213,30 @@ public class TPManager implements Observer {
 				tx.rollback();
 			throw e;
 		}
+	}
+
+	private void deleteTest(TPEvent tpEvent) throws Exception {
+		Transaction tx = null;
+
+		try {
+			// For standalone
+			// Session s =
+			// HibernateUtil.getSessionFactory().getCurrentSession();
+
+			Session s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+			tx = s.beginTransaction();
+
+			Test test = (Test) s.load(Test.class, new Integer(tpEvent.getID()));
+			s.delete(test);
+			s.flush();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+
 	}
 
 	public String getDateTime() {

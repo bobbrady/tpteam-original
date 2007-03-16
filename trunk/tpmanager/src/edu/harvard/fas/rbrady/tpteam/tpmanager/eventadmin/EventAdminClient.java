@@ -37,7 +37,8 @@ public class EventAdminClient {
 			if (topic.equals(ITPBridge.TEST_EXEC_REQ_TOPIC)
 					|| topic.equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)
 					|| topic.equals(ITPBridge.PROJ_GET_RESP_TOPIC)
-					|| topic.equals(ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
+					|| topic.equals(ITPBridge.TEST_TREE_GET_RESP_TOPIC)
+					|| topic.equals(ITPBridge.TEST_DEL_RESP_TOPIC)) {
 				System.out.println("EventAdminClient: Sent " + topic);
 				eventAdmin.sendEvent(new Event(topic, dictionary));
 				messageSent = true;

@@ -60,7 +60,7 @@ public class TestTreeAction extends ActionDelegate implements
 	public void run(IAction action) {
 		if(window != null) {	
 			try {
-				window.getActivePage().showView(viewID, Integer.toString(instanceNum++), IWorkbenchPage.VIEW_ACTIVATE);
+				window.getActivePage().showView(viewID);
 			} catch (PartInitException e) {
 				MessageDialog.openError(window.getShell(), "Error", "Error opening view:" + e.getMessage());
 			}

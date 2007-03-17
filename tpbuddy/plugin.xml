@@ -22,19 +22,19 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            allowMultiple="true"
+            allowMultiple="false"
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.TestView"
             icon="icons/junit.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview"
             name="Project Test Tree"/>
       <view
-            allowMultiple="true"
+            allowMultiple="false"
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.EventHistoryView"
             icon="icons/event_message.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.eventhistview"
             name="Event History"/>
       <view
-            allowMultiple="true"
+            allowMultiple="false"
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.ProjectView"
             icon="icons/checkout.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.projectview"

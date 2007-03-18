@@ -10,6 +10,7 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.exec;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +72,7 @@ public class ExecTest extends ServletUtil {
 	protected String getProjRows() throws Exception
 	{
 		Transaction tx = null;
-		Set<Project> projs = null;
+		Set<Project> projs = new HashSet<Project>();
 		StringBuffer projRows = new StringBuffer();
 		int remoteUserId = -1;
 		try {

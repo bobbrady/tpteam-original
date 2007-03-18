@@ -15,6 +15,7 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -22,6 +23,7 @@ import org.hibernate.Transaction;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
@@ -145,6 +147,20 @@ public class TPManager implements Observer {
 
 			Test test = (Test) s.load(Test.class, new Integer(testID));
 			testType = test.getTestType().getName();
+			
+			// Collect project member ecfIDs
+			Set<TpteamUser> users = test.getProject().getTpteamUsers();
+			StringBuilder userECFIDs = new StringBuilder();
+			int idx = 0;
+			for(TpteamUser user : users)
+			{
+				if(idx == 0)
+					userECFIDs.append(user.getEcfId());
+				else
+					userECFIDs.append("/" + user.getEcfId());
+				idx++;
+			}	
+			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECFIDs.toString());
 
 			s.flush();
 			tx.commit();

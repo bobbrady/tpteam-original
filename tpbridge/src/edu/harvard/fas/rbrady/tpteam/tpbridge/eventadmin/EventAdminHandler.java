@@ -50,7 +50,7 @@ public class EventAdminHandler implements EventHandler, Observer {
 	public void handleEvent(Event event) {
 
 		System.out.println("TPBridge EventAdminHandler: Got "
-				+ event.getTopic() + " Event from "
+				+ event.getTopic() + " Event SEND_TO "
 				+ event.getProperty(TPEvent.SEND_TO));
 
 		TPEvent tpEvent = new TPEvent(event);
@@ -73,15 +73,29 @@ public class EventAdminHandler implements EventHandler, Observer {
 			TPEvent tpEvent = (TPEvent) sharedObjEvent.getData();
 			System.out
 					.println("TPBridge: Update from SharedObject Got TPEvent topic "
-							+ tpEvent.getTopic());
+							+ tpEvent.getTopic() + " from " + tpEvent.getDictionary().get(TPEvent.FROM));
 
-			Activator.getEventAdminClient().sendEvent(tpEvent.getTopic(),
+			// Included so outbound messages don't get into infinite loop
+			if(isTopicForwardable(tpEvent.getTopic()))
+			{
+				Activator.getEventAdminClient().sendEvent(tpEvent.getTopic(),
 					tpEvent.getDictionary());
-
+			}
+		
 		}
 	}
 
 	public ArrayList<TPEvent> getEventLog() {
 		return mEvents;
+	}
+	
+	private boolean isTopicForwardable(String topic)
+	{
+		for(String bridgeTopic : mDictionary.get(EventConstants.EVENT_TOPIC))
+		{
+			if(topic.equalsIgnoreCase(bridgeTopic))
+				return false;
+		}
+		return true;
 	}
 }

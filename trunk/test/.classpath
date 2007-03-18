@@ -6,7 +6,5 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.junit_3.8.1/junit.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.hyades.test.tools.core_4.2.1.v200607310100/common.runner.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.hyades.test.tools.core_4.2.1.v200607310100/java.runner.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpbuddy"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpmanager"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

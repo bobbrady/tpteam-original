@@ -50,8 +50,6 @@ public interface ITPBridge {
 	public static final String DEFAULT_CONTAINER_TYPE = "ecf.xmpp.smack";
 
 	public static final String DEFAULT_SHARED_OBJECT_ID = "myobject";
-
-	public static final String DEFAULT_TARGET_ID = "tpteam_1@jabber.org";
 	
 	public static final String CLIENT_TYPE = "CLIENT_TYPE";
 	

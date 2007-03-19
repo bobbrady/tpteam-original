@@ -1,6 +1,5 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -34,6 +33,8 @@ public class ProjectUtil {
 			query.setString("ecfID", ecfID);
 			TpteamUser user = (TpteamUser) query.uniqueResult();
 			projs = user.getProjects();
+			if(projs == null)
+				return new HashSet<Project>();
 			for (Project proj : projs) {
 				proj.initSkeleton();
 			}

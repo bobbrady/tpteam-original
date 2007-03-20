@@ -24,10 +24,13 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecutionUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestUtil;
 
 public class TPManager implements Observer {
@@ -61,13 +64,11 @@ public class TPManager implements Observer {
 			try {
 				if (tpTopic.equals(ITPBridge.PROJ_GET_REQ_TOPIC)) {
 					sendProjGetResponse(tpEvent);
-				}
-
-				else if (tpTopic
+				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_EXEC_REQ_TOPIC)) {
 
 					runTest(tpEvent.getID(), tpEvent);
-
+					sendTestExecResponse(tpEvent);
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
 					sendTestTreeGetResponse(tpEvent);
@@ -84,7 +85,6 @@ public class TPManager implements Observer {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	private void sendProjGetResponse(TPEvent tpEvent) throws Exception {
@@ -116,7 +116,7 @@ public class TPManager implements Observer {
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_TREE_GET_RESP_TOPIC, dictionary);
 	}
-	
+
 	private void sendDelTestResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
@@ -131,6 +131,22 @@ public class TPManager implements Observer {
 				ITPBridge.TEST_DEL_RESP_TOPIC, dictionary);
 	}
 
+	private void sendTestExecResponse(TPEvent tpEvent) {
+		tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
+		tpEvent.getDictionary().put(TPEvent.FROM,
+				Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
+		
+		TPEntity execEntity = TestExecutionXML.getTPEntityFromExecEvent(tpEvent);
+		String execXML = TestExecutionXML.getTPEntityXML(execEntity);
+		tpEvent.getDictionary().put(TPEvent.TEST_EXEC_XML_KEY, execXML);
+		
+		System.out.println("TPManager runTests(): sending tpEvent w/status "
+				+ tpEvent.getStatus() + " & topic " + tpEvent.getTopic()
+				+ " to " + tpEvent.getDictionary().get(TPEvent.SEND_TO));
+
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				tpEvent.getTopic(), tpEvent.getDictionary());
+	}
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;
@@ -147,20 +163,22 @@ public class TPManager implements Observer {
 
 			Test test = (Test) s.load(Test.class, new Integer(testID));
 			testType = test.getTestType().getName();
-			
+
 			// Collect project member ecfIDs
 			Set<TpteamUser> users = test.getProject().getTpteamUsers();
 			StringBuilder userECFIDs = new StringBuilder();
 			int idx = 0;
-			for(TpteamUser user : users)
-			{
-				if(idx == 0)
+			for (TpteamUser user : users) {
+				if (idx == 0)
 					userECFIDs.append(user.getEcfId());
 				else
 					userECFIDs.append("/" + user.getEcfId());
 				idx++;
-			}	
+			}
+			String ECFID = tpEvent.getDictionary().get(TPEvent.FROM);
+			tpEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
 			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECFIDs.toString());
+			tpEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
 
 			s.flush();
 			tx.commit();
@@ -168,6 +186,7 @@ public class TPManager implements Observer {
 			if (testType.equalsIgnoreCase("JUNIT")) {
 				runJUnitTest(testID, tpEvent);
 			}
+			TestExecutionUtil.insertTestExec(testID, tpEvent);
 
 		} catch (Exception e) {
 			if (tx != null)
@@ -207,22 +226,13 @@ public class TPManager implements Observer {
 			s.flush();
 			tx.commit();
 
-			String status = mAutomationClient.run(eclipseHome, workspace,
+			String verdict = mAutomationClient.run(eclipseHome, workspace,
 					project, new String[] { suite }, report, tptpConn);
-			System.out.println("Test Status: " + status);
-			status += ": " + getDateTime();
 
-			// ********************************************************
-			tpEvent.setStatus(status);
-			tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
-			tpEvent.getDictionary().put(TPEvent.FROM,
-					Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
-			System.out
-					.println("TPManager runTests(): sending tpEvent w/status "
-							+ status + " & topic " + tpEvent.getTopic());
-			Activator.getDefault().getEventAdminClient().sendEvent(
-					tpEvent.getTopic(), tpEvent.getDictionary());
-			// ***********************************************************/
+			System.out.println("Test Verdict: " + verdict);
+
+			tpEvent.getDictionary().put(TPEvent.VERDICT_KEY, verdict);
+			tpEvent.getDictionary().put(TPEvent.TIMESTAMP_KEY, getDateTime());
 
 		} catch (Exception e) {
 			if (tx != null)

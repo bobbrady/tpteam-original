@@ -1,6 +1,5 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -8,10 +7,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class TestUtil {
 	public static List<Test> getTestByProjID(String projID) throws Exception {
@@ -19,11 +18,10 @@ public class TestUtil {
 		Session s = null;
 		Transaction tx = null;
 		try {
-			/*
-			 * s = Activator.getDefault().getHiberSessionFactory()
-			 * .getCurrentSession();
-			 */
-			s = HibernateUtil.getSessionFactory().getCurrentSession();
+			
+			 s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+			 
+			//s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.parent is null and test.project.id =:projID";
 			Query query = s.createQuery(hql);

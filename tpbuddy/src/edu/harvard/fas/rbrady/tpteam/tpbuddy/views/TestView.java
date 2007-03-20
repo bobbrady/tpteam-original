@@ -29,6 +29,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
@@ -161,26 +162,14 @@ public class TestView extends ViewPart implements Observer {
 			// final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
 
 			System.out.println("TestView Got Update: " + tpEvent.getTopic());
-			if (/*
-				 * tpEntity != null &
-				 */tpEvent.getTopic().equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
+			if (tpEvent.getTopic().equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
 
 				System.out.println("TestView: update called for "
 						+ tpEvent.getTopic() + " Event for "
 						+ tpEvent.getTestName());
-				/*
-				 * String status = tpEvent.getStatus(); String successPath =
-				 * TreeObject.TEST_OK_IMAGE; if (status.indexOf("pass") < 0) {
-				 * successPath = TreeObject.TEST_FAIL_IMAGE; } final
-				 * TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
-				 * tpEntity.setStatus(tpEvent.getStatus(), successPath);
-				 * Display.getDefault().syncExec(new Runnable() {
-				 * 
-				 * public void run() { mViewer.refresh(tpEntity, true); //
-				 * mViewer.update(tpEntity, null); }
-				 * 
-				 * });
-				 */
+
+				updateExecution(tpEvent);
+
 			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
@@ -218,9 +207,25 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void populateModel(ITreeNode treeNode) {
-		mTreeNodeModel.put(String.valueOf(treeNode.getID()), treeNode);
+		mTreeNodeModel.put(treeNode.getID(), treeNode);
 		for (ITreeNode child : treeNode.getChildren())
 			populateModel(child);
+	}
+
+	private void updateExecution(final TPEvent tpEvent) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				String execXML = tpEvent.getDictionary().get(
+						TPEvent.TEST_EXEC_XML_KEY);
+				ITreeNode execNode = TestExecutionXML
+						.getTPEntityFromXML(execXML);
+				ITreeNode parent = null;
+				if ((parent = mTreeNodeModel.get(execNode.getParent().getID())) != null) {
+					execNode.setParent(parent);
+					parent.addChild(execNode);
+				}
+			}
+		});
 	}
 
 	public void dispose() {

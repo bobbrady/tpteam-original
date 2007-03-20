@@ -49,6 +49,14 @@ public class TestLabelProvider extends LabelProvider {
 					ISharedImages.IMG_OBJ_FOLDER);
 		} else if (treeEnt.getType().equals(TPEntity.JUNIT_TEST)) {
 			image = getImageFromString("icons/junit.gif");
+		} else if (treeEnt.getType().equals(TPEntity.EXEC_PASS)) {
+			image = getImageFromString("icons/testok.gif");
+		} else if (treeEnt.getType().equals(TPEntity.EXEC_FAIL)) {
+			image = getImageFromString("icons/testfail.gif");
+		} else if (treeEnt.getType().equals(TPEntity.EXEC_ERROR)) {
+			image = getImageFromString("icons/testerr.gif");
+		} else if (treeEnt.getType().equals(TPEntity.EXEC_INCONCLUSIVE)) {
+			image = getImageFromString("icons/testignored.gif");
 		}
 
 		return image;

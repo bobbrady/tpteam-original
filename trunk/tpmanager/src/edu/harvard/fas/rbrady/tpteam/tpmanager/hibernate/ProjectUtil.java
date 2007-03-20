@@ -8,12 +8,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ProjectUtil {
 	public static Set<Project> getProjByECFID(String ecfID) throws Exception {
@@ -22,10 +22,9 @@ public class ProjectUtil {
 		Transaction tx = null;
 		try {
 
-			//s = Activator.getDefault().getHiberSessionFactory()
-			//		.getCurrentSession();
+			s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 
-			 s = HibernateUtil.getSessionFactory().getCurrentSession();
+			// s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";

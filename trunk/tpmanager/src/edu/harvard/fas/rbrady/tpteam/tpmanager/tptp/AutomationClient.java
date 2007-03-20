@@ -74,6 +74,7 @@ public class AutomationClient {
 		// Retrieve results back from return list
 		results = (List) properties.get("results");
 		System.out.println("Results collected: " + results);
+	
 
 		// Configure service properties for this service invocation
 		properties = new Properties();
@@ -92,19 +93,30 @@ public class AutomationClient {
 		System.out.println("Verdict: '" + properties.getProperty("verdict")
 				+ "'");
 
-		String verdict = properties.getProperty("verdict");
-		return verdict;
+		return properties.getProperty("verdict");
 
 	}
 	
 	public static void main(String[] args)
 	{
+		
 		String eclipse = "c:/Java/Eclipse3.2.1_ECF0.9.6/eclipse";
 		String workspace = "c:/tpteam/workspace_tpteam_test";
 		String project = "edu.harvard.fas.rbrady.tpteam.test";
+		String[] suites = new String[]{"edu/harvard/fas/rbrady/tpteam/tpbridge/hibernate/test/ProductTest.testsuite"};
+		String connection = "tptp:rac://localhost:10002/default";
+		String report = eclipse + "/reports";
+		
+		
+		/*
+		String eclipse = "/usr/local/eclipse";
+		String workspace = "/home/tpteam/workspace_tpteam_test";
+		String project = "edu.harvard.fas.rbrady.tpteam.test";
 		String[] suites = new String[]{"edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/ProductTest.testsuite"};
-		String connection = "tptp:rac://localhost:1002/default";
-		String report = "c:/tpteam/tests/reports";
+		String connection = "tptp:rac://192.168.0.12:10002/default";
+		String report = eclipse + "/reports";
+		*/
+
 		
 		AutomationClient client = new AutomationClient();
 		client.run(eclipse, workspace, project, suites, report, connection);

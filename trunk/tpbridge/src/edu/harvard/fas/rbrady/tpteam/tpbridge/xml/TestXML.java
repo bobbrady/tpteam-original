@@ -26,11 +26,11 @@ public class TestXML {
 		String testTypeName = test.getTestType().getName();
 
 		if (isFolder != null && isFolder.equalsIgnoreCase("Y")) {
-			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+			tpEntity = new TPEntity(id, name, desc,
 					TPEntity.FOLDER);
 		} else if (testTypeName != null
 				&& testTypeName.equalsIgnoreCase("JUnit")) {
-			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+			tpEntity = new TPEntity(id, name, desc,
 					TPEntity.JUNIT_TEST);
 		}
 		return tpEntity;
@@ -58,7 +58,7 @@ public class TestXML {
 	public static String getTPEntityXML(List<Test> tests, String projName)
 	{
 		ArrayList<ITreeNode> tpEntities = new ArrayList<ITreeNode>();
-		TPEntity rootEntity = new TPEntity(0, projName, projName, TPEntity.FOLDER);
+		TPEntity rootEntity = new TPEntity("0", projName, projName, TPEntity.FOLDER);
 
 		for(Test test : tests)
 		{
@@ -85,7 +85,7 @@ public class TestXML {
 	public static TPEntity getTPEntity(Test test, TPEntity parent)
 	{
 		TPEntity tpEntity = null;
-		int id = test.getId();
+		String id = String.valueOf(test.getId());
 		String name = test.getName();
 		String desc = null /*test.getDescription()*/;
 		String isFolder = String.valueOf(test.getIsFolder());
@@ -94,11 +94,11 @@ public class TestXML {
 			testTypeName = test.getTestType().getName();
 
 		if (isFolder != null && isFolder.equalsIgnoreCase("Y")) {
-			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+			tpEntity = new TPEntity(id, name, desc,
 					TPEntity.FOLDER);
 		} else if (testTypeName != null
 				&& testTypeName.equalsIgnoreCase("JUnit")) {
-			tpEntity = new TPEntity(Integer.valueOf(id), name, desc,
+			tpEntity = new TPEntity(id, name, desc,
 					TPEntity.JUNIT_TEST);
 		}
 		tpEntity.setParent(parent);

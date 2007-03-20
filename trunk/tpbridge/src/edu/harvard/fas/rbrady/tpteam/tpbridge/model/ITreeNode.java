@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface ITreeNode extends Serializable {
-	public int getID();
-	public void setID(int id);
+	public String getID();
+	public void setID(String id);
 	public String getName();
 	public void setName(String name);
 	public List<ITreeNode> getChildren();

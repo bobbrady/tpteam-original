@@ -25,42 +25,48 @@ public class HibernatTests {
 			// getProd(0);
 			// getTpteamUser(1);
 			// insertTest();
-			//printTree();
-			//insertUser();
-			//getProjOptions();
-			//updateProd();
-			//getProject("21");
-			//deleteUser(81);
-			//updateProj(1);
-			deleteTest(33);
-			//insertTestExec(45);
-			//deleteProj(41);
-			//getTPEventSendTo(62);
-			//getProjByUser(101);
-		    //Test test = getInitTopLevelTests(1);
-			//printTest(test);
+			// printTree();
+			// insertUser();
+			// getProjOptions();
+			// updateProd();
+			// getProject("21");
+			// deleteUser(81);
+			// updateProj(1);
+			// deleteTest(33);
+			insertTestExec(62);
+			// deleteProj(41);
+			// getTPEventSendTo(62);
+			// getProjByUser(101);
+			// Test test = getInitTopLevelTests(1);
+			// printTest(test);
 			HibernateUtil.getSessionFactory().close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static Integer insertTestExec(int testId) throws Exception
-	{
+
+	public static Integer insertTestExec(int testId) throws Exception {
 		System.out.println("Inserting TestExec");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		Integer id = null;
+		String ecfID = "tpteam_2@jabber.org";
 		try {
 
 			tx = s.beginTransaction();
+			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
+			Query query = s.createQuery(hql);
+			query.setString("ecfID", ecfID);
+			List users = query.list();
 			Test test = (Test) s.load(Test.class, new Integer(testId));
 			TestExecution testExec = new TestExecution();
 			testExec.setTest(test);
-			testExec.setStatus('P');
+			testExec.setStatus('I');
 			testExec.setExecDate(new Date());
+			testExec.setTpteamUser((TpteamUser) users.get(0));
 			s.save(testExec);
+			System.out.println("testExec ID: " + testExec.getId());
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)
@@ -69,7 +75,7 @@ public class HibernatTests {
 		}
 		return id;
 	}
-	
+
 	public static Integer insertUser() throws Exception {
 		System.out.println("Inserting User");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -86,12 +92,12 @@ public class HibernatTests {
 			user.setEmail("tpteam@test.com");
 			user.setPhone("617-555-1212");
 			user.setEcfId("tpteam@jabber.org");
-			
+
 			Project proj1 = (Project) s.load(Project.class, new Integer("1"));
 			Project proj21 = (Project) s.load(Project.class, new Integer("21"));
 			user.getProjects().add(proj1);
 			user.getProjects().add(proj21);
-			
+
 			Role role = (Role) s.load(Role.class, new Integer("1"));
 			user.setRole(role);
 
@@ -107,7 +113,6 @@ public class HibernatTests {
 		}
 		return id;
 	}
-
 
 	public static void insertProd() throws Exception {
 		System.out.println("Inserting Prod");
@@ -187,7 +192,7 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-	
+
 	public static void getTPEventSendTo(int id) throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
@@ -195,42 +200,41 @@ public class HibernatTests {
 
 			tx = s.beginTransaction();
 			Test test = (Test) s.load(Test.class, new Integer(id));
-			
+
 			String testType = test.getTestType().getName();
-				
+
 			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
-					"Demo Project (TPTeam)", "user", test.getName(),
-					String.valueOf(id), "status");
+					"Demo Project (TPTeam)", "user", test.getName(), String
+							.valueOf(id), "status");
 
 			// Add all project user's ECF IDs to SEND_TO field of event
-			Project proj = (Project)s.load(Project.class, new Integer(test.getProject().getId()));
+			Project proj = (Project) s.load(Project.class, new Integer(test
+					.getProject().getId()));
 			StringBuffer userECF = new StringBuffer();
-			for(TpteamUser user : proj.getTpteamUsers())
-			{
-				if(userECF.length() == 0)
+			for (TpteamUser user : proj.getTpteamUsers()) {
+				if (userECF.length() == 0)
 					userECF.append(user.getEcfId());
 				else
 					userECF.append("/" + user.getEcfId());
 			}
 			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
-			
-			Event myEvent = new Event(tpEvent.getTopic(), tpEvent.getDictionary());
-			
+
+			Event myEvent = new Event(tpEvent.getTopic(), tpEvent
+					.getDictionary());
+
 			TPEvent tpEventFromOSGIEvent = new TPEvent(myEvent);
 
 			String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
 			System.out.println("sendTo: " + sendTo);
 			String[] ECFIDs = sendTo.split("/");
-			for(String ECFID : ECFIDs)
-			{
-				//sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
-				//sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
-				System.out.println("TPBridge.sendECFTPMsg: sent event " + tpEvent.getTestName() + " to " + ECFID);
+			for (String ECFID : ECFIDs) {
+				// sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
+				// sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
+				System.out.println("TPBridge.sendECFTPMsg: sent event "
+						+ tpEvent.getTestName() + " to " + ECFID);
 			}
 
-			
 			s.flush();
-
 
 			tx.commit();
 		} catch (Exception e) {
@@ -239,7 +243,6 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-
 
 	public static void getTpteamUser(int id) throws Exception {
 		System.out.println("Getting TpTeamUser");
@@ -279,10 +282,10 @@ public class HibernatTests {
 		try {
 
 			tx = s.beginTransaction();
-			TpteamUser user = (TpteamUser)s.load(TpteamUser.class, new Integer(id));
-			for(Project proj : user.getProjects())
-			{
-				proj.getTpteamUsers().remove(user);				
+			TpteamUser user = (TpteamUser) s.load(TpteamUser.class,
+					new Integer(id));
+			for (Project proj : user.getProjects()) {
+				proj.getTpteamUsers().remove(user);
 			}
 			s.delete(user);
 			s.flush();
@@ -304,17 +307,12 @@ public class HibernatTests {
 		try {
 
 			tx = s.beginTransaction();
-			Test test = (Test)s.load(Test.class, new Integer(id));
+			Test test = (Test) s.load(Test.class, new Integer(id));
 			/*
-			for(TestExecution testExec : test.getTestExecutions())
-			{
-				s.delete(testExec);				
-			}
-			for(JunitTest junit : test.getJunitTests())
-			{
-				s.delete(junit);				
-			}
-			*/
+			 * for(TestExecution testExec : test.getTestExecutions()) {
+			 * s.delete(testExec); } for(JunitTest junit : test.getJunitTests()) {
+			 * s.delete(junit); }
+			 */
 			s.delete(test);
 			s.flush();
 			System.out.println("Done\n");
@@ -325,7 +323,7 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-	
+
 	public static void deleteProj(int id) throws Exception {
 		System.out.println("Deleting Proj with ID: " + id);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -335,17 +333,12 @@ public class HibernatTests {
 		try {
 
 			tx = s.beginTransaction();
-			Project proj = (Project)s.load(Project.class, new Integer(id));
+			Project proj = (Project) s.load(Project.class, new Integer(id));
 			/*
-			for(TestExecution testExec : test.getTestExecutions())
-			{
-				s.delete(testExec);				
-			}
-			for(JunitTest junit : test.getJunitTests())
-			{
-				s.delete(junit);				
-			}
-			*/
+			 * for(TestExecution testExec : test.getTestExecutions()) {
+			 * s.delete(testExec); } for(JunitTest junit : test.getJunitTests()) {
+			 * s.delete(junit); }
+			 */
 			proj.getTpteamUsers().removeAll(proj.getTpteamUsers());
 			s.delete(proj);
 			s.flush();
@@ -357,7 +350,7 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-	
+
 	public static void updateProj(int projId) throws Exception {
 		System.out.println("Updating proj with ID: " + projId);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -367,16 +360,16 @@ public class HibernatTests {
 		try {
 
 			tx = s.beginTransaction();
-			Project proj = (Project)s.load(Project.class, new Integer(projId));
+			Project proj = (Project) s.load(Project.class, new Integer(projId));
 			proj.setName("TPTeam Demo Proj");
 			proj.setDescription("Demo Desc");
 			Product prod = (Product) s.load(Product.class, new Integer("1"));
 			proj.setProduct(prod);
-			
-			//String[] userIds = new String[]{"1"};
+
+			// String[] userIds = new String[]{"1"};
 			proj.getTpteamUsers().removeAll(proj.getTpteamUsers());
 			String[] userIds = new String[0];
-		
+
 			for (String userId : userIds) {
 				TpteamUser tpTeamUser = (TpteamUser) s.load(TpteamUser.class,
 						new Integer(userId));
@@ -393,7 +386,6 @@ public class HibernatTests {
 		}
 	}
 
-	
 	public static void deleteProd(int id) throws Exception {
 		System.out.println("Deleting Prod with ID: " + id);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -445,7 +437,7 @@ public class HibernatTests {
 
 		return id;
 	}
-	
+
 	public static Integer insertTest() throws Exception {
 		System.out.println("Inserting Test");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -537,7 +529,6 @@ public class HibernatTests {
 		return path.length() - pathNoDots.length();
 	}
 
-	
 	public static void printTree(List<Test> tests) {
 		Stack<Test> nodes = new Stack<Test>();
 		nodes.addAll(tests);
@@ -588,9 +579,10 @@ public class HibernatTests {
 			header += "</div>\n";
 			header += "<span class=\"branch\" id=\"branch_" + testId + "\">\n";
 		} else {
-			header += getPad(depth) + "<img src=\"doc.gif\"> " + 
-			"<a href=\"#\" id=\""+ testId + "\" onClick=\"makeBold('" + testId + "'); return false;\">" +
-			 testName + "</a><br>\n";
+			header += getPad(depth) + "<img src=\"doc.gif\"> "
+					+ "<a href=\"#\" id=\"" + testId
+					+ "\" onClick=\"makeBold('" + testId
+					+ "'); return false;\">" + testName + "</a><br>\n";
 		}
 		return header;
 	}
@@ -610,10 +602,10 @@ public class HibernatTests {
 			pad += "\t";
 		return pad;
 	}
-	
-	private static String getRoleOptions() throws Exception
-	{
-		//Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+	private static String getRoleOptions() throws Exception {
+		// Session s =
+		// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		List<Role> roles = null;
@@ -621,11 +613,12 @@ public class HibernatTests {
 		try {
 
 			tx = s.beginTransaction();
-			
-			roles = s.createQuery("from Role as role order by role.name asc").list();
-			for(Role role : roles)
-			{
-				mRoleOptions += "<option value=\"" + role.getRoleId() + "\">" + role.getName() + "</option>";
+
+			roles = s.createQuery("from Role as role order by role.name asc")
+					.list();
+			for (Role role : roles) {
+				mRoleOptions += "<option value=\"" + role.getRoleId() + "\">"
+						+ role.getName() + "</option>";
 			}
 
 			tx.commit();
@@ -634,15 +627,15 @@ public class HibernatTests {
 				tx.rollback();
 			throw e;
 		}
-		
+
 		System.out.println(mRoleOptions);
 		return mRoleOptions;
 	}
-	
-	private static String getProjOptions() throws Exception
-	{
+
+	private static String getProjOptions() throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		//Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+		// Session s =
+		// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		List<Project> projs = null;
 		String mProjOptions = "";
@@ -650,10 +643,11 @@ public class HibernatTests {
 
 			tx = s.beginTransaction();
 
-			projs = s.createQuery("from Project as p order by p.name asc").list();
-			for(Project proj : projs)
-			{
-				mProjOptions += "<option value=\"" + proj.getId() + "\">" + proj.getName() + "</option>\n";
+			projs = s.createQuery("from Project as p order by p.name asc")
+					.list();
+			for (Project proj : projs) {
+				mProjOptions += "<option value=\"" + proj.getId() + "\">"
+						+ proj.getName() + "</option>\n";
 			}
 
 			tx.commit();
@@ -662,25 +656,24 @@ public class HibernatTests {
 				tx.rollback();
 			throw e;
 		}
-		
-		mProjOptions = "<option selected>Choose Project</option>\n" +  mProjOptions;
+
+		mProjOptions = "<option selected>Choose Project</option>\n"
+				+ mProjOptions;
 
 		System.out.println(mProjOptions);
-		
+
 		return mProjOptions;
 	}
-	
-	private static void getProject(String projId) throws Exception
-	{
+
+	private static void getProject(String projId) throws Exception {
 		System.out.println("Getting Proj");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
 
 			tx = s.beginTransaction();
-			Project proj = (Project)s.load(Project.class, new Integer(projId));
-			for(TpteamUser user : proj.getTpteamUsers())
-			{
+			Project proj = (Project) s.load(Project.class, new Integer(projId));
+			for (TpteamUser user : proj.getTpteamUsers()) {
 				System.out.println("user: " + user.getUserName());
 			}
 			System.out.println("product: " + proj.getProduct());
@@ -691,20 +684,21 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-	
-	private static void getProjByUser(int id) throws Exception
-	{
+
+	private static void getProjByUser(int id) throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
-		//List<TpteamUser> users = null;
+		// List<TpteamUser> users = null;
 		String teamOptions = "";
 		try {
 
 			tx = s.beginTransaction();
 
-			TpteamUser user = (TpteamUser)s.createQuery("from TpteamUser as user where user.id = " + id).uniqueResult();
+			TpteamUser user = (TpteamUser) s.createQuery(
+					"from TpteamUser as user where user.id = " + id)
+					.uniqueResult();
 			Set<Project> projs = user.getProjects();
-			for(Project proj : projs)
+			for (Project proj : projs)
 				System.out.println("Project: " + proj.getName());
 			tx.commit();
 		} catch (Exception e) {
@@ -714,42 +708,41 @@ public class HibernatTests {
 		}
 
 	}
-	
-	public static Test getInitTopLevelTests(int projID) throws Exception
-	{
-			Test root = new Test();
-			List<Test> tests = null;
-			Session s = null;
-			Transaction tx = null;
-			try {
-				s = HibernateUtil.getSessionFactory().getCurrentSession();
-				tx = s.beginTransaction();
 
-				String hql = "from Test as test where test.parent is null and test.project.id =:projID";
-				Query query = s.createQuery(hql);
-				query.setString("projID", String.valueOf(projID));
-				tests = query.list();
+	public static Test getInitTopLevelTests(int projID) throws Exception {
+		Test root = new Test();
+		List<Test> tests = null;
+		Session s = null;
+		Transaction tx = null;
+		try {
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+			tx = s.beginTransaction();
 
-				// Initialize fields of interest
-				for (Test test : tests) {
-					test.initSkeleton();
-				}
-				root.setName("root");
-				root.setId(0);
-				root.setChildren(new HashSet<Test>(tests));
-				tx.commit();
-			} catch (Exception e) {
-				if (tx != null)
-					tx.rollback();
-				throw e;
+			String hql = "from Test as test where test.parent is null and test.project.id =:projID";
+			Query query = s.createQuery(hql);
+			query.setString("projID", String.valueOf(projID));
+			tests = query.list();
+
+			// Initialize fields of interest
+			for (Test test : tests) {
+				test.initSkeleton();
 			}
-			return root;
+			root.setName("root");
+			root.setId(0);
+			root.setChildren(new HashSet<Test>(tests));
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
 		}
-	
-	public static void printTest(Test test)
-	{
-		System.out.println("Test Name: " + test.getName() + "id: " + test.getId());
-		for(Test child : test.getChildren())
+		return root;
+	}
+
+	public static void printTest(Test test) {
+		System.out.println("Test Name: " + test.getName() + "id: "
+				+ test.getId());
+		for (Test child : test.getChildren())
 			printTest(child);
 	}
 

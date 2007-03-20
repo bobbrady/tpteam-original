@@ -29,12 +29,24 @@ public class TPEvent implements Serializable{
 	public static final String PROJ_PROD_XML_KEY = "PROD_PROJ_XML";
 	
 	public static final String TEST_TREE_XML_KEY = "TEST_TREE_XML";
+	
+	public static final String TEST_EXEC_XML_KEY = "TEST_EXEC_XML";
 
 	public static final String PARENT_CONTAINER_KEY = "PARENT_CONTAINER";
+	
+	public static final String VERDICT_KEY = "VERDICT";
 
 	public static final String TEST_NAME_KEY = "TEST_NAME";
+	
+	public static final String TIMESTAMP_KEY = "TIMESTAMP";
+	
+	public static final String COMMENTS_KEY = "COMMENTS";
 
 	public static final String ID_KEY = "ID";
+	
+	public static final String PARENT_ID_KEY = "PARENT_ID";
+	
+	public static final String ECFID_KEY = "ECFID";
 
 	public static final String STATUS_KEY = "STATUS";
 	

@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class AbstractTreeNode implements ITreeNode {
 
-	private int mID;
+	private String mID;
 
 	private String mName;
 
@@ -47,7 +47,7 @@ public abstract class AbstractTreeNode implements ITreeNode {
 
 	public boolean removeChild(int childID) {
 		for (ITreeNode childEnt : mChildren) {
-			if (((TPEntity) childEnt).getID() == childID) {
+			if (((TPEntity) childEnt).getID().equals(childID)) {
 				boolean isRemoved = removeChild(childEnt);
 				if (isRemoved) {
 					fireNodeDeleted(childEnt);
@@ -59,11 +59,11 @@ public abstract class AbstractTreeNode implements ITreeNode {
 	}
 
 
-	public int getID() {
+	public String getID() {
 		return mID;
 	}
 
-	public void setID(int id) {
+	public void setID(String id) {
 		mID = id;
 	}
 

@@ -2,6 +2,7 @@
 <info primitiveTypes="attribute">
 <element name='tpEntity'>
 <element name='children' property='children' class='edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity'/>
+<element name='parent' property='parent' class='edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity'/>
 <addDefaults/>
 </element>
 </info>

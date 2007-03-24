@@ -94,10 +94,4 @@ Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
 Bundle-ClassPath: .,
  lib/tptp-automation-client.jar
 Require-Bundle: org.eclipse.ecf,
- org.eclipse.core.runtime,
- org.eclipse.ecf.presence,
- org.eclipse.ecf.provider,
- org.eclipse.ecf.provider.xmpp,
- org.eclipse.ecf.call,
- org.eclipse.ecf.discovery,
- org.eclipse.ecf.sharedobject
+ org.eclipse.core.runtime

@@ -73,6 +73,7 @@ public class URIClientConnectAction implements IWorkbenchWindowActionDelegate {
                 client.createAndConnectClient(containerType, uri,nickname, data);
                 return status;
             } catch (Exception e) {
+            	e.printStackTrace();
             	showExceptionInMultiStatus(15555,status,e);
                 return status;
             }

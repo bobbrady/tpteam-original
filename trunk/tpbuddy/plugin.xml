@@ -24,7 +24,7 @@
       <view
             allowMultiple="false"
             class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.TestView"
-            icon="icons/junit.gif"
+            icon="icons/testhier.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview"
             name="Project Test Tree"/>
       <view
@@ -39,6 +39,12 @@
             icon="icons/checkout.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.projectview"
             name="Project View"/>
+      <view
+            allowMultiple="false"
+            class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.DetailView"
+            icon="icons/test.gif"
+            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.detailview"
+            name="Test Details View"/>
    </extension>
       
       <extension
@@ -57,7 +63,7 @@
                tooltip="Open Event History View"/>
          <action
       		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.TestTreeAction"
-               icon="icons/junit.gif"
+               icon="icons/testhier.gif"
                id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.testtreeaction"
                label="Open Test Tree View..."
                style="push"

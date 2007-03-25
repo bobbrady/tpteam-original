@@ -15,6 +15,7 @@ import java.util.Observer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -22,6 +23,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -35,6 +37,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.MailDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
 public class TestView extends ViewPart implements Observer {
@@ -43,6 +46,8 @@ public class TestView extends ViewPart implements Observer {
 	private Action mExecTest;
 
 	private Action mDelTest;
+
+	private Action mUpdateTest;
 
 	private Action mShowTest;
 
@@ -76,6 +81,22 @@ public class TestView extends ViewPart implements Observer {
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
 		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		Shell parent = getViewSite().getShell();
+		
+		if(Integer.parseInt(treeEnt.getID()) < 1)
+		{
+			MessageDialog.openError(parent, "Delete Test Error", 
+					"Delete Test Error: The root node is not deleteable.");
+			return;
+		}
+		
+		boolean confirm = MessageDialog.openConfirm(parent,
+				"Delete Test Confirmation",
+				"Are you sure you want to delete test entity "
+						+ treeEnt.getName() + "?");
+		if (!confirm)
+			return;
+
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
@@ -84,6 +105,36 @@ public class TestView extends ViewPart implements Observer {
 				.getTargetIDName());
 		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC, dictionary);
 		sendMsgToEventAdmin(tpEvent);
+	}
+
+	private void updateTestAction() {
+		/*
+		 * IStructuredSelection selection = (IStructuredSelection) mViewer
+		 * .getSelection(); final TPEntity treeEnt = (TPEntity)
+		 * selection.getFirstElement(); System.out.println("\n\nTestView:
+		 * Selection " + treeEnt.getName()); Hashtable<String, String>
+		 * dictionary = new Hashtable<String, String>();
+		 * dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+		 * dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+		 * .getTPBridgeClient().getTPMgrECFID()); dictionary.put(TPEvent.FROM,
+		 * Activator.getDefault().getTPBridgeClient() .getTargetIDName());
+		 * TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC,
+		 * dictionary); sendMsgToEventAdmin(tpEvent);
+		 */
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				MailDialog mailDialog = new MailDialog(PlatformUI
+						.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						new String[] { "Suzie", "Bunny", "Puppy", "Eggie" });
+				if (mailDialog.open() == MailDialog.OPEN) {
+					String[] itemsToOpen = mailDialog.getItemsToOpen();
+					for (String item : itemsToOpen) {
+						System.out.println("item to open: " + item);
+					}
+				}
+
+			}
+		});
 	}
 
 	private void showTestAction() {
@@ -134,6 +185,10 @@ public class TestView extends ViewPart implements Observer {
 		mShowTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/test.gif"));
 
+		mUpdateTest.setEnabled(true);
+		mUpdateTest.setImageDescriptor(Activator
+				.getImageDescriptor("icons/update_tree.gif"));
+
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				// updateAction();
@@ -142,6 +197,7 @@ public class TestView extends ViewPart implements Observer {
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		mgr.add(mShowTest);
+		mgr.add(mUpdateTest);
 		mgr.add(mDelTest);
 		mgr.add(mExecTest);
 
@@ -172,6 +228,12 @@ public class TestView extends ViewPart implements Observer {
 		mShowTest = new Action("Details...") {
 			public void run() {
 				showTestAction();
+			}
+		};
+
+		mUpdateTest = new Action("Update...") {
+			public void run() {
+				updateTestAction();
 			}
 		};
 

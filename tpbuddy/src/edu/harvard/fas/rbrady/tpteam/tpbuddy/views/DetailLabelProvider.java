@@ -65,7 +65,7 @@ public class DetailLabelProvider extends LabelProvider implements
 			image = getImageFromString("icons/testerr.gif");
 		} else if (tpEntity.getType().equals(TPEntity.EXEC_INCONCLUSIVE)) {
 			image = getImageFromString("icons/testignored.gif");
-		} else if (tpEntity.getType().indexOf("Eclipse") >= 0) {
+		} else if (tpEntity.getType().toUpperCase().indexOf("ECLIPSE") >= 0) {
 			image = getImageFromString("icons/eclipse.gif");
 		} else if (tpEntity.getType().toUpperCase().indexOf("TPTP") >= 0) {
 			image = getImageFromString("icons/eclipse.gif");

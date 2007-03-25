@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class Test implements java.io.Serializable {
 
-	// Fields    
+	// Fields
 
 	private int id;
 
@@ -20,7 +20,7 @@ public class Test implements java.io.Serializable {
 	private TestType testType;
 
 	private TpteamUser createdBy;
-	
+
 	private TpteamUser modifiedBy;
 
 	private Test parent;
@@ -153,7 +153,7 @@ public class Test implements java.io.Serializable {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	public Date getCreatedDate() {
 		return this.createdDate;
 	}
@@ -185,9 +185,8 @@ public class Test implements java.io.Serializable {
 	public void setChildren(Set<Test> children) {
 		this.children = children;
 	}
-	
-	public void addChild(Test child)
-	{
+
+	public void addChild(Test child) {
 		this.children.add(child);
 	}
 
@@ -198,39 +197,73 @@ public class Test implements java.io.Serializable {
 	public void setJunitTests(Set<JunitTest> junitTests) {
 		this.junitTests = junitTests;
 	}
-	
-	public void printNode(int depth)
-	{
+
+	public void printNode(int depth) {
 		String pad = "";
-		for(int idx = 0; idx < depth; idx++)
+		for (int idx = 0; idx < depth; idx++)
 			pad += "\t";
 		System.out.println(pad + "printNode: " + name);
-		for(Test child : getChildren())
+		for (Test child : getChildren())
 			child.printNode(depth + 1);
 	}
-	
+
 	/**
-	 * Initializes a Test "Skeleton" for use in displaying
-	 * Tests in GUI trees
-	 *
-	 * Recursively initializes ID, Name, Description,
-	 * isFolder,  testType, parent, for this Test and 
-	 * all its children
+	 * Initializes a Test "Skeleton" for use in displaying Tests in GUI trees
+	 * 
+	 * Recursively initializes ID, Name, Description, isFolder, testType,
+	 * parent, for this Test and all its children
 	 */
-	public void initSkeleton()
-	{
+	public void initSkeleton() {
 		getId();
 		getName();
 		getDescription();
 		getIsFolder();
 		Test parent = getParent();
 		TestType testType = getTestType();
-		if(parent != null)
+		if (parent != null)
 			parent.getId();
-		if(testType != null)
+		if (testType != null)
 			testType.getName();
-		for(Test child : getChildren())
+		for (Test child : getChildren())
 			child.initSkeleton();
 	}
-	
+
+	public void initProps() {
+		getId();
+		getName();
+		getDescription();
+		getCreatedBy().getFirstName();
+		getCreatedBy().getLastName();
+		getCreatedDate();
+		getIsFolder();
+		TestType testType = getTestType();
+		if (testType != null)
+			testType.getName();
+		if (getModifiedBy() != null) {
+			getModifiedBy().getFirstName();
+			getModifiedBy().getLastName();
+			getModifiedDate();
+		}
+		if (getJunitTests() != null) {
+			for (JunitTest junit : getJunitTests()) {
+				junit.getEclipseHome();
+				junit.getWorkspace();
+				junit.getProject();
+				junit.getTestSuite();
+				junit.getReportDir();
+				junit.getTptpConnection();
+			}
+		}
+		if (getTestExecutions() != null) {
+			for (TestExecution testExec : getTestExecutions()) {
+				testExec.getStatus();
+				testExec.getTpteamUser().getFirstName();
+				testExec.getTpteamUser().getLastName();
+				testExec.getTpteamUser().getEcfId();
+				testExec.getExecDate();
+				testExec.getComments();
+			}
+		}
+	}
+
 }

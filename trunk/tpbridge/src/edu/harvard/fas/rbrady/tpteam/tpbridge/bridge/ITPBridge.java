@@ -25,6 +25,10 @@ public interface ITPBridge {
 
 	public static final String TEST_EXEC_RESULT_TOPIC = "edu/harvard/fas/rbrady/tpteam/testexecresult";
 	
+	public static final String TEST_DETAIL_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdetailreq";
+	
+	public static final String TEST_DETAIL_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdetailresp";
+	
 	public static final String TEST_DEL_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdelreq";
 	
 	public static final String TEST_DEL_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdelresp";

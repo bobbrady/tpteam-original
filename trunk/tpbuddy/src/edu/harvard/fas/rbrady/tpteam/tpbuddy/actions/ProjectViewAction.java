@@ -12,21 +12,18 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionDelegate;
 
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.EventHistoryView;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.ProjectView;
 
 public class ProjectViewAction extends ActionDelegate implements
 		IWorkbenchWindowActionDelegate {
 	
 	private IWorkbenchWindow window;
-	private int instanceNum = 0;
 	private final String viewID = ProjectView.ID;
 
 

@@ -57,7 +57,7 @@ public class LoginAction extends ActionDelegate implements
 	public void run(IAction action) {
 		String namespaceName = "ecf.xmpp.smack";
 		String namespaceDescription = "XMPP (Jabber)";
-		Map namespaceProps = new HashMap();
+		Map<String,String> namespaceProps = new HashMap<String,String>();
 		namespaceProps.put(
 				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.usepassword",
 				"true");
@@ -85,7 +85,7 @@ public class LoginAction extends ActionDelegate implements
 		String snamespaceName = "ecf.xmpps.smack";
 		String snamespaceDescription = "XMPP SSL (Secure Jabber)";
 
-		Map snamespaceProps = new HashMap();
+		Map<String,String> snamespaceProps = new HashMap<String,String>();
 		snamespaceProps.put(
 				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.usepassword",
 				"true");

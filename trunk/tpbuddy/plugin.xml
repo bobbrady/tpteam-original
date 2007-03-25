@@ -62,6 +62,14 @@
                toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
                tooltip="Open Event History View"/>
          <action
+      		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.TestDetailAction"
+               icon="icons/test.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.testdetailaction"
+               label="Open Test Details View..."
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="Open Test Details View"/>            
+         <action
       		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.TestTreeAction"
                icon="icons/testhier.gif"
                id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.testtreeaction"

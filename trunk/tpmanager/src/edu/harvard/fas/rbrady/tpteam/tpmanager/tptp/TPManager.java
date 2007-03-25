@@ -27,6 +27,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
@@ -74,11 +75,11 @@ public class TPManager implements Observer {
 					sendTestTreeGetResponse(tpEvent);
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_DEL_REQ_TOPIC)) {
-					System.out.println("TPManager.update(): Recv'd event "
-							+ tpTopic + " from "
-							+ tpEvent.getDictionary().get(TPEvent.FROM));
 					deleteTest(tpEvent);
 					sendDelTestResponse(tpEvent);
+				} else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_DETAIL_REQ_TOPIC)) {
+					sendTestDetailResponse(tpEvent);
 				}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
@@ -135,11 +136,12 @@ public class TPManager implements Observer {
 		tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
 		tpEvent.getDictionary().put(TPEvent.FROM,
 				Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
-		
-		TPEntity execEntity = TestExecutionXML.getTPEntityFromExecEvent(tpEvent);
+
+		TPEntity execEntity = TestExecutionXML
+				.getTPEntityFromExecEvent(tpEvent);
 		String execXML = TestExecutionXML.getTPEntityXML(execEntity);
 		tpEvent.getDictionary().put(TPEvent.TEST_EXEC_XML_KEY, execXML);
-		
+
 		System.out.println("TPManager runTests(): sending tpEvent w/status "
 				+ tpEvent.getStatus() + " & topic " + tpEvent.getTopic()
 				+ " to " + tpEvent.getDictionary().get(TPEvent.SEND_TO));
@@ -147,6 +149,23 @@ public class TPManager implements Observer {
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				tpEvent.getTopic(), tpEvent.getDictionary());
 	}
+	
+	private void sendTestDetailResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = tpEvent.getDictionary();
+		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
+		
+		System.out.println("TPManager.sendTestTreeGetResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+		
+		Test test = TestUtil.getTestByID(tpEvent.getID());
+		dictionary.put(TPEvent.TEST_PROP_XML_KEY, TestXML.getTestPropXML(test));
+		
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_DETAIL_RESP_TOPIC, dictionary);
+	}
+
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;

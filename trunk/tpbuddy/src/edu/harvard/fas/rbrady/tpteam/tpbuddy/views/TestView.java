@@ -22,6 +22,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
@@ -40,6 +43,8 @@ public class TestView extends ViewPart implements Observer {
 	private Action mExecTest;
 
 	private Action mDelTest;
+
+	private Action mShowTest;
 
 	private TreeViewer mViewer;
 
@@ -69,19 +74,45 @@ public class TestView extends ViewPart implements Observer {
 	private void delTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
-		Iterator selectionIter = selection.iterator();
-		while (selectionIter.hasNext()) {
-			final TPEntity treeEnt = (TPEntity) selectionIter.next();
-			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-			Hashtable<String, String> dictionary = new Hashtable<String, String>();
-			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
-			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
-					.getTPBridgeClient().getTPMgrECFID());
-			dictionary.put(TPEvent.FROM, Activator.getDefault()
-					.getTPBridgeClient().getTargetIDName());
-			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC,
-					dictionary);
-			sendMsgToEventAdmin(tpEvent);
+		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC, dictionary);
+		sendMsgToEventAdmin(tpEvent);
+	}
+
+	private void showTestAction() {
+		IStructuredSelection selection = (IStructuredSelection) mViewer
+				.getSelection();
+		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DETAIL_REQ_TOPIC,
+				dictionary);
+		sendMsgToEventAdmin(tpEvent);
+		showDetailView();
+	}
+
+	private void showDetailView() {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			try {
+				page.showView(DetailView.ID);
+			} catch (PartInitException e) {
+
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -99,6 +130,10 @@ public class TestView extends ViewPart implements Observer {
 		mDelTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/delete.gif"));
 
+		mShowTest.setEnabled(true);
+		mShowTest.setImageDescriptor(Activator
+				.getImageDescriptor("icons/test.gif"));
+
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				// updateAction();
@@ -106,6 +141,7 @@ public class TestView extends ViewPart implements Observer {
 		});
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+		mgr.add(mShowTest);
 		mgr.add(mDelTest);
 		mgr.add(mExecTest);
 
@@ -130,6 +166,12 @@ public class TestView extends ViewPart implements Observer {
 		mDelTest = new Action("Delete...") {
 			public void run() {
 				delTestAction();
+			}
+		};
+
+		mShowTest = new Action("Details...") {
+			public void run() {
+				showTestAction();
 			}
 		};
 

@@ -77,6 +77,8 @@ public class ProjectView extends ViewPart implements Observer {
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
 		}
 	}
+	
+
 
 	@Override
 	public void createPartControl(Composite parent) {

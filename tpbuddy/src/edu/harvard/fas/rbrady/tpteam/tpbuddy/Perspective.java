@@ -12,6 +12,7 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.DetailView;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.EventHistoryView;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.ProjectView;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.TestView;
@@ -26,6 +27,7 @@ public class Perspective implements IPerspectiveFactory {
 		 IFolderLayout topFolder = layout.createFolder("top", IPageLayout.TOP, 0.65f, layout.getEditorArea());
 		 topFolder.addView(ProjectView.ID);
 		 topFolder.addView(TestView.ID);
+		 topFolder.addView(DetailView.ID);
 		//layout.addView(TestView.ID, IPageLayout.TOP, 0.65f, layout.getEditorArea());
 		layout.addView("org.eclipse.ecf.ui.view.rosterview", IPageLayout.RIGHT, 0.7f, "top");
 		layout.addView(EventHistoryView.ID, IPageLayout.BOTTOM, 0.35f, layout.getEditorArea());

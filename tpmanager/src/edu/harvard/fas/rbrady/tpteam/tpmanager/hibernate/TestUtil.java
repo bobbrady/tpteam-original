@@ -1,5 +1,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
@@ -43,21 +45,21 @@ public class TestUtil {
 		return tests;
 	}
 	
-	public static Test getTestByID(String testID) throws Exception {
+	public static Test getTestByID(String testID, boolean includeExec) throws Exception {
 		Test test = null;
 		Session s = null;
 		Transaction tx = null;
 		try {
 			
-			 s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+			 //s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 			 
-			//s = HibernateUtil.getSessionFactory().getCurrentSession();
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.id =:testID";
 			Query query = s.createQuery(hql);
 			query.setString("testID", String.valueOf(testID));
 			test = (Test)query.list().get(0);
-			test.initProps();
+			test.initProps(includeExec);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)
@@ -71,6 +73,31 @@ public class TestUtil {
 	public static String getTestTreeXML(TPEvent tpEvent) throws Exception {
 		List<Test> tests = getTestByProjID(tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY));
 		return TestXML.getTPEntityXML(tests, tpEvent.getDictionary().get(TPEvent.PROJECT_KEY));
+	}
+	
+	public static Test getTestUpdateStub(Test test)
+	{
+		Test testStub = new Test();
+		testStub.setId(test.getId());
+		testStub.setName(test.getName());
+		testStub.setDescription(test.getDescription());
+		testStub.setIsFolder(testStub.getIsFolder());
+		if (test.getJunitTests().size() > 0) {
+			HashSet<JunitTest> junitSet = new HashSet<JunitTest>();
+			for (JunitTest junit : test.getJunitTests()) {
+				JunitTest junitStub = new JunitTest();
+				junitStub.setId(junit.getId());
+				junitStub.setEclipseHome(junit.getEclipseHome());
+				junitStub.setWorkspace(junit.getWorkspace());
+				junitStub.setProject(junit.getProject());
+				junitStub.setTestSuite(junit.getTestSuite());
+				junitStub.setReportDir(junit.getReportDir());
+				junitStub.setTptpConnection(junit.getTptpConnection());
+				junitSet.add(junitStub);
+			}
+			testStub.setJunitTests(junitSet);
+		}
+		return testStub;
 	}
 	
 	

@@ -166,6 +166,39 @@ public class HibernatTests {
 			throw e;
 		}
 	}
+	
+	public static void updateTest(int testID, Test testStub) throws Exception {
+		System.out.println("Updating Test w/ID " + testID);
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = s.beginTransaction();
+			Test test = (Test) s.load(Test.class, testID);
+			test.setName(testStub.getName());
+			test.setDescription(testStub.getDescription());
+			if(test.getIsFolder() == 'N' && test.getJunitTests() != null && test.getJunitTests().size() > 0)
+			{
+				if(testStub.getJunitTests() != null && testStub.getJunitTests().size() > 0)
+				{
+					JunitTest junit = ((JunitTest[])test.getJunitTests().toArray(new JunitTest[0]))[0];
+					JunitTest junitStub = ((JunitTest[])testStub.getJunitTests().toArray(new JunitTest[0]))[0];
+					junit.setEclipseHome(junitStub.getEclipseHome());
+					junit.setWorkspace(junitStub.getWorkspace());
+					junit.setProject(junitStub.getProject());
+					junit.setTestSuite(junitStub.getTestSuite());
+					junit.setReportDir(junitStub.getReportDir());
+					junit.setTptpConnection(junitStub.getTptpConnection());
+				}
+			}
+			s.flush();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+	}
+
 
 	public static void getProd(int id) throws Exception {
 		System.out.println("Getting Prod");

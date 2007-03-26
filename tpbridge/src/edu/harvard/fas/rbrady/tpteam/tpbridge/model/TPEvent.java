@@ -42,6 +42,8 @@ public class TPEvent implements Serializable{
 
 	public static final String TEST_NAME_KEY = "TEST_NAME";
 	
+	public static final String TEST_DESC_KEY = "TEST_DESC";
+	
 	public static final String TIMESTAMP_KEY = "TIMESTAMP";
 	
 	public static final String COMMENTS_KEY = "COMMENTS";

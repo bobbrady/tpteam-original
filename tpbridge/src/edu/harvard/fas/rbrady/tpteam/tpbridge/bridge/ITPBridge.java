@@ -33,6 +33,10 @@ public interface ITPBridge {
 	
 	public static final String TEST_UPDATE_DATA_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/testupdatedatresp";
 	
+	public static final String TEST_UPDATE_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/testupdatereq";
+	
+	public static final String TEST_UPDATE_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/testupdateresp";
+	
 	public static final String TEST_DEL_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdelreq";
 	
 	public static final String TEST_DEL_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/testdelresp";

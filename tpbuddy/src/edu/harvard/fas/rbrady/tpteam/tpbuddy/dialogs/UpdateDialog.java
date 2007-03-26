@@ -32,7 +32,7 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	// We use large integer so as not
 	// to conflict with system constants
 	public static final int OK = 9999;
-	
+
 	private Button mOKBtn;
 
 	private boolean mIsFolder;
@@ -52,6 +52,10 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	private Text mReportDir;
 
 	private Text mConnURL;
+	
+	private Test mTestStub;
+	
+	private int mTestID;
 
 	/**
 	 * Constructor for UpdateDialog.
@@ -138,7 +142,7 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 		mWorkspace = new Text(area, SWT.BORDER);
 
 		Label projLabel = new Label(area, SWT.NONE);
-		projLabel.setText("Eclipse Workspace:");
+		projLabel.setText("Eclipse Project:");
 		mProject = new Text(area, SWT.BORDER);
 
 		Label testsuiteLabel = new Label(area, SWT.NONE);
@@ -194,28 +198,25 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 
 	private boolean validate() {
 		boolean returnVal = false;
-		if (mName.getText() == null || mName.getText().equals(""))
-		{
-			setErrorMessage("Name value must not be empty.");			
-		}
-		else if(!mIsFolder)
-		{
-			if(mHome.getText() == null || mHome.getText().equals("")
-					|| mWorkspace.getText() == null || mWorkspace.getText().equals("")
-					|| mProject.getText() == null || mProject.getText().equals("")
-					|| mTestSuite.getText() == null || mTestSuite.getText().equals("")
-					|| mReportDir.getText() == null || mReportDir.getText().equals("")
-					|| mConnURL.getText() == null || mConnURL.getText().equals(""))
-			{
+		if (mName.getText() == null || mName.getText().equals("")) {
+			setErrorMessage("Name value must not be empty.");
+		} else if (!mIsFolder) {
+			if (mHome.getText() == null || mHome.getText().equals("")
+					|| mWorkspace.getText() == null
+					|| mWorkspace.getText().equals("")
+					|| mProject.getText() == null
+					|| mProject.getText().equals("")
+					|| mTestSuite.getText() == null
+					|| mTestSuite.getText().equals("")
+					|| mReportDir.getText() == null
+					|| mReportDir.getText().equals("")
+					|| mConnURL.getText() == null
+					|| mConnURL.getText().equals("")) {
 				setErrorMessage("JUnit properties must not be empty.");
-			}
-			else
-			{
+			} else {
 				returnVal = true;
 			}
-		}
-		else
-		{
+		} else {
 			setErrorMessage(null);
 			returnVal = true;
 		}
@@ -236,8 +237,22 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 		// Add a SelectionListener
 		mOKBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				if(validate())
-				{
+				if (validate()) {
+					mTestStub = new Test();
+					mTestStub.setId(mTestID);
+					mTestStub.setName(mName.getText());
+					mTestStub.setDescription(mDescription.getText());
+					if(!mIsFolder)
+					{
+						JunitTest junit = new JunitTest();
+						junit.setEclipseHome(mHome.getText());
+						junit.setWorkspace(mWorkspace.getText());
+						junit.setProject(mProject.getText());
+						junit.setTestSuite(mTestSuite.getText());
+						junit.setReportDir(mReportDir.getText());
+						junit.setTptpConnection(mConnURL.getText());
+						mTestStub.addJunitTest(junit);
+					}
 					setReturnCode(OK);
 					close();
 				}
@@ -274,11 +289,13 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	private void populateWidgets(final Test test) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
+				mTestID = test.getId();
 				mName.setText(test.getName());
-				if(test.getDescription() != null)
+				if (test.getDescription() != null)
 					mDescription.setText(test.getDescription());
-				
-				if (test.getJunitTests() != null && test.getJunitTests().size() > 0) {
+
+				if (test.getJunitTests() != null
+						&& test.getJunitTests().size() > 0) {
 					for (JunitTest junit : test.getJunitTests()) {
 						mHome.setText(junit.getEclipseHome());
 						mWorkspace.setText(junit.getWorkspace());
@@ -288,17 +305,21 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 						mConnURL.setText(junit.getTptpConnection());
 					}
 				}
-				mOKBtn.setEnabled(true);	
+				mOKBtn.setEnabled(true);
 			}
 		});
 
 	}
 
-	public boolean close()
-	{
+	public boolean close() {
 		Activator.getDefault().getEventAdminHandler().deleteObserver(this);
 		super.close();
 		return true;
 	}
 	
+	public Test getTestStub()
+	{
+		return mTestStub;
+	}
+
 }

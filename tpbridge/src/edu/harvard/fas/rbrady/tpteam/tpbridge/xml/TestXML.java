@@ -119,6 +119,19 @@ public class TestXML {
 		}
 		return tpEntity;
 	}
+	
+	public static Test getTestFromXML(String testXML) {
+		Test test = null;
+		try {
+			BeanReader reader = new BeanReader();
+			reader.registerBeanClass("test", Test.class);
+			StringReader xmlReader = new StringReader(testXML);
+			test = (Test) reader.parse(xmlReader);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return test;
+	}
 
 	public static String getTestPropXML(Test test) {
 		TPEntity[] tpEntities = getTPEntityTestProps(test);

@@ -21,10 +21,11 @@ public class TestUtil {
 		Session s = null;
 		Transaction tx = null;
 		try {
-			
-			 s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-			 
-			//s = HibernateUtil.getSessionFactory().getCurrentSession();
+
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+
+			// s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.parent is null and test.project.id =:projID";
 			Query query = s.createQuery(hql);
@@ -44,21 +45,23 @@ public class TestUtil {
 		}
 		return tests;
 	}
-	
-	public static Test getTestByID(String testID, boolean includeExec) throws Exception {
+
+	public static Test getTestByID(String testID, boolean includeExec)
+			throws Exception {
 		Test test = null;
 		Session s = null;
 		Transaction tx = null;
 		try {
-			
-			 //s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-			 
+
+			// s =
+			// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
 			s = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.id =:testID";
 			Query query = s.createQuery(hql);
 			query.setString("testID", String.valueOf(testID));
-			test = (Test)query.list().get(0);
+			test = (Test) query.list().get(0);
 			test.initProps(includeExec);
 			tx.commit();
 		} catch (Exception e) {
@@ -69,42 +72,73 @@ public class TestUtil {
 		return test;
 	}
 
-
 	public static String getTestTreeXML(TPEvent tpEvent) throws Exception {
-		List<Test> tests = getTestByProjID(tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY));
-		return TestXML.getTPEntityXML(tests, tpEvent.getDictionary().get(TPEvent.PROJECT_KEY));
+		List<Test> tests = getTestByProjID(tpEvent.getDictionary().get(
+				TPEvent.PROJECT_ID_KEY));
+		return TestXML.getTPEntityXML(tests, tpEvent.getDictionary().get(
+				TPEvent.PROJECT_KEY));
 	}
-	
-	public static Test getTestUpdateStub(Test test)
-	{
+
+	public static Test getTestUpdateStub(Test test) {
 		Test testStub = new Test();
 		testStub.setId(test.getId());
 		testStub.setName(test.getName());
 		testStub.setDescription(test.getDescription());
 		testStub.setIsFolder(testStub.getIsFolder());
 		if (test.getJunitTests().size() > 0) {
-			HashSet<JunitTest> junitSet = new HashSet<JunitTest>();
-			for (JunitTest junit : test.getJunitTests()) {
-				JunitTest junitStub = new JunitTest();
-				junitStub.setId(junit.getId());
-				junitStub.setEclipseHome(junit.getEclipseHome());
-				junitStub.setWorkspace(junit.getWorkspace());
-				junitStub.setProject(junit.getProject());
-				junitStub.setTestSuite(junit.getTestSuite());
-				junitStub.setReportDir(junit.getReportDir());
-				junitStub.setTptpConnection(junit.getTptpConnection());
-				junitSet.add(junitStub);
-			}
-			testStub.setJunitTests(junitSet);
+			JunitTest junit = ((JunitTest[]) test.getJunitTests().toArray(
+					new JunitTest[0]))[0];
+			JunitTest junitStub = new JunitTest();
+			junitStub.setId(junit.getId());
+			junitStub.setEclipseHome(junit.getEclipseHome());
+			junitStub.setWorkspace(junit.getWorkspace());
+			junitStub.setProject(junit.getProject());
+			junitStub.setTestSuite(junit.getTestSuite());
+			junitStub.setReportDir(junit.getReportDir());
+			junitStub.setTptpConnection(junit.getTptpConnection());
+			testStub.addJunitTest(junitStub);
 		}
 		return testStub;
 	}
-	
-	
+
+	public static void updateTest(Test testStub) throws Exception {
+		//Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = s.beginTransaction();
+			Test test = (Test) s.load(Test.class, testStub.getId());
+			test.setName(testStub.getName());
+			test.setDescription(testStub.getDescription());
+			if (test.getIsFolder() == 'N' && test.getJunitTests() != null
+					&& test.getJunitTests().size() > 0) {
+				if (testStub.getJunitTests() != null
+						&& testStub.getJunitTests().size() > 0) {
+					JunitTest junit = ((JunitTest[]) test.getJunitTests()
+							.toArray(new JunitTest[0]))[0];
+					JunitTest junitStub = ((JunitTest[]) testStub
+							.getJunitTests().toArray(new JunitTest[0]))[0];
+					junit.setEclipseHome(junitStub.getEclipseHome());
+					junit.setWorkspace(junitStub.getWorkspace());
+					junit.setProject(junitStub.getProject());
+					junit.setTestSuite(junitStub.getTestSuite());
+					junit.setReportDir(junitStub.getReportDir());
+					junit.setTptpConnection(junitStub.getTptpConnection());
+				}
+			}
+			s.flush();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+	}
 
 	public static void main(String[] args) {
 		try {
-			Hashtable<String,String> hash = new Hashtable<String,String>();
+			Hashtable<String, String> hash = new Hashtable<String, String>();
 			hash.put(TPEvent.PROJECT_ID_KEY, "1");
 			TPEvent tpEvent = new TPEvent("TEST_TOPIC", hash);
 			System.out.println("Test XML: \n" + getTestTreeXML(tpEvent));

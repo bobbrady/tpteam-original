@@ -136,10 +136,21 @@ public class TestView extends ViewPart implements Observer {
 					"Update Test Error: The root node can not be updated.");
 			return;
 		}
+		
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_DATA_REQ_TOPIC, dictionary);
+		sendMsgToEventAdmin(tpEvent);
+
 
 		UpdateDialog updateDialog = new UpdateDialog(parent, treeEnt.getType()
 				.equals(TPEntity.FOLDER));
 		if (updateDialog.open() == UpdateDialog.OK) {
+			System.out.println("updateDialog.OK");
 		}
 	}
 

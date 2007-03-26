@@ -30,6 +30,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
@@ -136,21 +138,26 @@ public class TestView extends ViewPart implements Observer {
 					"Update Test Error: The root node can not be updated.");
 			return;
 		}
-		
+
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
 				.getTPBridgeClient().getTPMgrECFID());
 		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
 				.getTargetIDName());
-		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_DATA_REQ_TOPIC, dictionary);
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_DATA_REQ_TOPIC,
+				dictionary);
 		sendMsgToEventAdmin(tpEvent);
-
 
 		UpdateDialog updateDialog = new UpdateDialog(parent, treeEnt.getType()
 				.equals(TPEntity.FOLDER));
+
 		if (updateDialog.open() == UpdateDialog.OK) {
-			System.out.println("updateDialog.OK");
+			String testXML = TestXML.getXML(updateDialog.getTestStub());
+			System.out.println("testXML:\n" + testXML);
+			dictionary.put(TPEvent.TEST_XML_KEY, testXML);
+			tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_REQ_TOPIC, dictionary);
+			sendMsgToEventAdmin(tpEvent);
 		}
 	}
 
@@ -319,6 +326,17 @@ public class TestView extends ViewPart implements Observer {
 								&& (parent = delNode.getParent()) != null) {
 							parent.removeChild(delNode);
 						}
+					}
+				});
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
+					ITPBridge.TEST_UPDATE_RESP_TOPIC)) {
+				final String nodeID = tpEvent.getID();
+				final String testName = tpEvent.getDictionary().get(
+						TPEvent.TEST_NAME_KEY);
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						ITreeNode updateNode = mTreeNodeModel.get(nodeID);
+						updateNode.setName(testName);
 					}
 				});
 			}

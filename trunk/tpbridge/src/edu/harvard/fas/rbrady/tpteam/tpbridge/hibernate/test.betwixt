@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <info primitiveTypes="attribute">
 <hide property="testExecutions" />
-<hide property="junitTests" />
 <element name='test'>
 <addDefaults/>
 </element>

@@ -197,6 +197,11 @@ public class Test implements java.io.Serializable {
 	public void setJunitTests(Set<JunitTest> junitTests) {
 		this.junitTests = junitTests;
 	}
+	
+	public void addJunitTest(JunitTest junitTest)
+	{
+		this.junitTests.add(junitTest);
+	}
 
 	public void printNode(int depth) {
 		String pad = "";
@@ -228,7 +233,7 @@ public class Test implements java.io.Serializable {
 			child.initSkeleton();
 	}
 
-	public void initProps() {
+	public void initProps(boolean includeExec) {
 		getId();
 		getName();
 		getDescription();
@@ -254,7 +259,7 @@ public class Test implements java.io.Serializable {
 				junit.getTptpConnection();
 			}
 		}
-		if (getTestExecutions() != null) {
+		if (includeExec && getTestExecutions() != null) {
 			for (TestExecution testExec : getTestExecutions()) {
 				testExec.getStatus();
 				testExec.getTpteamUser().getFirstName();

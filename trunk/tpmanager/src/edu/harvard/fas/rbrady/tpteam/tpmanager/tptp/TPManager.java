@@ -80,6 +80,9 @@ public class TPManager implements Observer {
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_DETAIL_REQ_TOPIC)) {
 					sendTestDetailResponse(tpEvent);
+				} else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_UPDATE_DATA_REQ_TOPIC)) {
+					sendTestUpdateDatResponse(tpEvent);
 				}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
@@ -149,23 +152,42 @@ public class TPManager implements Observer {
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				tpEvent.getTopic(), tpEvent.getDictionary());
 	}
-	
+
 	private void sendTestDetailResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
-		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
-		
-		System.out.println("TPManager.sendTestTreeGetResponse: Send To: "
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+
+		System.out.println("TPManager.sendTestDetailResponse: Send To: "
 				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
 				+ dictionary.get(TPEvent.FROM));
-		
-		Test test = TestUtil.getTestByID(tpEvent.getID());
+
+		Test test = TestUtil.getTestByID(tpEvent.getID(), true);
 		dictionary.put(TPEvent.TEST_PROP_XML_KEY, TestXML.getTestPropXML(test));
-		
+
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_DETAIL_RESP_TOPIC, dictionary);
 	}
 
+	private void sendTestUpdateDatResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = tpEvent.getDictionary();
+		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+
+		System.out.println("TPManager.sendTestUpdateDatResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+
+		Test test = TestUtil.getTestByID(tpEvent.getID(), false);
+		Test testStub = TestUtil.getTestUpdateStub(test);
+		
+		dictionary.put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
+
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_UPDATE_DATA_RESP_TOPIC, dictionary);
+	}
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;

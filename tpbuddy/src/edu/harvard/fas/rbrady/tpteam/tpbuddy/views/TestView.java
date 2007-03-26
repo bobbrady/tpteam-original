@@ -37,7 +37,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.MailDialog;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.UpdateDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
 public class TestView extends ViewPart implements Observer {
@@ -82,14 +82,13 @@ public class TestView extends ViewPart implements Observer {
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
 		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
 		Shell parent = getViewSite().getShell();
-		
-		if(Integer.parseInt(treeEnt.getID()) < 1)
-		{
-			MessageDialog.openError(parent, "Delete Test Error", 
-					"Delete Test Error: The root node is not deleteable.");
+
+		if (Integer.parseInt(treeEnt.getID()) < 1) {
+			MessageDialog.openError(parent, "Delete Test Error",
+					"Delete Test Error: The root node can not be deleted.");
 			return;
 		}
-		
+
 		boolean confirm = MessageDialog.openConfirm(parent,
 				"Delete Test Confirmation",
 				"Are you sure you want to delete test entity "
@@ -121,20 +120,27 @@ public class TestView extends ViewPart implements Observer {
 		 * TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC,
 		 * dictionary); sendMsgToEventAdmin(tpEvent);
 		 */
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				MailDialog mailDialog = new MailDialog(PlatformUI
-						.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						new String[] { "Suzie", "Bunny", "Puppy", "Eggie" });
-				if (mailDialog.open() == MailDialog.OPEN) {
-					String[] itemsToOpen = mailDialog.getItemsToOpen();
-					for (String item : itemsToOpen) {
-						System.out.println("item to open: " + item);
-					}
-				}
 
-			}
-		});
+		IStructuredSelection selection = (IStructuredSelection) mViewer
+				.getSelection();
+		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+
+		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		System.out.println("TestType: " + treeEnt.getType());
+		System.out.println("Test ID: " + treeEnt.getID());
+
+		Shell parent = getViewSite().getShell();
+
+		if (Integer.parseInt(treeEnt.getID()) < 1) {
+			MessageDialog.openError(parent, "Update Test Error",
+					"Update Test Error: The root node can not be updated.");
+			return;
+		}
+
+		UpdateDialog updateDialog = new UpdateDialog(parent, treeEnt.getType()
+				.equals(TPEntity.FOLDER));
+		if (updateDialog.open() == UpdateDialog.OK) {
+		}
 	}
 
 	private void showTestAction() {

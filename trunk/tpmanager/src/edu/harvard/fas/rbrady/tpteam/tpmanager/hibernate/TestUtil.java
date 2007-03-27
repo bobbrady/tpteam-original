@@ -1,6 +1,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
@@ -108,6 +109,13 @@ public class TestUtil {
 		Transaction tx = null;
 		try {
 			tx = s.beginTransaction();
+			
+			// Get the user who is requesting update
+			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
+			Query query = s.createQuery(hql);
+			query.setString("ecfID", String.valueOf(testStub.getModifiedBy().getEcfId()));
+			TpteamUser updateUser = (TpteamUser) query.list().get(0);
+			
 			Test test = (Test) s.load(Test.class, testStub.getId());
 			test.setName(testStub.getName());
 			test.setDescription(testStub.getDescription());
@@ -127,6 +135,8 @@ public class TestUtil {
 					junit.setTptpConnection(junitStub.getTptpConnection());
 				}
 			}
+			test.setModifiedBy(updateUser);
+			test.setModifiedDate(new Date());
 			s.flush();
 			tx.commit();
 		} catch (Exception e) {

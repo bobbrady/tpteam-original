@@ -208,6 +208,9 @@ public class TPManager implements Observer {
 		System.out.println("testXML:\n" + testXML);
 		
 		Test testStub = TestXML.getTestFromXML(testXML);
+		TpteamUser updateUser = new TpteamUser();
+		updateUser.setEcfId(dictionary.get(TPEvent.SEND_TO));
+		testStub.setModifiedBy(updateUser);
 		TestUtil.updateTest(testStub);
 		
 		dictionary.put(TPEvent.TEST_NAME_KEY, testStub.getName());

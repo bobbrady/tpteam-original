@@ -188,13 +188,13 @@ public class TPManager implements Observer {
 
 		Test test = TestUtil.getTestByID(tpEvent.getID(), false);
 		Test testStub = TestUtil.getTestUpdateStub(test);
-		
+
 		dictionary.put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
 
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_UPDATE_DATA_RESP_TOPIC, dictionary);
 	}
-	
+
 	private void sendTestUpdateResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
@@ -204,26 +204,25 @@ public class TPManager implements Observer {
 		System.out.println("TPManager.sendTestUpdateResponse: Send To: "
 				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
 				+ dictionary.get(TPEvent.FROM));
-		
-		String testXML = tpEvent.getDictionary().get(
-				TPEvent.TEST_XML_KEY);
-		
+
+		String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
+
 		System.out.println("testXML:\n" + testXML);
-		
+
 		Test testStub = TestXML.getTestFromXML(testXML);
 		TpteamUser updateUser = new TpteamUser();
 		updateUser.setEcfId(dictionary.get(TPEvent.SEND_TO));
 		testStub.setModifiedBy(updateUser);
 		TestUtil.updateTest(testStub);
-		
+
 		dictionary.put(TPEvent.TEST_NAME_KEY, testStub.getName());
 		dictionary.put(TPEvent.TEST_DESC_KEY, testStub.getDescription());
-		
+
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_UPDATE_RESP_TOPIC, dictionary);
-		
-		}
-	
+
+	}
+
 	private void sendTestAddResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
@@ -233,25 +232,25 @@ public class TPManager implements Observer {
 		System.out.println("TPManager.sendTestAddResponse: Send To: "
 				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
 				+ dictionary.get(TPEvent.FROM));
-		
-		String testXML = tpEvent.getDictionary().get(
-				TPEvent.TEST_XML_KEY);
-		
+
+		String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
+
 		System.out.println("testXML:\n" + testXML);
-		
+
 		Test testStub = TestXML.getTestFromXML(testXML);
 		TestUtil.addTest(testStub);
-		
+
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(testStub.getId()));
 		dictionary.put(TPEvent.TEST_NAME_KEY, testStub.getName());
-		dictionary.put(TPEvent.TEST_DESC_KEY, testStub.getDescription());
+		if (testStub.getDescription() != null) {
+			dictionary.put(TPEvent.TEST_DESC_KEY, testStub.getDescription());
+		}
 		dictionary.put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
-		
+
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.TEST_ADD_RESP_TOPIC, dictionary);
-		
-		}
 
+	}
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;

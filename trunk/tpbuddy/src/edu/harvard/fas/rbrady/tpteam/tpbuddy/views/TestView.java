@@ -30,6 +30,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
@@ -59,7 +62,7 @@ public class TestView extends ViewPart implements Observer {
 	private TestContentProvider mTestContentProvider;
 
 	private TreeNodeModel mTreeNodeModel;
-	
+
 	private String mProjID;
 
 	private void execTestAction() {
@@ -172,11 +175,29 @@ public class TestView extends ViewPart implements Observer {
 				.parseInt(treeEnt.getID()));
 
 		if (addFolderDialog.open() == AddFolderDialog.OK) {
-			String testXML = TestXML.getXML(addFolderDialog.getTestStub());
+			Test testStub = addFolderDialog.getTestStub();
+			TpteamUser addUser = new TpteamUser();
+			addUser.setEcfId(Activator.getDefault().getTPBridgeClient()
+					.getTargetIDName());
+			testStub.setCreatedBy(addUser);
+			Project proj = new Project();
+			proj.setId(Integer.parseInt(mProjID));
+			testStub.setProject(proj);
+			String testXML = TestXML.getXML(testStub);
 			System.out.println("testXML:\n" + testXML);
-		}
-		System.out.println("mProjID: " + mProjID);
 
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+			dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, addUser.getEcfId());
+
+			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_ADD_REQ_TOPIC,
+					dictionary);
+			dictionary.put(TPEvent.TEST_XML_KEY, testXML);
+			sendMsgToEventAdmin(tpEvent);
+		}
 	}
 
 	private void showTestAction() {
@@ -327,11 +348,10 @@ public class TestView extends ViewPart implements Observer {
 
 				updateExecution(tpEvent);
 
-			} else if(tpEvent.getTopic().equalsIgnoreCase(
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
 				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
-			}
-			else if (tpEvent.getTopic().equalsIgnoreCase(
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);
@@ -372,10 +392,35 @@ public class TestView extends ViewPart implements Observer {
 						updateNode.setName(testName);
 					}
 				});
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
+					ITPBridge.TEST_ADD_RESP_TOPIC)) {
+					String testXML = tpEvent.getDictionary().get(
+						TPEvent.TEST_XML_KEY);
+				System.out.println("testAddXML:\n" + testXML);
+				final Test testStub = TestXML.getTestFromXML(testXML);
+				final TPEntity tpEntity = TestXML.getTPEntityFromTest(testStub);
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						ITreeNode addNode = tpEntity;
+						ITreeNode parent = null;
+						if(testStub.getParent().getId() == 0)
+						{
+							parent = mTreeNodeModel.get("0");
+						}
+						else
+						{
+							parent = mTreeNodeModel.get(String.valueOf(testStub.getParent().getId()));
+						}
+						if (parent != null) {
+							addNode.setParent(parent);
+							parent.addChild(addNode);
+							mTreeNodeModel.addNode(addNode);
+						}
+					}
+				});
+
 			}
-
 		}
-
 	}
 
 	private void populateModel(ITreeNode treeNode) {

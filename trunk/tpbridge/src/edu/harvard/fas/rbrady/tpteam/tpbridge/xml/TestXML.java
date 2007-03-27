@@ -25,12 +25,11 @@ public class TestXML {
 		String name = test.getName();
 		String desc = test.getDescription();
 		String isFolder = String.valueOf(test.getIsFolder());
-		String testTypeName = test.getTestType().getName();
 
 		if (isFolder != null && isFolder.equalsIgnoreCase("Y")) {
 			tpEntity = new TPEntity(id, name, desc, TPEntity.FOLDER);
-		} else if (testTypeName != null
-				&& testTypeName.equalsIgnoreCase("JUnit")) {
+		} else if (test.getTestType() != null
+				&& test.getTestType().getName().equalsIgnoreCase("JUnit")) {
 			tpEntity = new TPEntity(id, name, desc, TPEntity.JUNIT_TEST);
 		}
 		return tpEntity;

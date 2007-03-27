@@ -10,7 +10,9 @@ import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
@@ -103,9 +105,9 @@ public class TestUtil {
 	}
 
 	public static void updateTest(Test testStub) throws Exception {
-		//Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
 			tx = s.beginTransaction();
@@ -138,6 +140,67 @@ public class TestUtil {
 			test.setModifiedBy(updateUser);
 			test.setModifiedDate(new Date());
 			s.flush();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+	}
+	
+	public static void addTest(Test testStub) throws Exception {
+		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = s.beginTransaction();
+						
+			Test test = new Test();
+			// First, data common to both folders and tests
+			test.setName(testStub.getName());
+			test.setDescription(testStub.getDescription());
+			test.setIsFolder(testStub.getIsFolder());
+			if(testStub.getParent().getId() > 0)
+			{
+				Test parent = (Test) s.load(Test.class, testStub.getParent().getId());
+				test.setParent(parent);
+			}
+			Project proj = (Project) s.load(Project.class, testStub.getProject().getId());
+			test.setProject(proj);
+			// Get the user who is requesting update
+			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
+			Query query = s.createQuery(hql);
+			query.setString("ecfID", String.valueOf(testStub.getCreatedBy().getEcfId()));
+			TpteamUser addUser = (TpteamUser) query.list().get(0);
+			test.setCreatedBy(addUser);
+			test.setCreatedDate(new Date());
+			// Now, add test definition data
+			if(testStub.getIsFolder() == 'N')
+			{
+				hql = "from TestType as testType where testType.name =:name";
+				query = s.createQuery(hql);
+				query.setString("name", testStub.getTestType().getName());
+				TestType testType = (TestType) query.list().get(0);
+				test.setTestType(testType);
+				Integer testID = (Integer) s.save(test);
+				s.saveOrUpdate(test);
+				 // Next, create JUnit entity, pointing to parent test 
+				JunitTest junitStub = ((JunitTest[])test.getJunitTests().toArray(new JunitTest[0]))[0];
+				JunitTest junit = new JunitTest(); 
+				 junit.setId(testID);
+				 junit.setTest(test); 
+				 junit.setEclipseHome(junitStub.getEclipseHome());
+				 junit.setProject(junitStub.getProject());
+				 junit.setWorkspace(junitStub.getWorkspace()); 
+				 junit.setReportDir(junitStub.getReportDir());
+				 junit.setTptpConnection(junitStub.getTptpConnection());
+				 junit.setTestSuite(junitStub.getTestSuite()); 
+				 s.save(junit);
+			}
+			s.saveOrUpdate(test);
+			s.flush();
+			testStub.setId(test.getId());
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)

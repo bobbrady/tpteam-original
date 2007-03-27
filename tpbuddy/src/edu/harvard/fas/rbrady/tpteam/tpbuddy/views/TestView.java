@@ -41,6 +41,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.AddFolderDialog;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.AddTestDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.UpdateDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
@@ -56,6 +57,8 @@ public class TestView extends ViewPart implements Observer {
 	private Action mShowTest;
 
 	private Action mAddFolder;
+	
+	private Action mAddTest;
 
 	private TreeViewer mViewer;
 
@@ -199,6 +202,52 @@ public class TestView extends ViewPart implements Observer {
 			sendMsgToEventAdmin(tpEvent);
 		}
 	}
+	
+	private void addTestAction() {
+		IStructuredSelection selection = (IStructuredSelection) mViewer
+				.getSelection();
+		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+
+		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		System.out.println("TestType: " + treeEnt.getType());
+		System.out.println("Test ID: " + treeEnt.getID());
+
+		Shell parent = getViewSite().getShell();
+
+		if (!treeEnt.getType().equals(TPEntity.FOLDER)) {
+			MessageDialog
+					.openError(parent, "Add Test Error",
+							"Add Test Error: Test definitions can not be added to test definitions.");
+			return;
+		}
+
+		AddTestDialog addTestDialog = new AddTestDialog(parent, Integer.parseInt(treeEnt.getID()));
+
+		if (addTestDialog.open() == AddTestDialog.OK) {
+			Test testStub = addTestDialog.getTestStub();
+			TpteamUser addUser = new TpteamUser();
+			addUser.setEcfId(Activator.getDefault().getTPBridgeClient()
+					.getTargetIDName());
+			testStub.setCreatedBy(addUser);
+			Project proj = new Project();
+			proj.setId(Integer.parseInt(mProjID));
+			testStub.setProject(proj);
+			String testXML = TestXML.getXML(testStub);
+			System.out.println("testXML:\n" + testXML);
+
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+			dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, addUser.getEcfId());
+
+			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_ADD_REQ_TOPIC,
+					dictionary);
+			dictionary.put(TPEvent.TEST_XML_KEY, testXML);
+			sendMsgToEventAdmin(tpEvent);
+		}
+	}
 
 	private void showTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -255,6 +304,11 @@ public class TestView extends ViewPart implements Observer {
 		mAddFolder.setEnabled(true);
 		mAddFolder.setImageDescriptor(Activator
 				.getImageDescriptor("icons/folderadd_pending.gif"));
+		
+		mAddTest.setEnabled(true);
+		mAddTest.setImageDescriptor(Activator
+				.getImageDescriptor("icons/new_testcase.gif"));
+
 
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -265,10 +319,10 @@ public class TestView extends ViewPart implements Observer {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		mgr.add(mShowTest);
 		mgr.add(mAddFolder);
+		mgr.add(mAddTest);
 		mgr.add(mUpdateTest);
 		mgr.add(mDelTest);
 		mgr.add(mExecTest);
-
 	}
 
 	/**
@@ -308,6 +362,12 @@ public class TestView extends ViewPart implements Observer {
 		mAddFolder = new Action("Add Test Folder...") {
 			public void run() {
 				addFolderAction();
+			}
+		};
+		
+		mAddTest = new Action("Add Test Definition...") {
+			public void run() {
+				addTestAction();
 			}
 		};
 

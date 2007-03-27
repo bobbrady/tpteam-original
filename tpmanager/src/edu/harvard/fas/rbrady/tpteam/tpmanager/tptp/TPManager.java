@@ -86,6 +86,9 @@ public class TPManager implements Observer {
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_UPDATE_REQ_TOPIC)) {
 					sendTestUpdateResponse(tpEvent);
+				} else if (tpTopic
+						.equalsIgnoreCase(ITPBridge.TEST_ADD_REQ_TOPIC)) {
+					sendTestAddResponse(tpEvent);
 				}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
@@ -220,6 +223,35 @@ public class TPManager implements Observer {
 				ITPBridge.TEST_UPDATE_RESP_TOPIC, dictionary);
 		
 		}
+	
+	private void sendTestAddResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = tpEvent.getDictionary();
+		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+
+		System.out.println("TPManager.sendTestAddResponse: Send To: "
+				+ dictionary.get(TPEvent.SEND_TO) + ", From: "
+				+ dictionary.get(TPEvent.FROM));
+		
+		String testXML = tpEvent.getDictionary().get(
+				TPEvent.TEST_XML_KEY);
+		
+		System.out.println("testXML:\n" + testXML);
+		
+		Test testStub = TestXML.getTestFromXML(testXML);
+		TestUtil.addTest(testStub);
+		
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(testStub.getId()));
+		dictionary.put(TPEvent.TEST_NAME_KEY, testStub.getName());
+		dictionary.put(TPEvent.TEST_DESC_KEY, testStub.getDescription());
+		dictionary.put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
+		
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_ADD_RESP_TOPIC, dictionary);
+		
+		}
+
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;

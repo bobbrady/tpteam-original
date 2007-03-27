@@ -105,19 +105,21 @@ public class TestUtil {
 	}
 
 	public static void updateTest(Test testStub) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
 
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
 			tx = s.beginTransaction();
-			
+
 			// Get the user who is requesting update
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
 			Query query = s.createQuery(hql);
-			query.setString("ecfID", String.valueOf(testStub.getModifiedBy().getEcfId()));
+			query.setString("ecfID", String.valueOf(testStub.getModifiedBy()
+					.getEcfId()));
 			TpteamUser updateUser = (TpteamUser) query.list().get(0);
-			
+
 			Test test = (Test) s.load(Test.class, testStub.getId());
 			test.setName(testStub.getName());
 			test.setDescription(testStub.getDescription());
@@ -147,37 +149,39 @@ public class TestUtil {
 			throw e;
 		}
 	}
-	
-	public static void addTest(Test testStub) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+	public static void addTest(Test testStub) throws Exception {
+		Session s = Activator.getDefault().getHiberSessionFactory()
+				.getCurrentSession();
+
+		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
 			tx = s.beginTransaction();
-						
+
 			Test test = new Test();
 			// First, data common to both folders and tests
 			test.setName(testStub.getName());
 			test.setDescription(testStub.getDescription());
 			test.setIsFolder(testStub.getIsFolder());
-			if(testStub.getParent().getId() > 0)
-			{
-				Test parent = (Test) s.load(Test.class, testStub.getParent().getId());
+			if (testStub.getParent().getId() > 0) {
+				Test parent = (Test) s.load(Test.class, testStub.getParent()
+						.getId());
 				test.setParent(parent);
 			}
-			Project proj = (Project) s.load(Project.class, testStub.getProject().getId());
+			Project proj = (Project) s.load(Project.class, testStub
+					.getProject().getId());
 			test.setProject(proj);
 			// Get the user who is requesting update
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
 			Query query = s.createQuery(hql);
-			query.setString("ecfID", String.valueOf(testStub.getCreatedBy().getEcfId()));
+			query.setString("ecfID", String.valueOf(testStub.getCreatedBy()
+					.getEcfId()));
 			TpteamUser addUser = (TpteamUser) query.list().get(0);
 			test.setCreatedBy(addUser);
 			test.setCreatedDate(new Date());
 			// Now, add test definition data
-			if(testStub.getIsFolder() == 'N')
-			{
+			if (testStub.getIsFolder() == 'N') {
 				hql = "from TestType as testType where testType.name =:name";
 				query = s.createQuery(hql);
 				query.setString("name", testStub.getTestType().getName());
@@ -185,18 +189,19 @@ public class TestUtil {
 				test.setTestType(testType);
 				Integer testID = (Integer) s.save(test);
 				s.saveOrUpdate(test);
-				 // Next, create JUnit entity, pointing to parent test 
-				JunitTest junitStub = ((JunitTest[])test.getJunitTests().toArray(new JunitTest[0]))[0];
-				JunitTest junit = new JunitTest(); 
-				 junit.setId(testID);
-				 junit.setTest(test); 
-				 junit.setEclipseHome(junitStub.getEclipseHome());
-				 junit.setProject(junitStub.getProject());
-				 junit.setWorkspace(junitStub.getWorkspace()); 
-				 junit.setReportDir(junitStub.getReportDir());
-				 junit.setTptpConnection(junitStub.getTptpConnection());
-				 junit.setTestSuite(junitStub.getTestSuite()); 
-				 s.save(junit);
+				// Next, create JUnit entity, pointing to parent test
+				JunitTest junitStub = ((JunitTest[]) testStub.getJunitTests()
+						.toArray(new JunitTest[0]))[0];
+				JunitTest junit = new JunitTest();
+				junit.setId(testID);
+				junit.setTest(test);
+				junit.setEclipseHome(junitStub.getEclipseHome());
+				junit.setProject(junitStub.getProject());
+				junit.setWorkspace(junitStub.getWorkspace());
+				junit.setReportDir(junitStub.getReportDir());
+				junit.setTptpConnection(junitStub.getTptpConnection());
+				junit.setTestSuite(junitStub.getTestSuite());
+				s.save(junit);
 			}
 			s.saveOrUpdate(test);
 			s.flush();

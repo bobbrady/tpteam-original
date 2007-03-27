@@ -125,6 +125,7 @@ public class AddFolderDialog extends TitleAreaDialog {
 					mTestStub = new Test();
 					mTestStub.setName(mName.getText());
 					mTestStub.setDescription(mDescription.getText());
+					mTestStub.setIsFolder('Y');
 					Test parent = new Test();
 					parent.setId(mParentID);
 					parent.addChild(mTestStub);

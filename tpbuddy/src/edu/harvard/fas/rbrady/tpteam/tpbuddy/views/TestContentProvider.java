@@ -73,11 +73,13 @@ public class TestContentProvider extends ArrayContentProvider implements
 	}
 
 	public void addNode(ITreeNode node) {
+		addListenerTo(node);
 		mTreeViewer.refresh(node.getParent(), false);
 	}
 
 	public void deleteNode(ITreeNode node) {
 		System.out.println("TestContentProvider Got message to delete node: " + node.getName());
+		removeListenerFrom(node);
 		mTreeViewer.refresh(node.getParent(), true);
 	}
 

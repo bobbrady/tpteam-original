@@ -30,8 +30,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
@@ -39,6 +37,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.AddFolderDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.UpdateDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
@@ -53,11 +52,15 @@ public class TestView extends ViewPart implements Observer {
 
 	private Action mShowTest;
 
+	private Action mAddFolder;
+
 	private TreeViewer mViewer;
 
 	private TestContentProvider mTestContentProvider;
 
 	private TreeNodeModel mTreeNodeModel;
+	
+	private String mProjID;
 
 	private void execTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -109,20 +112,6 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void updateTestAction() {
-		/*
-		 * IStructuredSelection selection = (IStructuredSelection) mViewer
-		 * .getSelection(); final TPEntity treeEnt = (TPEntity)
-		 * selection.getFirstElement(); System.out.println("\n\nTestView:
-		 * Selection " + treeEnt.getName()); Hashtable<String, String>
-		 * dictionary = new Hashtable<String, String>();
-		 * dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
-		 * dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
-		 * .getTPBridgeClient().getTPMgrECFID()); dictionary.put(TPEvent.FROM,
-		 * Activator.getDefault().getTPBridgeClient() .getTargetIDName());
-		 * TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC,
-		 * dictionary); sendMsgToEventAdmin(tpEvent);
-		 */
-
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
@@ -159,6 +148,35 @@ public class TestView extends ViewPart implements Observer {
 			tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_REQ_TOPIC, dictionary);
 			sendMsgToEventAdmin(tpEvent);
 		}
+	}
+
+	private void addFolderAction() {
+		IStructuredSelection selection = (IStructuredSelection) mViewer
+				.getSelection();
+		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+
+		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+		System.out.println("TestType: " + treeEnt.getType());
+		System.out.println("Test ID: " + treeEnt.getID());
+
+		Shell parent = getViewSite().getShell();
+
+		if (!treeEnt.getType().equals(TPEntity.FOLDER)) {
+			MessageDialog
+					.openError(parent, "Add Test Error",
+							"Add Test Error: Folders can not be added to test definitions.");
+			return;
+		}
+
+		AddFolderDialog addFolderDialog = new AddFolderDialog(parent, Integer
+				.parseInt(treeEnt.getID()));
+
+		if (addFolderDialog.open() == AddFolderDialog.OK) {
+			String testXML = TestXML.getXML(addFolderDialog.getTestStub());
+			System.out.println("testXML:\n" + testXML);
+		}
+		System.out.println("mProjID: " + mProjID);
+
 	}
 
 	private void showTestAction() {
@@ -213,6 +231,10 @@ public class TestView extends ViewPart implements Observer {
 		mUpdateTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/update_tree.gif"));
 
+		mAddFolder.setEnabled(true);
+		mAddFolder.setImageDescriptor(Activator
+				.getImageDescriptor("icons/folderadd_pending.gif"));
+
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				// updateAction();
@@ -221,6 +243,7 @@ public class TestView extends ViewPart implements Observer {
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		mgr.add(mShowTest);
+		mgr.add(mAddFolder);
 		mgr.add(mUpdateTest);
 		mgr.add(mDelTest);
 		mgr.add(mExecTest);
@@ -261,6 +284,12 @@ public class TestView extends ViewPart implements Observer {
 			}
 		};
 
+		mAddFolder = new Action("Add Test Folder...") {
+			public void run() {
+				addFolderAction();
+			}
+		};
+
 		mViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER);
 		mTestContentProvider = new TestContentProvider();
@@ -298,7 +327,11 @@ public class TestView extends ViewPart implements Observer {
 
 				updateExecution(tpEvent);
 
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} else if(tpEvent.getTopic().equalsIgnoreCase(
+					ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
+				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
+			}
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);

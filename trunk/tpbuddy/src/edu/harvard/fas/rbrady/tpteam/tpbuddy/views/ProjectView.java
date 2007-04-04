@@ -9,7 +9,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -47,6 +46,8 @@ public class ProjectView extends ViewPart implements Observer {
 	private TableViewer mTableViewer;
 
 	private Action mGetTestTree;
+	
+	private Action mGetProjReports;
 
 	public ProjectView() {
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
@@ -55,14 +56,18 @@ public class ProjectView extends ViewPart implements Observer {
 				getTestTreeAction();
 			}
 		};
+		mGetProjReports = new Action("Get Proj Reports") {
+			public void run() {
+				getProjReportsAction();
+			}
+		};
+
 	}
 
 	private void getTestTreeAction() {
 		IStructuredSelection selection = (IStructuredSelection) mTableViewer
 				.getSelection();
-		Iterator selectionIter = selection.iterator();
-		while (selectionIter.hasNext()) {
-			Project proj = (Project) selectionIter.next();
+			Project proj = (Project) selection.getFirstElement();
 			Hashtable<String, String> dictionary = new Hashtable<String, String>();
 			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
 					.getTPBridgeClient().getTPMgrECFID());
@@ -75,9 +80,31 @@ public class ProjectView extends ViewPart implements Observer {
 			showTestView();
 			Activator.getDefault().getEventAdminClient().sendEvent(
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
-		}
+
 	}
 	
+
+	private void getProjReportsAction() {
+		IStructuredSelection selection = (IStructuredSelection) mTableViewer
+				.getSelection();
+			Project proj = (Project) selection.getFirstElement();
+			/*
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, Activator.getDefault()
+					.getTPBridgeClient().getTargetIDName());
+			dictionary
+					.put(TPEvent.PROJECT_ID_KEY, String.valueOf(proj.getId()));
+			dictionary.put(TPEvent.PROJECT_KEY, proj.getName());
+			System.out.println("Project Name: " + dictionary.get(TPEvent.PROJECT_KEY));
+			*/
+			showProjReportView();
+			/*
+			Activator.getDefault().getEventAdminClient().sendEvent(
+					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
+		*/
+	}
 
 
 	@Override
@@ -104,8 +131,28 @@ public class ProjectView extends ViewPart implements Observer {
 			}
 		}
 	}
+	
+	private void showProjReportView() {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			try {
+				page.showView(ReportView.ID);
+			} catch (PartInitException e) {
+
+				e.printStackTrace();
+			}
+		}
+	}
+
 
 	private void createActions() {
+		
+		mGetProjReports.setEnabled(true);
+		mGetProjReports.setImageDescriptor(Activator
+				.getImageDescriptor("icons/report.gif"));
+
+		
 		mGetTestTree.setEnabled(true);
 		mGetTestTree.setImageDescriptor(Activator
 				.getImageDescriptor("icons/testhier.gif"));
@@ -118,6 +165,7 @@ public class ProjectView extends ViewPart implements Observer {
 				});
 
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+		mgr.add(mGetProjReports);
 		mgr.add(mGetTestTree);
 
 	}
@@ -169,6 +217,14 @@ public class ProjectView extends ViewPart implements Observer {
 
 			final List<Project> projs = ProjectXML.getProjsFromXML(tpEvent
 					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
+			
+			System.out.println(tpEvent
+					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
+			
+			for(Project proj : projs)
+			{
+				System.out.println("Proj Name: " + proj.getName() + ", Desc: " + proj.getDescription());
+			}
 
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {

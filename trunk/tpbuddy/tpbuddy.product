@@ -25,14 +25,12 @@
       <plugin id="com.ibm.icu"/>
       <plugin id="edu.harvard.fas.rbrady.tpteam.tpbridge"/>
       <plugin id="edu.harvard.fas.rbrady.tpteam.tpbuddy"/>
-      <plugin id="org.apache.xerces"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.runtime"/>
       <plugin id="org.eclipse.core.runtime.compatibility.auth"/>
-      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
       <plugin id="org.eclipse.ecf"/>
       <plugin id="org.eclipse.ecf.call"/>
       <plugin id="org.eclipse.ecf.discovery"/>

@@ -45,13 +45,19 @@
             icon="icons/test.gif"
             id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.detailview"
             name="Test Details View"/>
+      <view
+            allowMultiple="false"
+            class="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.ReportView"
+            icon="icons/report.gif"
+            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.views.reportview"
+            name="Project Report View"/>
    </extension>
       
       <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.ecfActionSet"
-            label="ECF"
+            id="edu.harvard.fas.rbrady.tpteam.tpbuddy.tpteamActionSet"
+            label="TPTeam"
             visible="true">
          <action
       		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.EventHistoryAction"
@@ -77,6 +83,14 @@
                style="push"
                toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
                tooltip="Open Test Tree View"/>      
+         <action
+      		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ProjectReportAction"
+               icon="icons/report.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ProjectReportAction"
+               label="View Project Reports"
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="View Project Report Charts"/>      
          <action
       			class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ProjectViewAction"
                icon="icons/checkout.gif"

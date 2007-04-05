@@ -10,6 +10,7 @@ Import-Package: org.jivesoftware.smack,
  org.osgi.service.event,
  org.osgi.util.tracker
 Export-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
+ edu.harvard.fas.rbrady.tpteam.tpbridge.chart,
  edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model,
  edu.harvard.fas.rbrady.tpteam.tpbridge.xml,

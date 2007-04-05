@@ -2,6 +2,7 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -33,12 +34,13 @@ public class HibernatTests {
 			// deleteUser(81);
 			// updateProj(1);
 			// deleteTest(33);
-			insertTestExec(62);
+			// insertTestExec(62);
 			// deleteProj(41);
 			// getTPEventSendTo(62);
 			// getProjByUser(101);
 			// Test test = getInitTopLevelTests(1);
 			// printTest(test);
+			getPieChartData(1);
 			HibernateUtil.getSessionFactory().close();
 
 		} catch (Exception e) {
@@ -166,7 +168,7 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-	
+
 	public static void updateTest(int testID, Test testStub) throws Exception {
 		System.out.println("Updating Test w/ID " + testID);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -176,12 +178,14 @@ public class HibernatTests {
 			Test test = (Test) s.load(Test.class, testID);
 			test.setName(testStub.getName());
 			test.setDescription(testStub.getDescription());
-			if(test.getIsFolder() == 'N' && test.getJunitTests() != null && test.getJunitTests().size() > 0)
-			{
-				if(testStub.getJunitTests() != null && testStub.getJunitTests().size() > 0)
-				{
-					JunitTest junit = ((JunitTest[])test.getJunitTests().toArray(new JunitTest[0]))[0];
-					JunitTest junitStub = ((JunitTest[])testStub.getJunitTests().toArray(new JunitTest[0]))[0];
+			if (test.getIsFolder() == 'N' && test.getJunitTests() != null
+					&& test.getJunitTests().size() > 0) {
+				if (testStub.getJunitTests() != null
+						&& testStub.getJunitTests().size() > 0) {
+					JunitTest junit = ((JunitTest[]) test.getJunitTests()
+							.toArray(new JunitTest[0]))[0];
+					JunitTest junitStub = ((JunitTest[]) testStub
+							.getJunitTests().toArray(new JunitTest[0]))[0];
 					junit.setEclipseHome(junitStub.getEclipseHome());
 					junit.setWorkspace(junitStub.getWorkspace());
 					junit.setProject(junitStub.getProject());
@@ -198,7 +202,6 @@ public class HibernatTests {
 			throw e;
 		}
 	}
-
 
 	public static void getProd(int id) throws Exception {
 		System.out.println("Getting Prod");
@@ -777,6 +780,66 @@ public class HibernatTests {
 				+ test.getId());
 		for (Test child : test.getChildren())
 			printTest(child);
+	}
+
+	public static void getPieChartData(int id) throws Exception {
+		System.out.println("Gettign PieChartData w/Proj ID: " + id);
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+
+			tx = s.beginTransaction();
+			/*
+			 * String SQL_QUERY = "SELECT nvl(status, 'NA'), count(*) FROM
+			 * test_execution te, test t " + "WHERE (t.proj_id = 1 AND
+			 * te.test_id(+) = t.id ) AND t.is_folder = 'N' " + "AND
+			 * (te.exec_date = " + " (SELECT max(te2.exec_date) from
+			 * test_execution te2 where te2.test_id = te.test_id) " + " or
+			 * te.exec_date is NULL) GROUP BY status";
+			 */
+
+			/*
+			String SQL_QUERY = "SELECT nvl(te.status, 'NA'), count(*) FROM TestExecution te, Test t "
+					+ " WHERE (t.project.id = 1 AND te.test.id = t.id ) AND t.isFolder = 'N' "
+					+ " AND (te.execDate = "
+					+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id) "
+					+ " or te.execDate is NULL) GROUp BY te.status";
+					*/
+			String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "  
+			    + " join te.test as t "
+				+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
+				+ " AND (te.execDate = "
+				+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id) "
+				+ " or te.execDate is NULL) GROUP BY te.status";
+			
+
+			Query query = s.createQuery(SQL_QUERY);
+			query.setInteger(0, id);
+
+			for (Iterator it = query.iterate(); it.hasNext();) {
+				Object[] row = (Object[]) it.next();
+				System.out.println("Status: " + row[0]);
+				System.out.println("Count: " + row[1]);
+			}
+			
+			SQL_QUERY = "SELECT count(*) FROM Test as t "  
+				+ " WHERE t.project.id = ? AND t.isFolder = 'N' ";
+			query = s.createQuery(SQL_QUERY);
+			query.setInteger(0, id);
+
+			for (Iterator it = query.iterate(); it.hasNext();) {
+				Object row = (Object) it.next();
+				System.out.println("Total Num Tests: " + row);
+			}
+			
+			
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
 	}
 
 }

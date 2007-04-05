@@ -23,6 +23,8 @@ public class ChartDataSet implements java.io.Serializable{
 	
 	public static final String LINE = "LINE_CHART";
 	
+	public static final String CHART_TYPE = "CHART_TYPE";
+	
 	public ChartDataSet()
 	{
 		

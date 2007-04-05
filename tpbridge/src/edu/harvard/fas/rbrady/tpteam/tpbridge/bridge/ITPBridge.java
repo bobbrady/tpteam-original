@@ -52,6 +52,10 @@ public interface ITPBridge {
 	public static final String PROJ_GET_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/projgetreq";
 	
 	public static final String PROJ_GET_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/projgetresp";
+	
+	public static final String CHART_GET_DATA_REQ_TOPIC = "edu/harvard/fas/rbrady/tpteam/chartgetdatareq";
+	
+	public static final String CHART_GET_DATA_RESP_TOPIC = "edu/harvard/fas/rbrady/tpteam/chartgetdataresp";
 
 	public static final String IMPLEMENTATION_TYPE = "IMPLEMENTATION_TYPE";
 

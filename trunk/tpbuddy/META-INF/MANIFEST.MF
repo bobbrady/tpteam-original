@@ -20,3 +20,9 @@ Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
  org.eclipse.ecf.ui.views,
  org.eclipse.ecf.ui.wizards,
  org.osgi.service.event
+Bundle-ClassPath: lib/jcommon-1.0.9.jar,
+ lib/jfreechart-1.0.5.jar,
+ lib/jfreechart-1.0.5-experimental.jar,
+ lib/jfreechart-1.0.5-swt.jar,
+ lib/swtgraphics2d.jar,
+ .

@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0
 Bundle-Activator: edu.harvard.fas.rbrady.tpteam.tpmanager.Activator
 Bundle-Localization: plugin
 Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
+ edu.harvard.fas.rbrady.tpteam.tpbridge.chart,
  edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model,
  edu.harvard.fas.rbrady.tpteam.tpbridge.xml,

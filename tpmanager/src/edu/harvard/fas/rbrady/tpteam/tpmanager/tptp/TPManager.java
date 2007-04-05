@@ -21,6 +21,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
@@ -30,6 +31,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.eventadmin.EventAdminHandler;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ChartUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecutionUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestUtil;
@@ -90,6 +92,10 @@ public class TPManager implements Observer {
 						.equalsIgnoreCase(ITPBridge.TEST_ADD_REQ_TOPIC)) {
 					sendTestAddResponse(tpEvent);
 				}
+				 else if (tpTopic
+							.equalsIgnoreCase(ITPBridge.CHART_GET_DATA_REQ_TOPIC)) {
+						sendChartDataResponse(tpEvent);
+					}
 			} catch (Exception e) {
 				// Should throw TPTeam ExceptionEvent here?
 				e.printStackTrace();
@@ -230,6 +236,24 @@ public class TPManager implements Observer {
 				ITPBridge.TEST_ADD_RESP_TOPIC, dictionary);
 
 	}
+	
+	private void sendChartDataResponse(TPEvent tpEvent) throws Exception {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
+				TPEvent.FROM));
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		dictionary.put(ChartDataSet.CHART_TYPE, tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE));
+		
+		if(tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE).equals(ChartDataSet.PIE))
+		{
+			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getBarChartXML(tpEvent));			
+		}
+		
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.CHART_GET_DATA_RESP_TOPIC, dictionary);
+	}
+
 
 	public void runTest(String testID, TPEvent tpEvent) throws Exception {
 		Transaction tx = null;

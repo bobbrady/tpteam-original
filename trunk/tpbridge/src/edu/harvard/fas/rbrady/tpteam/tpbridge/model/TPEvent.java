@@ -35,6 +35,8 @@ public class TPEvent implements Serializable{
 	public static final String TEST_EXEC_XML_KEY = "TEST_EXEC_XML";
 	
 	public static final String TEST_PROP_XML_KEY = "TEST_PROP_XML";
+	
+	public static final String CHART_DATASET_XML_KEY = "CHART_DATASET_XML_KEY";
 
 	public static final String PARENT_CONTAINER_KEY = "PARENT_CONTAINER";
 	

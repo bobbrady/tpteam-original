@@ -31,6 +31,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
@@ -88,7 +89,7 @@ public class ProjectView extends ViewPart implements Observer {
 		IStructuredSelection selection = (IStructuredSelection) mTableViewer
 				.getSelection();
 			Project proj = (Project) selection.getFirstElement();
-			/*
+			
 			Hashtable<String, String> dictionary = new Hashtable<String, String>();
 			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
 					.getTPBridgeClient().getTPMgrECFID());
@@ -97,13 +98,13 @@ public class ProjectView extends ViewPart implements Observer {
 			dictionary
 					.put(TPEvent.PROJECT_ID_KEY, String.valueOf(proj.getId()));
 			dictionary.put(TPEvent.PROJECT_KEY, proj.getName());
-			System.out.println("Project Name: " + dictionary.get(TPEvent.PROJECT_KEY));
-			*/
+			dictionary.put(ChartDataSet.CHART_TYPE, ChartDataSet.PIE);
+			
 			showProjReportView();
-			/*
+			
 			Activator.getDefault().getEventAdminClient().sendEvent(
-					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
-		*/
+					ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
+		
 	}
 
 

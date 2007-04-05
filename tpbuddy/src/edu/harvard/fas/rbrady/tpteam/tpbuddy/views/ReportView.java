@@ -1,5 +1,9 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -11,12 +15,19 @@ import org.eclipse.ui.part.ViewPart;
 import org.jfree.chart.JFreeChart;
 import org.jfree.experimental.chart.swt.ChartComposite;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ChartDataSetXML;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.charts.BarChart;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.charts.LineChart;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.charts.PieChart;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
-public class ReportView extends ViewPart {
+public class ReportView extends ViewPart implements Observer {
 
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.reportview";
 
@@ -79,6 +90,7 @@ public class ReportView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		Activator.getDefault().getEventAdminHandler().addObserver(this);
 		mParent = parent;
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
@@ -145,4 +157,26 @@ public class ReportView extends ViewPart {
 
 	}
 
+	public void update(Observable observable, Object object) {
+
+		if (observable instanceof EventAdminHandler
+				&& object instanceof TPEvent
+				&& ((TPEvent) object).getTopic().equals(
+						ITPBridge.CHART_GET_DATA_RESP_TOPIC)) {
+			TPEvent tpEvent = (TPEvent) object;
+			System.out.println("ReportView: update called for "
+					+ tpEvent.getTopic());
+
+			String dataSetXML = tpEvent.getDictionary().get(
+					TPEvent.CHART_DATASET_XML_KEY);
+			ChartDataSet dataSet = ChartDataSetXML
+					.getDataSetFromXML(dataSetXML);
+			String chartType = tpEvent.getDictionary().get(
+					ChartDataSet.CHART_TYPE);
+			System.out.println("dataSetXML\n: " + dataSetXML);
+			if (chartType.equalsIgnoreCase(ChartDataSet.BAR)) {
+				// createAndShowPieChart(tpEvent);
+			}
+		}
+	}
 }

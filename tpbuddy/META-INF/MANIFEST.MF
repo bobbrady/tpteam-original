@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ecf.presence,
  org.eclipse.ecf.sharedobject
 Import-Package: edu.harvard.fas.rbrady.tpteam.tpbridge.bridge,
+ edu.harvard.fas.rbrady.tpteam.tpbridge.chart,
  edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate,
  edu.harvard.fas.rbrady.tpteam.tpbridge.model,
  edu.harvard.fas.rbrady.tpteam.tpbridge.xml,

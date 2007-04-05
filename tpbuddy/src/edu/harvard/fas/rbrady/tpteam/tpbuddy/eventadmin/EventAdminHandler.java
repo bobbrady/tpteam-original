@@ -35,7 +35,8 @@ public class EventAdminHandler extends Observable implements EventHandler {
 				ITPBridge.TEST_DETAIL_REQ_TOPIC, ITPBridge.TEST_DETAIL_RESP_TOPIC,
 				ITPBridge.TEST_UPDATE_DATA_REQ_TOPIC, ITPBridge.TEST_UPDATE_DATA_RESP_TOPIC,
 				ITPBridge.TEST_UPDATE_REQ_TOPIC, ITPBridge.TEST_UPDATE_RESP_TOPIC,
-				ITPBridge.TEST_ADD_REQ_TOPIC, ITPBridge.TEST_ADD_RESP_TOPIC});
+				ITPBridge.TEST_ADD_REQ_TOPIC, ITPBridge.TEST_ADD_RESP_TOPIC,
+				ITPBridge.CHART_GET_DATA_REQ_TOPIC, ITPBridge.CHART_GET_DATA_RESP_TOPIC});
 		
 		context.registerService(EventHandler.class.getName(), this, mDictionary);
 	}

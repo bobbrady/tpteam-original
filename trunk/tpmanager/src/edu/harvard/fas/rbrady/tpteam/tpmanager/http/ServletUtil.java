@@ -366,6 +366,7 @@ public class ServletUtil extends HttpServlet {
 			// System.out.println(ServletUtil.getSHA1Hash("tpteam"));
 			System.out.println("userId: "
 					+ ServletUtil.getRemoteUserID("tpmgr"));
+			System.out.println(ServletUtil.getTestTree("1", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -375,7 +376,7 @@ public class ServletUtil extends HttpServlet {
 			throws Exception {
 
 		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
+			.getCurrentSession();
 
 		// For standalone debug
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -411,7 +412,7 @@ public class ServletUtil extends HttpServlet {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 		// For standalone debug
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		 //Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		int userId;
 		try {
@@ -429,4 +430,5 @@ public class ServletUtil extends HttpServlet {
 		}
 		return userId;
 	}
+	
 }

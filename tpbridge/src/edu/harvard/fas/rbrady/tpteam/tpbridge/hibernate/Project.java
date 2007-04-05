@@ -93,6 +93,11 @@ public class Project implements java.io.Serializable {
 		this.getTpteamUsers().add(tpTeamUser);
 		tpTeamUser.getProjects().add(this);
 	}
+	
+	public void addTpteamUser(TpteamUser tpTeamUser)
+	{
+		this.getTpteamUsers().add(tpTeamUser);
+	}
 
 	public void removeFromTpteamUsers(TpteamUser tpTeamUser) {
 		this.getTpteamUsers().remove(tpTeamUser);

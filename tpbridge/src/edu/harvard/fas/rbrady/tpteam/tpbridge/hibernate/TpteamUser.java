@@ -201,6 +201,11 @@ public class TpteamUser implements java.io.Serializable {
 		this.getProjects().add(project);
 		project.getTpteamUsers().add(this);
 	}
+	
+	public void addProject(Project project)
+	{
+		this.getProjects().add(project);
+	}
 
 	public void removeFromProject(Project project) {
 		this.getProjects().remove(project);

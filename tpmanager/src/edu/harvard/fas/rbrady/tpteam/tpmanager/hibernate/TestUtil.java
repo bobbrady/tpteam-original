@@ -3,6 +3,7 @@ package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -104,20 +105,23 @@ public class TestUtil {
 		return testStub;
 	}
 
-	public static void updateTest(Test testStub) throws Exception {
+	public static void updateTest(TPEvent tpEvent) throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
+			
+			String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
+			Test testStub = TestXML.getTestFromXML(testXML);
+			
 			tx = s.beginTransaction();
 
 			// Get the user who is requesting update
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
 			Query query = s.createQuery(hql);
-			query.setString("ecfID", String.valueOf(testStub.getModifiedBy()
-					.getEcfId()));
+			query.setString("ecfID", tpEvent.getDictionary().get(TPEvent.FROM));
 			TpteamUser updateUser = (TpteamUser) query.list().get(0);
 
 			Test test = (Test) s.load(Test.class, testStub.getId());
@@ -141,6 +145,25 @@ public class TestUtil {
 			}
 			test.setModifiedBy(updateUser);
 			test.setModifiedDate(new Date());
+			
+			// Collect project member ecfIDs
+			Set<TpteamUser> users = test.getProject().getTpteamUsers();
+			StringBuilder userECFIDs = new StringBuilder();
+			int idx = 0;
+			for (TpteamUser user : users) {
+				if (idx == 0)
+					userECFIDs.append(user.getEcfId());
+				else
+					userECFIDs.append("/" + user.getEcfId());
+				idx++;
+			}
+			String ECFID = tpEvent.getDictionary().get(TPEvent.FROM);
+			tpEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
+			tpEvent.getDictionary().put(TPEvent.FROM, userECFIDs.toString());
+			tpEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
+			if(test.getDescription() != null)
+				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY, test.getDescription());
+			
 			s.flush();
 			tx.commit();
 		} catch (Exception e) {
@@ -150,13 +173,17 @@ public class TestUtil {
 		}
 	}
 
-	public static void addTest(Test testStub) throws Exception {
+	public static void addTest(TPEvent tpEvent) throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
+			
+			String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
+			Test testStub = TestXML.getTestFromXML(testXML);
+
 			tx = s.beginTransaction();
 
 			Test test = new Test();
@@ -205,7 +232,29 @@ public class TestUtil {
 			}
 			s.saveOrUpdate(test);
 			s.flush();
+			test.setPath(test.getParent().getPath() + "." + test.getId());
 			testStub.setId(test.getId());
+
+			// Collect project member ecfIDs
+			Set<TpteamUser> users = test.getProject().getTpteamUsers();
+			StringBuilder userECFIDs = new StringBuilder();
+			int idx = 0;
+			for (TpteamUser user : users) {
+				if (idx == 0)
+					userECFIDs.append(user.getEcfId());
+				else
+					userECFIDs.append("/" + user.getEcfId());
+				idx++;
+			}
+			String ECFID = tpEvent.getDictionary().get(TPEvent.FROM);
+			tpEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
+			tpEvent.getDictionary().put(TPEvent.FROM, userECFIDs.toString());
+			tpEvent.getDictionary().put(TPEvent.ID_KEY, String.valueOf(test.getId()));
+			tpEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
+			if(test.getDescription() != null)
+				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY, test.getDescription());
+			tpEvent.getDictionary().put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
+			s.flush();
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null)

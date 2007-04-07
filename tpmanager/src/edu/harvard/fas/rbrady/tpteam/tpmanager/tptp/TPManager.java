@@ -69,7 +69,6 @@ public class TPManager implements Observer {
 					sendProjGetResponse(tpEvent);
 				} else if (tpTopic
 						.equalsIgnoreCase(ITPBridge.TEST_EXEC_REQ_TOPIC)) {
-
 					runTest(tpEvent.getID(), tpEvent);
 					sendTestExecResponse(tpEvent);
 				} else if (tpTopic
@@ -247,8 +246,12 @@ public class TPManager implements Observer {
 		
 		if(tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE).equals(ChartDataSet.PIE))
 		{
-			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getBarChartXML(tpEvent));			
+			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getPieChartXML(tpEvent));			
 		}
+		else if(tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE).equals(ChartDataSet.BAR))
+		{
+			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getBarChartXML(tpEvent));			
+		} 
 		
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.CHART_GET_DATA_RESP_TOPIC, dictionary);

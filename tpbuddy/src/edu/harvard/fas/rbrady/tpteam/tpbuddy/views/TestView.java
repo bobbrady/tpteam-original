@@ -67,6 +67,8 @@ public class TestView extends ViewPart implements Observer {
 	private TreeNodeModel mTreeNodeModel;
 
 	private String mProjID;
+	
+	private String mProjName;
 
 	private void execTestAction() {
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -278,6 +280,21 @@ public class TestView extends ViewPart implements Observer {
 			}
 		}
 	}
+	
+	private void getTestTreeAction() {
+			Hashtable<String, String> dictionary = new Hashtable<String, String>();
+			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+					.getTPBridgeClient().getTPMgrECFID());
+			dictionary.put(TPEvent.FROM, Activator.getDefault()
+					.getTPBridgeClient().getTargetIDName());
+			dictionary
+					.put(TPEvent.PROJECT_ID_KEY, mProjID);
+			dictionary.put(TPEvent.PROJECT_KEY, mProjName);
+
+			Activator.getDefault().getEventAdminClient().sendEvent(
+					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
+	}
+
 
 	private void sendMsgToEventAdmin(TPEvent tpEvent) {
 		Activator.getDefault().getEventAdminClient().sendEvent(
@@ -384,6 +401,14 @@ public class TestView extends ViewPart implements Observer {
 		getSite().setSelectionProvider(mViewer);
 
 		createActions();
+		
+		mProjID = Activator.getDefault().getProjID();
+		mProjName = Activator.getDefault().getProjName();
+
+		if (mProjID != null && !mProjID.equalsIgnoreCase("")
+				&& Integer.parseInt(mProjID) > 0)
+			getTestTreeAction();
+
 	}
 
 	/**
@@ -411,7 +436,19 @@ public class TestView extends ViewPart implements Observer {
 			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
 				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
+				Activator.getDefault().setProjID(mProjID);
+				Activator.getDefault().setProjName(mProjName);
+			} 
+			else if(((TPEvent) object).getTopic().equals(
+					ITPBridge.CHART_GET_DATA_REQ_TOPIC))
+			{
+				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
+				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
+				Activator.getDefault().setProjID(mProjID);
+				Activator.getDefault().setProjName(mProjName);
+			}
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);

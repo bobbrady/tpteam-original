@@ -1,6 +1,7 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -106,13 +107,27 @@ public class ReportView extends ViewPart implements Observer {
 							"A Project must first Be selected in the Project View, then click on the \"Get Proj Reports\" icon.");
 			return;
 		}
+		
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+		dictionary.put(TPEvent.PROJECT_KEY, mProjName);
+		dictionary.put(ChartDataSet.CHART_TYPE, ChartDataSet.BAR);
 
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
+
+/*
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				createAndShowBarChart();
 				mParent.layout();
 			}
 		});
+		*/
 	}
 
 	private void getLineAction() {
@@ -182,6 +197,14 @@ public class ReportView extends ViewPart implements Observer {
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
+	
+	private void createAndShowBarChart(ChartDataSet[] dataSets) {
+
+		mChart = BarChart.getInstance().createChart(dataSets, mProjName);
+		mFrame.setChart(mChart);
+		mFrame.layout();
+	}
+
 
 	private void createAndShowLineChart() {
 
@@ -238,16 +261,24 @@ public class ReportView extends ViewPart implements Observer {
 
 				String dataSetXML = tpEvent.getDictionary().get(
 						TPEvent.CHART_DATASET_XML_KEY);
-				final ChartDataSet dataSet = ChartDataSetXML
-						.getDataSetFromXML(dataSetXML);
 				String chartType = tpEvent.getDictionary().get(
 						ChartDataSet.CHART_TYPE);
 				System.out.println("dataSetXML\n: " + dataSetXML);
 
 				if (chartType.equalsIgnoreCase(ChartDataSet.PIE)) {
+					final ChartDataSet dataSet = ChartDataSetXML
+					.getDataSetFromXML(dataSetXML);
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							createAndShowPieChart(dataSet);
+							mParent.layout();
+						}
+					});
+				} else if (chartType.equalsIgnoreCase(ChartDataSet.BAR)) {
+					final ChartDataSet[] dataSets = ChartDataSetXML.getDataSetsFromXML(dataSetXML);
+					Display.getDefault().syncExec(new Runnable() {
+						public void run() {
+							createAndShowBarChart(dataSets);
 							mParent.layout();
 						}
 					});

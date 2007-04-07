@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 
-public class ChartDataSet implements java.io.Serializable{
+public class ChartDataSet implements java.io.Serializable, Comparable<ChartDataSet> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,5 +66,9 @@ public class ChartDataSet implements java.io.Serializable{
 
 	public void addChartDataPoint(ChartDataPoint chartDataPoint) {
 			mChartDataPoints.add(chartDataPoint);
+	}
+
+	public int compareTo(ChartDataSet chartDataSet) {
+		return this.mUser.compareTo(chartDataSet.getUser());
 	}
 }

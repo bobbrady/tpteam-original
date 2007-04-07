@@ -33,6 +33,10 @@ public class Activator extends AbstractUIPlugin {
 
 	private TPBridgeClient mTPBridgeClient;
 	
+	private String mProjID;
+	
+	private String mProjName;
+	
 	public static final String APPLICATION_WINDOW_TITLE = "TPBuddy";
 	public static final int APPLICATION_WINDOW_SIZE_X = 600;
 	public static final int APPLICATION_WINDOW_SIZE_Y = 400;
@@ -105,5 +109,25 @@ public class Activator extends AbstractUIPlugin {
 	public TPBridgeClient getTPBridgeClient()
 	{
 		return mTPBridgeClient;
+	}
+	
+	public void setProjID(String projID)
+	{
+		mProjID = projID;
+	}
+	
+	public String getProjID()
+	{
+		return mProjID;
+	}
+	
+	public void setProjName(String projName)
+	{
+		mProjName = projName;
+	}
+	
+	public String getProjName()
+	{
+		return mProjName;
 	}
 }

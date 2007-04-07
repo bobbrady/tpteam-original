@@ -40,7 +40,8 @@ public class HibernatTests {
 			// getProjByUser(101);
 			// Test test = getInitTopLevelTests(1);
 			// printTest(test);
-			getPieChartData(1);
+			// getPieChartData(1);
+			getBarChartData(1);
 			HibernateUtil.getSessionFactory().close();
 
 		} catch (Exception e) {
@@ -799,19 +800,19 @@ public class HibernatTests {
 			 */
 
 			/*
-			String SQL_QUERY = "SELECT nvl(te.status, 'NA'), count(*) FROM TestExecution te, Test t "
-					+ " WHERE (t.project.id = 1 AND te.test.id = t.id ) AND t.isFolder = 'N' "
+			 * String SQL_QUERY = "SELECT nvl(te.status, 'NA'), count(*) FROM
+			 * TestExecution te, Test t " + " WHERE (t.project.id = 1 AND
+			 * te.test.id = t.id ) AND t.isFolder = 'N' " + " AND (te.execDate = " + "
+			 * (SELECT max(te2.execDate) from TestExecution te2 where
+			 * te2.test.id = te.test.id) " + " or te.execDate is NULL) GROUp BY
+			 * te.status";
+			 */
+			String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "
+					+ " join te.test as t "
+					+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
 					+ " AND (te.execDate = "
 					+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id) "
-					+ " or te.execDate is NULL) GROUp BY te.status";
-					*/
-			String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "  
-			    + " join te.test as t "
-				+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
-				+ " AND (te.execDate = "
-				+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id) "
-				+ " or te.execDate is NULL) GROUP BY te.status";
-			
+					+ " or te.execDate is NULL) GROUP BY te.status";
 
 			Query query = s.createQuery(SQL_QUERY);
 			query.setInteger(0, id);
@@ -821,9 +822,9 @@ public class HibernatTests {
 				System.out.println("Status: " + row[0]);
 				System.out.println("Count: " + row[1]);
 			}
-			
-			SQL_QUERY = "SELECT count(*) FROM Test as t "  
-				+ " WHERE t.project.id = ? AND t.isFolder = 'N' ";
+
+			SQL_QUERY = "SELECT count(*) FROM Test as t "
+					+ " WHERE t.project.id = ? AND t.isFolder = 'N' ";
 			query = s.createQuery(SQL_QUERY);
 			query.setInteger(0, id);
 
@@ -831,8 +832,45 @@ public class HibernatTests {
 				Object row = (Object) it.next();
 				System.out.println("Total Num Tests: " + row);
 			}
-			
-			
+
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+	}
+
+	public static void getBarChartData(int id) throws Exception {
+		System.out.println("Getting BarChartData w/Proj ID: " + id);
+		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = null;
+		try {
+
+			tx = s.beginTransaction();
+
+			Project proj = (Project) s.load(Project.class, id);
+			for (TpteamUser user : proj.getTpteamUsers()) {
+				System.out.println("user: " + user.getUserName());
+				String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "
+						+ " join te.test as t "
+						+ " WHERE t.project.id = ? AND t.createdBy.id = ? AND t.isFolder = 'N' "
+						+ " AND (te.execDate = "
+						+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id) "
+						+ " or te.execDate is NULL) GROUP BY te.status";
+
+				Query query = s.createQuery(SQL_QUERY);
+				query.setInteger(0, id);
+				query.setInteger(1, user.getId());
+
+				for (Iterator it = query.iterate(); it.hasNext();) {
+					Object[] row = (Object[]) it.next();
+					System.out.println("Status: " + row[0]);
+					System.out.println("Count: " + row[1]);
+				}
+
+			}
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();

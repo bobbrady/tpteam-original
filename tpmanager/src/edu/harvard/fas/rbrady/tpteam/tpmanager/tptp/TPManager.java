@@ -251,7 +251,12 @@ public class TPManager implements Observer {
 		else if(tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE).equals(ChartDataSet.BAR))
 		{
 			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getBarChartXML(tpEvent));			
+		}
+		else if(tpEvent.getDictionary().get(ChartDataSet.CHART_TYPE).equals(ChartDataSet.LINE))
+		{
+			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil.getLineChartXML(tpEvent));			
 		} 
+
 		
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.CHART_GET_DATA_RESP_TOPIC, dictionary);

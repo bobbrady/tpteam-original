@@ -20,17 +20,6 @@ public class AutomationClient {
 	public String run(String eclipse, String workspace, String project,
 			String[] suites, String report, String connection) {
 
-		/****************************
-		  Simple Debug
-		  
-		System.out.println(eclipse);
-		System.out.println(workspace);
-		System.out.println(project);
-		System.out.println(suites[0]);
-		System.out.println(report);
-		System.out.println(connection);
-		********************************/
-		
 		// Instantiate TPTP automatable services' Java automation client adapter
 		AutomationClientAdapter adapter = new AutomationClientAdapter(eclipse);
 
@@ -46,7 +35,7 @@ public class AutomationClient {
 				.booleanValue();
 
 		if (!verified) {
-			return "not verified";
+			return "error";
 		}
 
 		System.out.println("AgentController is running...");

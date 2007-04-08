@@ -1,6 +1,8 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +21,8 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ChartDataSetXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ChartUtil {
+	
+	public static final int NUM_LINECHART_DAYS = 30;
 
 	private static ChartDataPoint getPieChartDataPoint(TPEvent tpEvent)
 			throws Exception {
@@ -116,6 +120,7 @@ public class ChartUtil {
 		return ChartDataSetXML.getListXML(dataSetList);
 	}
 	
+	
 	private static ChartDataPoint getBarChartDataPoint(int projID, int userID) throws Exception
 	{
 		Session s = null;
@@ -203,6 +208,93 @@ public class ChartUtil {
 		}
 		return (TpteamUser[])projUsers.toArray(new TpteamUser[projUsers.size()]);
 	}
+	
+	public static String getLineChartXML(TPEvent tpEvent) throws Exception {
+		int projID = Integer.parseInt(tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY));
+		String projName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
+
+		ChartDataSet dataSet = new ChartDataSet();
+		dataSet.setProjName(projName);
+		dataSet.setType(ChartDataSet.LINE);
+
+		Calendar cal = Calendar.getInstance();  
+		Date today = new Date();              
+		for(int idx = 0; idx < NUM_LINECHART_DAYS; idx++)
+		{
+			cal.setTime(today);
+			ChartDataPoint dataPoint = getLineChartDataPoint(projID, idx, cal);
+			dataSet.addChartDataPoint(dataPoint);
+		}
+
+		return ChartDataSetXML.getXML(dataSet);
+	}
+	
+	private static ChartDataPoint getLineChartDataPoint(int projID, int daysPrev, Calendar cal) throws Exception
+	{
+		Session s = null;
+		Transaction tx = null;
+		ChartDataPoint dataPoint = new ChartDataPoint();
+		try {
+
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+			//s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
+
+			tx = s.beginTransaction();
+
+			String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "
+					+ " join te.test as t "
+					+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
+					+ " AND te.execDate = "
+					+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id " +
+							"AND te2.execDate <= sysdate - ?) "
+					+ " GROUP BY te.status";
+
+			Query query = s.createQuery(SQL_QUERY);
+			query.setInteger(0, projID);
+			query.setInteger(1,daysPrev);
+
+			int sum = 0;
+			for (Iterator it = query.iterate(); it.hasNext();) {
+				Object[] row = (Object[]) it.next();
+				Character status = (Character) row[0];
+				Long count = (Long) row[1];
+
+				if (status == 'P')
+					dataPoint.setPass(count.intValue());
+				else if (status == 'F')
+					dataPoint.setFail(count.intValue());
+				else if (status == 'E')
+					dataPoint.setError(count.intValue());
+				else if (status == 'I')
+					dataPoint.setInconcl(count.intValue());
+				sum += count.intValue();
+			}
+			
+		SQL_QUERY = "SELECT count(*) FROM Test as t "
+				+ " WHERE t.project.id = ? AND t.isFolder = 'N' AND t.createdDate <= sysdate - ?";
+		
+		query = s.createQuery(SQL_QUERY);
+		query.setInteger(0, projID);
+		query.setInteger(1, daysPrev);
+
+		for (Iterator it = query.iterate(); it.hasNext();) {
+			Long totalTests = (Long) it.next();
+			int notExec = totalTests.intValue() - sum;
+			dataPoint.setNotExec(notExec);
+		}	
+		cal.add(Calendar.DATE, -daysPrev);
+		dataPoint.setDate(cal.getTime());
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		}
+		return dataPoint;
+	}
+
+
 
 
 	public static void main(String[] args) {
@@ -226,6 +318,12 @@ public class ChartUtil {
 			e.printStackTrace();
 		}
 		*/
+		
+		/***************************************************************
+		 * Test Getting Bar Chart
+		 **************************************************************/
+		
+		/*
 		Hashtable<String,String> dict = new Hashtable<String,String>();
 		dict.put(TPEvent.PROJECT_ID_KEY, "1");
 		dict.put(TPEvent.PROJECT_KEY, "Proj Name");
@@ -244,7 +342,35 @@ public class ChartUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
+
+		/***************************************************************
+		 * Test Getting Line Chart
+		 **************************************************************/
 		
+		
+		Hashtable<String,String> dict = new Hashtable<String,String>();
+		dict.put(TPEvent.PROJECT_ID_KEY, "1");
+		dict.put(TPEvent.PROJECT_KEY, "Proj Name");
+		TPEvent tpEvent = new TPEvent("test_topic", dict);
+		try {
+			String lineChartXML = getLineChartXML(tpEvent);
+			System.out.println("lineChartXML:\n" + lineChartXML);
+			
+			ChartDataSet dataSet = ChartDataSetXML.getDataSetFromXML(lineChartXML);
+				String projName = dataSet.getProjName();
+				String type = dataSet.getType();
+				List<ChartDataPoint> dataPoints = dataSet.getChartDataPoints();
+				System.out.println("Proj Name: " + projName + ", Type: " + type);
+				for(ChartDataPoint dataPoint : dataPoints)
+				{
+					System.out.println(dataPoint.getDate() + " Pass: " + dataPoint.getPass());
+				}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		
 	}
 

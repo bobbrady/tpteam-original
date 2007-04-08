@@ -3,6 +3,9 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.betwixt.io.BeanReader;
@@ -208,7 +211,9 @@ public class TestXML {
 	}
 
 	private static void addExecProps(ArrayList<TPEntity> list, Test test) {
-		for (TestExecution testExec : test.getTestExecutions()) {
+		TestExecution[] testExecs = test.getTestExecutions().toArray(new TestExecution[test.getTestExecutions().size()]); 
+		Arrays.sort(testExecs);
+		for (TestExecution testExec : testExecs) {
 			String type = null;
 			StringBuilder desc = new StringBuilder();
 			if (testExec.getStatus() == 'P') {

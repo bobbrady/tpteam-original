@@ -19,7 +19,7 @@
         <property name="hibernate.max_fetch_depth">1</property>
         <property name="hibernate.proxool.pool_alias">pool1</property>
         <property name="hibernate.query.substitutions">yes 'Y', no 'N'</property>
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
         <mapping resource="edu/harvard/fas/rbrady/tpteam/tpbridge/hibernate/Test.hbm.xml" />

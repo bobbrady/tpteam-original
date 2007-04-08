@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -16,6 +17,9 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 
 public class LineChart extends AbstractChart{
 	
@@ -71,6 +75,37 @@ public class LineChart extends AbstractChart{
 		return chart;
 	}
 	
+	public JFreeChart createChart(ChartDataSet dataSet, String projName) {
+		XYDataset dataset = (XYDataset)createDataset(dataSet);
+		JFreeChart chart = ChartFactory.createTimeSeriesChart(
+				"Project " + projName + " Historical Status", "Date", "Number of Tests",
+				dataset, true, true, false);
+		chart.setBackgroundPaint(Color.white);
+		XYPlot plot = chart.getXYPlot();
+		plot.setBackgroundPaint(Color.lightGray);
+		plot.setDomainGridlinePaint(Color.white);
+		plot.setRangeGridlinePaint(Color.white);
+
+		plot.setDomainCrosshairVisible(true);
+		plot.setRangeCrosshairVisible(true);
+		XYItemRenderer renderer = plot.getRenderer();
+		renderer.setSeriesPaint(0, GREEN);
+		renderer.setSeriesPaint(1, RED);
+		renderer.setSeriesPaint(2, YELLOW);
+		renderer.setSeriesPaint(3, BLUE);
+		renderer.setSeriesPaint(4, PINK);
+		if (renderer instanceof StandardXYItemRenderer) {
+			StandardXYItemRenderer rr = (StandardXYItemRenderer) renderer;
+		//	rr.setPlotShapes(true);
+			rr.setShapesFilled(true);
+			rr.setItemLabelsVisible(true);
+		}
+		DateAxis axis = (DateAxis) plot.getDomainAxis();
+		axis.setDateFormatOverride(new SimpleDateFormat("MMM-dd-yy"));
+
+		return chart;
+	}
+	
 	private TimeSeries createTimeSeries(String seriesName)
 	{
 		Calendar cal = Calendar.getInstance();  
@@ -94,6 +129,26 @@ public class LineChart extends AbstractChart{
 		return timeSeries;
 		
 	}
+	
+	private TimeSeries createTimeSeries(ChartDataSet dataSet, String seriesName)
+	{
+		TimeSeries timeSeries = new TimeSeries(seriesName, Day.class);
+		List<ChartDataPoint> dataPoints = dataSet.getChartDataPoints();
+		for(ChartDataPoint dataPoint : dataPoints)
+		{
+			if(seriesName.equalsIgnoreCase(PASS))
+				timeSeries.add(new Day(dataPoint.getDate()), dataPoint.getPass());
+			else if(seriesName.equalsIgnoreCase(FAIL))
+				timeSeries.add(new Day(dataPoint.getDate()), dataPoint.getFail());
+			else if(seriesName.equalsIgnoreCase(ERR))
+				timeSeries.add(new Day(dataPoint.getDate()), dataPoint.getError());
+			else if(seriesName.equalsIgnoreCase(INCONCL))
+				timeSeries.add(new Day(dataPoint.getDate()), dataPoint.getInconcl());
+			else if(seriesName.equalsIgnoreCase(NOTEXEC))
+				timeSeries.add(new Day(dataPoint.getDate()), dataPoint.getNotExec());			
+		}
+		return timeSeries;
+	}
 
 	/**
 	 * Creates a dataset, consisting of two series of monthly data.
@@ -113,5 +168,21 @@ public class LineChart extends AbstractChart{
 
 		return dataset;
 	}
+	
+	protected AbstractDataset createDataset(ChartDataSet dataSet) {
+		TimeSeries passSeries = createTimeSeries(dataSet, PASS);
+		TimeSeries failSeries = createTimeSeries(dataSet, FAIL);
+		TimeSeries errSeries = createTimeSeries(dataSet, ERR);
+		TimeSeries incSeries = createTimeSeries(dataSet, INCONCL);
+		TimeSeries notExecSeries = createTimeSeries(dataSet, NOTEXEC);
+		TimeSeriesCollection dataset = new TimeSeriesCollection();
+		dataset.addSeries(passSeries);
+		dataset.addSeries(failSeries);
+		dataset.addSeries(errSeries);
+		dataset.addSeries(incSeries);
+		dataset.addSeries(notExecSeries);
+		return dataset;
+	}
+
 
 }

@@ -89,11 +89,6 @@ public class ReportView extends ViewPart implements Observer {
 
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
-
-		/*
-		 * Display.getDefault().syncExec(new Runnable() { public void run() {
-		 * createAndShowPieChart(); mParent.layout(); } });
-		 */
 	}
 
 	private void getBarAction() {
@@ -107,7 +102,7 @@ public class ReportView extends ViewPart implements Observer {
 							"A Project must first Be selected in the Project View, then click on the \"Get Proj Reports\" icon.");
 			return;
 		}
-		
+
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
 				.getTPBridgeClient().getTPMgrECFID());
@@ -119,15 +114,6 @@ public class ReportView extends ViewPart implements Observer {
 
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
-
-/*
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				createAndShowBarChart();
-				mParent.layout();
-			}
-		});
-		*/
 	}
 
 	private void getLineAction() {
@@ -141,13 +127,18 @@ public class ReportView extends ViewPart implements Observer {
 							"A Project must first Be selected in the Project View, then click on the \"Get Proj Reports\" icon.");
 			return;
 		}
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+		dictionary.put(TPEvent.PROJECT_KEY, mProjName);
+		dictionary.put(ChartDataSet.CHART_TYPE, ChartDataSet.LINE);
 
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				createAndShowLineChart();
-				mParent.layout();
-			}
-		});
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
+
 	}
 
 	@Override
@@ -197,18 +188,21 @@ public class ReportView extends ViewPart implements Observer {
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
-	
-	private void createAndShowBarChart(ChartDataSet[] dataSets) {
 
+	private void createAndShowBarChart(ChartDataSet[] dataSets) {
 		mChart = BarChart.getInstance().createChart(dataSets, mProjName);
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
 
-
 	private void createAndShowLineChart() {
-
 		mChart = LineChart.getInstance().createChart();
+		mFrame.setChart(mChart);
+		mFrame.layout();
+	}
+
+	private void createAndShowLineChart(ChartDataSet dataSet) {
+		mChart = LineChart.getInstance().createChart(dataSet, mProjName);
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
@@ -267,7 +261,7 @@ public class ReportView extends ViewPart implements Observer {
 
 				if (chartType.equalsIgnoreCase(ChartDataSet.PIE)) {
 					final ChartDataSet dataSet = ChartDataSetXML
-					.getDataSetFromXML(dataSetXML);
+							.getDataSetFromXML(dataSetXML);
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							createAndShowPieChart(dataSet);
@@ -275,10 +269,20 @@ public class ReportView extends ViewPart implements Observer {
 						}
 					});
 				} else if (chartType.equalsIgnoreCase(ChartDataSet.BAR)) {
-					final ChartDataSet[] dataSets = ChartDataSetXML.getDataSetsFromXML(dataSetXML);
+					final ChartDataSet[] dataSets = ChartDataSetXML
+							.getDataSetsFromXML(dataSetXML);
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							createAndShowBarChart(dataSets);
+							mParent.layout();
+						}
+					});
+				} else if (chartType.equalsIgnoreCase(ChartDataSet.LINE)) {
+					final ChartDataSet dataSet = ChartDataSetXML
+							.getDataSetFromXML(dataSetXML);
+					Display.getDefault().syncExec(new Runnable() {
+						public void run() {
+							createAndShowLineChart(dataSet);
 							mParent.layout();
 						}
 					});

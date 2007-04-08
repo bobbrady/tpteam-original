@@ -2,6 +2,8 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate;
 
 // Generated Dec 5, 2006 8:35:12 PM by Hibernate Tools 3.2.0.beta8
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

@@ -8,11 +8,11 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.ecf.core.ContainerTypeDescription;
+import org.eclipse.ecf.core.ContainerCreateException;
+import org.eclipse.ecf.core.ContainerFactory;
+import org.eclipse.ecf.core.IContainer;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbench;
@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionDelegate;
 
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.wizard.ConnectWizard;
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.wizard.XMPPConnectWizard;
 
 public class LoginAction extends ActionDelegate implements
 		IWorkbenchWindowActionDelegate {
@@ -55,68 +55,20 @@ public class LoginAction extends ActionDelegate implements
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	public void run(IAction action) {
-		String namespaceName = "ecf.xmpp.smack";
-		String namespaceDescription = "XMPP (Jabber)";
-		Map<String,String> namespaceProps = new HashMap<String,String>();
-		namespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.usepassword",
-				"true");
-		namespaceProps
-				.put(
-						"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.examplegroupid",
-						"<user>@<xmppserver>");
-		namespaceProps
-				.put(
-						"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage..defaultgroupid",
-						"");
-		namespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.urlprefix",
-				"xmpp:");
-		namespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.groupIDLabel",
-				"Account:");
-		namespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.namespace",
-				namespaceName);
-		ContainerTypeDescription desc1 = new ContainerTypeDescription(this
-				.getClass().getClassLoader(), namespaceName, "",
-				namespaceDescription, null, namespaceProps);
-
-		String snamespaceName = "ecf.xmpps.smack";
-		String snamespaceDescription = "XMPP SSL (Secure Jabber)";
-
-		Map<String,String> snamespaceProps = new HashMap<String,String>();
-		snamespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.usepassword",
-				"true");
-		snamespaceProps
-				.put(
-						"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.examplegroupid",
-						"<user>@<xmppserver>");
-		snamespaceProps
-				.put(
-						"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage..defaultgroupid",
-						"");
-		snamespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.urlprefix",
-				"xmpps:");
-		snamespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.groupIDLabel",
-				"Account:");
-		snamespaceProps.put(
-				"org.eclipse.ecf.ui.wizards.JoinGroupWizardPage.namespace",
-				snamespaceName);
-		ContainerTypeDescription desc2 = new ContainerTypeDescription(this
-				.getClass().getClassLoader(), snamespaceName, "",
-				snamespaceDescription, null, snamespaceProps);
-		ConnectWizard wizard = new ConnectWizard(getWorkbench(),
-				"Connect to Server", new ContainerTypeDescription[] { desc1,
-						desc2 });
 		// Create the wizard dialog
+		IContainer container = null;
+		try {
+			container = ContainerFactory.getDefault().createContainer(XMPPConnectWizard.CONTAINER_TYPE);
+		} catch (ContainerCreateException e) {
+			MessageDialog.openError(getWorkbench().getActiveWorkbenchWindow().getShell(), "Create Error", "Could not create XMPP container.\n\nError: "+e.getLocalizedMessage());
+		}
+		XMPPConnectWizard connectWizard = new XMPPConnectWizard();
+		connectWizard.init(getWorkbench(), container);
 		WizardDialog dialog = new WizardDialog(getWorkbench()
-				.getActiveWorkbenchWindow().getShell(), wizard);
+				.getActiveWorkbenchWindow().getShell(), connectWizard);
 		// Open the wizard dialog
 		dialog.open();
+
 	}
 
 	/*

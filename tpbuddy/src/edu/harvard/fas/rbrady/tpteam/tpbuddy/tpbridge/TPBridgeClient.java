@@ -18,7 +18,9 @@ import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.security.ConnectContextFactory;
 import org.eclipse.ecf.core.security.IConnectContext;
+import org.eclipse.ecf.core.user.User;
 import org.eclipse.ecf.presence.IPresenceContainerAdapter;
+import org.eclipse.ecf.presence.ui.PresenceUI;
 import org.osgi.framework.BundleContext;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
@@ -30,7 +32,7 @@ public class TPBridgeClient extends Client{
 	public static final String WORKSPACE_NAME = "<workspace>";
     public static final String GENERIC_CONTAINER_CLIENT_NAME = "ecf.generic.client";
 	static Hashtable clients = new Hashtable();
-	PresenceContainerUI presenceContainerUI = null;
+	PresenceUI presenceContainerUI = null;
 
 	public TPBridgeClient(BundleContext context) {
 		super(context);
@@ -62,8 +64,8 @@ public class TPBridgeClient extends Client{
 				.getAdapter(IPresenceContainerAdapter.class);
 		if (pc != null) {
 			// Setup presence UI
-			presenceContainerUI = new PresenceContainerUI(pc);
-			presenceContainerUI.setup(client, targetID, username);
+			presenceContainerUI = new PresenceUI(client,pc);
+			presenceContainerUI.showForUser(new User(targetID,username));
 		} else throw new NullPointerException("IPresenceContainerAdapter interface not exposed by client with type "+containerType);
 		// Now connect
 		client.connect(targetID, getJoinContext(username, connectData));

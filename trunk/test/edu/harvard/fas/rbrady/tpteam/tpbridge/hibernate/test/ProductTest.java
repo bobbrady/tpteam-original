@@ -154,7 +154,7 @@ public class ProductTest extends HyadesTestCase {
 		try {
 			tx = s.beginTransaction();
 			Query query = s.createQuery("from Product as p where p.name = ?");
-			query.setString(0, mTempProdName);
+			query.setString(0, mTempProdName + "_update");
 			List<Product> prods = query.list();
 			assertTrue(
 					"testDeleteProduct Error: failed to return temp product",

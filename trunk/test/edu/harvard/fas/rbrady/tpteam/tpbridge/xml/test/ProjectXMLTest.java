@@ -1,5 +1,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpbridge.xml.test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -93,13 +94,16 @@ public class ProjectXMLTest extends HyadesTestCase {
 		assertTrue(
 				"Error: returned XML number of lines does not equal number in test reference XML",
 				xmlLines.length == PROJ_XML.length);
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		for(String line : PROJ_XML)
+		{
+			map.put(line, 1);
+		}
 
-		int idx = 0;
 		for (String line : xmlLines) {
 			assertTrue("Error returned XML line " + line.trim()
-					+ " does not equal test reference line "
-					+ PROJ_XML[idx].trim(), line.trim().equals(
-					PROJ_XML[idx++].trim()));
+					+ " not found in test reference XML", map.get(line.trim()) == 1);
 		}
 	}
 

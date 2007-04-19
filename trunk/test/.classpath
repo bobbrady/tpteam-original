@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="lib/commons-collections-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpbuddy"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.harvard.fas.rbrady.tpteam.tpmanager"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

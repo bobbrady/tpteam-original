@@ -23,69 +23,71 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 public class Client {
 
 	protected ServiceTracker mServiceTracker;
-	
+
 	public static final String TPMANAGER_ECFID_KEY = "tpmanager.ecfID";
-	
+
 	public static final String TPMANAGER_ECFID_PASSWORD = "tpmanager.password";
-	
+
 	private String mTPMgrECFID = null;
-	
+
 	public Client(BundleContext context) {
 		mServiceTracker = new ServiceTracker(context,
 				ITPBridge.class.getName(), null);
 		mServiceTracker.open();
 	}
 
-	public void setTPMgrECFID(String tpMgrECFID)
-	{
+	public void setTPMgrECFID(String tpMgrECFID) {
 		mTPMgrECFID = tpMgrECFID;
 	}
-	
-	public String getTPMgrECFID()
-	{
+
+	public String getTPMgrECFID() {
 		return mTPMgrECFID;
 	}
-	
-	
-	public boolean setContainer(IContainer container, String targetIDName, String clientType) throws ECFException
-	{
+
+	public void setServiceTracker(ServiceTracker serviceTracker) {
+		mServiceTracker = serviceTracker;
+	}
+
+	public ServiceTracker getServiceTracker() {
+		return mServiceTracker;
+	}
+
+	public boolean setContainer(IContainer container, String targetIDName,
+			String clientType) throws ECFException {
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
 		if (tpBridge == null) {
 			System.out.println("TPBridgeClient: tpBridge service ref is null");
 			return false;
 		}
 		tpBridge.setContainer(container, targetIDName, clientType);
-		System.out.println("TPBridgeClient: tpBridge service container was set");
+		System.out
+				.println("TPBridgeClient: tpBridge service container was set");
 		return true;
 	}
-	
-	public SessionFactory getHibernateSessionFactory() throws RuntimeException
-	{
+
+	public SessionFactory getHibernateSessionFactory() throws RuntimeException {
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
 		if (tpBridge == null) {
 			System.out.println("TPBridgeClient: tpBridge service ref is null");
-			throw new RuntimeException("TPBridge.Client.getHibernateSessionFactory() Error: tpBridge service ref is null.");
+			throw new RuntimeException(
+					"TPBridge.Client.getHibernateSessionFactory() Error: tpBridge service ref is null.");
 		}
 		return tpBridge.getHibernateSessionFactory();
 	}
 
-
-	public ArrayList<TPEvent> getEventLog()
-	{
+	public ArrayList<TPEvent> getEventLog() {
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
 		if (tpBridge == null) {
 			System.out.println("TPBridgeClient: tpBridge service ref is null");
 		}
 		return tpBridge.getEventLog();
 	}
-	
-	public Properties getTPTeamProps()
-	{
+
+	public Properties getTPTeamProps() {
 		return Activator.getTPTeamProps();
 	}
-	
-	public String getTargetIDName()
-	{
+
+	public String getTargetIDName() {
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
 		if (tpBridge == null) {
 			System.out.println("TPBridgeClient: tpBridge service ref is null");

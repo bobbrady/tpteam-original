@@ -31,9 +31,15 @@ public class URIClientConnectAction implements IWorkbenchWindowActionDelegate {
     protected String nickname = null;
     protected Object data = null;
     protected String projectName = null;
+    protected TPBridgeClient mTPBridgeClient = null;
 
     public URIClientConnectAction() {
     }
+    
+    public URIClientConnectAction(TPBridgeClient tpBridgeClient) {
+    	mTPBridgeClient = tpBridgeClient;
+    }
+    
     public URIClientConnectAction(String containerType, String uri, String nickname, Object data) {
     	this();
     	this.containerType = containerType;
@@ -72,8 +78,8 @@ public class URIClientConnectAction implements IWorkbenchWindowActionDelegate {
         	ClientMultiStatus status = new ClientMultiStatus(Activator.PLUGIN_ID, 0,
                     failMsg, null);
             try {
-            	TPBridgeClient client = Activator.getDefault().getTPBridgeClient();
-                client.createAndConnectClient(containerType, uri,nickname, data);
+            	TPBridgeClient client = mTPBridgeClient;
+                client.createAndConnectClient(containerType, uri,nickname, data, false);
                 return status;
             } catch (final Exception e) {
 				Display.getDefault().syncExec(new Runnable() {
@@ -106,5 +112,10 @@ public class URIClientConnectAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	public void init(IWorkbenchWindow window) {
+	}
+	
+	public void setTPBridgeClient(TPBridgeClient tpBridgeClient)
+	{
+		mTPBridgeClient = tpBridgeClient;
 	}
 }

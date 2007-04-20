@@ -29,15 +29,12 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 
 public class TPBridgeClient extends Client{
-	public static final String WORKSPACE_NAME = "<workspace>";
-    public static final String GENERIC_CONTAINER_CLIENT_NAME = "ecf.generic.client";
 	static Hashtable clients = new Hashtable();
 	PresenceUI presenceContainerUI = null;
 
 	public TPBridgeClient(BundleContext context) {
 		super(context);
 		setTPMgrECFID(getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY));
-		System.out.println("mTPMgrECFID: " + getTPMgrECFID());
 	}
 	
 	/**
@@ -50,7 +47,7 @@ public class TPBridgeClient extends Client{
 	 * @throws Exception
 	 */
 	public void createAndConnectClient(final String containerType, String uri,
-			String nickname, final Object connectData)
+			String nickname, final Object connectData, boolean isHeadless)
 			throws Exception {
 		// Create the new container 
 		final IContainer client = ContainerFactory
@@ -62,7 +59,7 @@ public class TPBridgeClient extends Client{
 	     // Check for IPresenceContainerAdapter....if it is, setup presence UI, if not setup shared object container
 		IPresenceContainerAdapter pc = (IPresenceContainerAdapter) client
 				.getAdapter(IPresenceContainerAdapter.class);
-		if (pc != null) {
+		if (pc != null && !isHeadless) {
 			// Setup presence UI
 			presenceContainerUI = new PresenceUI(client,pc);
 			presenceContainerUI.showForUser(new User(targetID,username));
@@ -78,7 +75,8 @@ public class TPBridgeClient extends Client{
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.SEND_TO, getTPMgrECFID());
 		dictionary.put(TPEvent.FROM, ecfID);
-		Activator.getDefault().getEventAdminClient().sendEvent(ITPBridge.PROJ_GET_REQ_TOPIC, dictionary);
+		if(Activator.getDefault() != null)
+			Activator.getDefault().getEventAdminClient().sendEvent(ITPBridge.PROJ_GET_REQ_TOPIC, dictionary);
 	}
 
 	protected IConnectContext getJoinContext(final String username,

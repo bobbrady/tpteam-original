@@ -29,6 +29,11 @@ public class Client {
 	public static final String TPMANAGER_ECFID_PASSWORD = "tpmanager.password";
 
 	private String mTPMgrECFID = null;
+	
+	public Client()
+	{
+		
+	}
 
 	public Client(BundleContext context) {
 		mServiceTracker = new ServiceTracker(context,

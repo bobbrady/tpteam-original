@@ -92,4 +92,6 @@ public interface ITPBridge {
 	public boolean sendECFTPMsg(Event event);
 	
 	public ArrayList<TPEvent> getEventLog();
+	
+	public boolean isSharedObjectActive();
 }

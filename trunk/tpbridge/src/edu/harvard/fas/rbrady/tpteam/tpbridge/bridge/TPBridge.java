@@ -171,5 +171,13 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			return null;
 		}
 	}
+	
+	public boolean isSharedObjectActive()
+	{
+		if(mSharedObject != null)
+			return mSharedObject.getContext().isActive();
+		else
+			return false;
+	}
 
 }

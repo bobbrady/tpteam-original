@@ -99,5 +99,15 @@ public class Client {
 		}
 		return tpBridge.getTargetIDName();
 	}
+	
+	public boolean isSharedObjectActive()
+	{
+		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();
+		if (tpBridge == null) {
+			return false;
+		}
+		return tpBridge.isSharedObjectActive();
+		
+	}
 
 }

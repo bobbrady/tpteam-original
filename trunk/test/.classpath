@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-bean-collections.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-core.jar"/>
+	<classpathentry kind="lib" path="lib/commons-betwixt-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester-1.8.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.event_1.0.0.v20060601a.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.2.2.R32x_v20070118.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi.services_3.1.100.v20060601.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi.util_3.1.100.v20060601.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.discovery_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.identity_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.presence_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.provider_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.provider.xmpp_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ecf.sharedobject_1.0.0.v20070330-2111.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

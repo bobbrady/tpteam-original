@@ -15,6 +15,7 @@ import org.eclipse.ecf.ui.IConnectWizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 
+import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.URIClientConnectAction;
 
 public class XMPPConnectWizard extends Wizard implements IConnectWizard {
@@ -31,10 +32,9 @@ public class XMPPConnectWizard extends Wizard implements IConnectWizard {
 
 	public boolean performFinish() {
 		page.saveDialogSettings();
-		URIClientConnectAction client = null;
-
-		client = new URIClientConnectAction(CONTAINER_TYPE,
+		URIClientConnectAction client = new URIClientConnectAction(CONTAINER_TYPE,
 				page.getConnectID(), null, page.getPassword());
+		client.setTPBridgeClient(Activator.getDefault().getTPBridgeClient());
 		client.run(null);
 
 		return true;

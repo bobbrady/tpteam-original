@@ -31,6 +31,8 @@ public class ProjectUtil {
 			Query query = s.createQuery(hql);
 			query.setString("ecfID", ecfID);
 			TpteamUser user = (TpteamUser) query.uniqueResult();
+			if(user == null)
+				return new HashSet<Project>();
 			projs = user.getProjects();
 			if(projs == null)
 				return new HashSet<Project>();

@@ -232,7 +232,13 @@ public class TestUtil {
 			}
 			s.saveOrUpdate(test);
 			s.flush();
-			test.setPath(test.getParent().getPath() + "." + test.getId());
+			
+			// If parent is null, then is top level folder in project
+			if(test.getParent() != null)
+				test.setPath(test.getParent().getPath() + "." + test.getId());
+			else
+				test.setPath(String.valueOf(test.getId()));
+			
 			testStub.setId(test.getId());
 
 			// Collect project member ecfIDs

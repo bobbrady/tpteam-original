@@ -7,14 +7,7 @@
 		name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project"
 		table="PROJECT">
 		<id name="id" type="int">
-			<generator class="sequence">
-				<param name="sequence">seq_project_id</param>
-			</generator>
-
-			<!-- 
-				<column name="ID" precision="8" scale="0" />
-				<generator class="assigned" />
-			-->
+			<generator class="native" />
 		</id>
 		<many-to-one name="product"
 			class="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product"

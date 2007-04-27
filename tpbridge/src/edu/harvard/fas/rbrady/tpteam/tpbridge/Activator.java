@@ -45,6 +45,7 @@ public class Activator implements BundleActivator {
 		mEventAdminHandler = new EventAdminHandler(context);
 		mEventAdminClient = new EventAdminClient(context);
 		mTPBridge = new TPBridge(context);
+		Platform.getBundle("org.eclipse.equinox.event").start();
 	}
 
 	/*

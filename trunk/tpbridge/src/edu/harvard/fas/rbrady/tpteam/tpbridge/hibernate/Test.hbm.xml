@@ -5,9 +5,7 @@
 <hibernate-mapping>
     <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test" table="TEST">
        		<id name="id" type="int">
-			<generator class="sequence">
-				<param name="sequence">seq_test_id</param>
-			</generator>
+			<generator class="native" />
 			</id>
     <!-- 
         <id name="id" type="int">

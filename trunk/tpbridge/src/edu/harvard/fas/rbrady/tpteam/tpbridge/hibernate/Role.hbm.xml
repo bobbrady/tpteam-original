@@ -6,7 +6,7 @@
     <class name="edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Role" table="ROLE">
         <id name="roleId" type="int">
             <column name="ROLE_ID" precision="8" scale="0" />
-            <generator class="assigned" />
+            <generator class="native" />
         </id>
         <property name="name" type="string">
             <column name="NAME" length="256" />

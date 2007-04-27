@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tpteam" default="getddl" basedir=".">
+
+	<path id="toolslib">
+		<path location="lib/hibernate-tools.jar" />
+		<path location="lib/hibernate3.jar" />
+		<path location="lib/freemarker.jar" />
+		<path location="lib/mysql-connector-java-5.0.5.jar" />
+		<path location="lib/dom4j-1.6.1.jar" />
+		<path location="lib/commons-collections-2.1.1.jar" />
+	</path>
+
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="toolslib" />
+
+	<target name="getddl">
+		<hibernatetool destdir="c:/">
+			<configuration configurationfile="src/hibernate.cfg.xml" />
+
+			<classpath>
+				<path location="bin" />
+			</classpath>
+
+			<hbm2ddl export="false" outputfilename="sql.ddl" />
+		</hibernatetool>
+	</target>
+
+</project>

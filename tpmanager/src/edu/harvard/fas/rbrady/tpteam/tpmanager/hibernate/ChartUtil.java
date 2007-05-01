@@ -246,7 +246,7 @@ public class ChartUtil {
 					+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
 					+ " AND te.execDate = "
 					+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id " +
-							"AND te2.execDate <= sysdate - ?) "
+							"AND te2.execDate <= now() - ?) "
 					+ " GROUP BY te.status";
 
 			Query query = s.createQuery(SQL_QUERY);
@@ -271,7 +271,7 @@ public class ChartUtil {
 			}
 			
 		SQL_QUERY = "SELECT count(*) FROM Test as t "
-				+ " WHERE t.project.id = ? AND t.isFolder = 'N' AND t.createdDate <= sysdate - ?";
+				+ " WHERE t.project.id = ? AND t.isFolder = 'N' AND t.createdDate <= now() - ?";
 		
 		query = s.createQuery(SQL_QUERY);
 		query.setInteger(0, projID);

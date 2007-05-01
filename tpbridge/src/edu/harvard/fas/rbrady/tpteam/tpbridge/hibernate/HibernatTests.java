@@ -896,7 +896,7 @@ public class HibernatTests {
 							+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
 							+ " AND te.execDate = "
 							+ " (SELECT max(te2.execDate) FROM TestExecution te2 WHERE te2.test.id = te.test.id " +
-									" AND te2.execDate < sysdate - ? )"
+									" AND te2.execDate < now() - ? )"
 							+ " GROUP BY te.status";
 
 					Query query = s.createQuery(SQL_QUERY);
@@ -911,7 +911,7 @@ public class HibernatTests {
 					
 				SQL_QUERY = "SELECT count(*) FROM Test as t "
 						+ " WHERE t.project.id = ? AND t.isFolder = 'N' " +
-								"AND t.createdDate < sysdate - ?";
+								"AND t.createdDate < now() - ?";
 				query = s.createQuery(SQL_QUERY);
 				query.setInteger(0, id);
 				query.setInteger(1, idx);

@@ -1,5 +1,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -241,24 +242,38 @@ public class ChartUtil {
 
 			tx = s.beginTransaction();
 
+			/**************************************************************************
+			 * Oracle Legacy Code
+			 *************************************************************************
 			String SQL_QUERY = "SELECT te.status, count(*) FROM TestExecution as te "
 					+ " join te.test as t "
 					+ " WHERE t.project.id = ? AND t.isFolder = 'N' "
 					+ " AND te.execDate = "
 					+ " (SELECT max(te2.execDate) from TestExecution te2 where te2.test.id = te.test.id " +
-							"AND te2.execDate <= now() - ?) "
+							"AND te2.execDate <= sysdate - ?) "
 					+ " GROUP BY te.status";
+			*****************************************************************************/
+			
+			// MySQL Native SQL
+			String SQL_QUERY = "SELECT te.status, count(*) FROM Test_Execution AS te "
+				+ " INNER JOIN Test as t on te.test_id =  t.id "
+				+ " WHERE t.proj_id = ? AND t.is_Folder = 'N' "
+				+ " AND te.exec_Date = "
+				+ " (SELECT max(te2.exec_Date) FROM Test_Execution te2 WHERE te2.test_id = te.test_id " +
+						" AND te2.exec_Date < date_sub(now(), INTERVAL ? day))"
+				+ " GROUP BY te.status";
 
-			Query query = s.createQuery(SQL_QUERY);
+			Query query = s.createSQLQuery(SQL_QUERY);
 			query.setInteger(0, projID);
 			query.setInteger(1,daysPrev);
 
 			int sum = 0;
-			for (Iterator it = query.iterate(); it.hasNext();) {
-				Object[] row = (Object[]) it.next();
-				Character status = (Character) row[0];
-				Long count = (Long) row[1];
+			for (Object row : query.list()) {
+				Object[] cols = (Object[])row;
+				Character status = (Character) cols[0];
+				java.math.BigInteger count = (java.math.BigInteger) cols[1];
 
+			    
 				if (status == 'P')
 					dataPoint.setPass(count.intValue());
 				else if (status == 'F')
@@ -268,17 +283,26 @@ public class ChartUtil {
 				else if (status == 'I')
 					dataPoint.setInconcl(count.intValue());
 				sum += count.intValue();
+				
 			}
 			
+		/**************************************************************************************
+		 * Oracle Legacy Code
+		 **************************************************************************************
 		SQL_QUERY = "SELECT count(*) FROM Test as t "
-				+ " WHERE t.project.id = ? AND t.isFolder = 'N' AND t.createdDate <= now() - ?";
+				+ " WHERE t.project.id = ? AND t.isFolder = 'N' AND t.createdDate <= sysdate - ?";
+		***************************************************************************************/
 		
-		query = s.createQuery(SQL_QUERY);
+		SQL_QUERY = "SELECT count(*) FROM Test as t "
+				 + " WHERE t.proj_id = ? AND t.is_Folder = 'N' " +
+					"AND t.created_Date < date_sub(now(), INTERVAL ? day)";
+			
+		query = s.createSQLQuery(SQL_QUERY);
 		query.setInteger(0, projID);
 		query.setInteger(1, daysPrev);
 
-		for (Iterator it = query.iterate(); it.hasNext();) {
-			Long totalTests = (Long) it.next();
+		for (Object row : query.list()) {
+			java.math.BigInteger totalTests = (java.math.BigInteger)row;
 			int notExec = totalTests.intValue() - sum;
 			dataPoint.setNotExec(notExec);
 		}	

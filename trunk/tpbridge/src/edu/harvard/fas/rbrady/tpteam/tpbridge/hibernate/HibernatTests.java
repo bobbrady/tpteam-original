@@ -42,7 +42,8 @@ public class HibernatTests {
 			// printTest(test);
 			// getPieChartData(1);
 			//getBarChartData(1);
-			getLineChartData(1);
+			//getLineChartData(1);
+			getMySQLLineChartData(1);
 			HibernateUtil.getSessionFactory().close();
 
 		} catch (Exception e) {
@@ -932,5 +933,65 @@ public class HibernatTests {
 			}
 
 	}
+		
+		public static void getMySQLLineChartData(int id) throws Exception {
+			System.out.println("Getting LineChartData w/Proj ID: " + id);
+			Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+			Transaction tx = null;
+			try {
+
+				tx = s.beginTransaction();
+
+				for (int idx = 0; idx < 30; idx++) {
+	
+					
+					String SQL_QUERY = "SELECT te.status, count(*) FROM Test_Execution AS te "
+							+ " INNER JOIN Test as t on te.test_id =  t.id "
+							+ " WHERE t.proj_id = ? AND t.is_Folder = 'N' "
+							+ " AND te.exec_Date = "
+							+ " (SELECT max(te2.exec_Date) FROM Test_Execution te2 WHERE te2.test_id = te.test_id " +
+									" AND te2.exec_Date < date_sub(now(), INTERVAL ? day))"
+							+ " GROUP BY te.status";
+
+					Query query = s.createSQLQuery(SQL_QUERY);
+					query.setInteger(0, id);
+					query.setInteger(1, idx);
+
+					
+					for (Object row : query.list()) {
+						Object[] cols = (Object[])row;
+						System.out.println("Status: " + cols[0]);
+						System.out.println("Count: " + cols[1]);
+					}
+					
+					
+				SQL_QUERY = "SELECT count(*) FROM Test as t "
+						+ " WHERE t.proj_id = ? AND t.is_Folder = 'N' " +
+								"AND t.created_Date < date_sub(now(), INTERVAL ? day)";
+				
+				query = s.createSQLQuery(SQL_QUERY);
+				query.setInteger(0, id);
+				query.setInteger(1, idx);
+				
+				
+				
+				for (Object row : query.list()) {
+					Object col = (Object)row;
+					System.out.println("TotalTests: " + col);
+				}
+				
+
+
+				}
+				tx.commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (tx != null)
+					tx.rollback();
+				throw e;
+			}
+
+	}
+
 
 }

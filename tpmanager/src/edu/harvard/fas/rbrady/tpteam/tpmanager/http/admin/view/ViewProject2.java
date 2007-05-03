@@ -85,7 +85,7 @@ public class ViewProject2 extends ServletUtil {
 		}
 	}
 
-	protected void getTeam(Set<TpteamUser> team) throws Exception {
+	public void getTeam(Set<TpteamUser> team) throws Exception {
 		StringBuffer teamUsers = new StringBuffer();
 		if (team.size() < 1) {
 			mTeam = "";
@@ -120,6 +120,16 @@ public class ViewProject2 extends ServletUtil {
 		reply.append("</table>\n<br>\n");
 
 		showPage(req, resp, reply, null, this);
+	}
+	
+	/**
+	 * Getter for TPTeam Project members in HTML format
+	 * 
+	 * @return team members in html format
+	 */
+	public String getTeam()
+	{
+		return mTeam;
 	}
 
 }

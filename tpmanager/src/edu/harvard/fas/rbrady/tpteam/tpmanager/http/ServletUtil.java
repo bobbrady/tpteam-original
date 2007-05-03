@@ -16,13 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ServletUtil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String ADD_TEST_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test.js\">\n";
 
 	public static final String ADD_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test_tree.js\">\n";
@@ -56,7 +57,7 @@ public class ServletUtil extends HttpServlet {
 	public static final String DELETE_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/delete_test_tree.js\">\n";
 
 	public static final String VIEW_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/view_test_tree.js\">\n";
-	
+
 	public static final String EXEC_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/exec_test_tree.js\">\n";
 
 	public static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat(
@@ -76,7 +77,7 @@ public class ServletUtil extends HttpServlet {
 				+ "<a href=\"/bridge/tpteam/admin/index.html\">Home</a><hr size=\"2\">\n";
 		out.println(header);
 	}
-	
+
 	public void userHeader(HttpServletRequest request,
 			HttpServletResponse response, String javaScript)
 			throws ServletException, IOException {
@@ -99,7 +100,7 @@ public class ServletUtil extends HttpServlet {
 		out.println(footer);
 		out.close();
 	}
-	
+
 	public void userFooter(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		adminFooter(request, response);
@@ -111,7 +112,7 @@ public class ServletUtil extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println(reply);
 	}
-	
+
 	public void userReply(HttpServletRequest request,
 			HttpServletResponse response, String reply)
 			throws ServletException, IOException {
@@ -126,7 +127,7 @@ public class ServletUtil extends HttpServlet {
 		adminReply(request, response, error);
 		adminFooter(request, response);
 	}
-	
+
 	public void userError(HttpServletRequest request,
 			HttpServletResponse response, String error)
 			throws ServletException, IOException {
@@ -135,33 +136,32 @@ public class ServletUtil extends HttpServlet {
 		userReply(request, response, error);
 		userFooter(request, response);
 	}
-	
+
 	protected void throwError(HttpServletRequest req, HttpServletResponse resp,
-			StringBuffer error, HttpServlet servlet) throws ServletException, IOException {
-		if(servlet instanceof UserServlet)
+			StringBuffer error, HttpServlet servlet) throws ServletException,
+			IOException {
+		if (servlet instanceof UserServlet)
 			userError(req, resp, error.toString());
 		else
 			adminError(req, resp, error.toString());
 	}
 
 	protected void showPage(HttpServletRequest req, HttpServletResponse resp,
-			StringBuffer reply, String javaScript, HttpServlet servlet) throws ServletException,
-			IOException, Exception {
-		if(servlet instanceof UserServlet)
-		{
+			StringBuffer reply, String javaScript, HttpServlet servlet)
+			throws ServletException, IOException, Exception {
+		if (servlet instanceof UserServlet) {
 			userHeader(req, resp, javaScript);
 			userReply(req, resp, reply.toString());
 			userFooter(req, resp);
-		}
-		else
-		{
+		} else {
 			adminHeader(req, resp, javaScript);
 			adminReply(req, resp, reply.toString());
 			adminFooter(req, resp);
 
 		}
 	}
-		public String getTreeJavaScript() {
+
+	public String getTreeJavaScript() {
 		String javaScript = ""
 				+ " var openImg = new Image();\n"
 				+ " openImg.src = \"open.gif\";\n"
@@ -203,11 +203,14 @@ public class ServletUtil extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	public static String getTestTreeFolders(String projID) throws Exception {
 
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-
-		// For standalone debug
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Session s = null;
+		if (Activator.getDefault() != null) {
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+		} else {
+			// For standalone debug
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 		Transaction tx = null;
 		StringBuffer tree = new StringBuffer();
 
@@ -376,7 +379,7 @@ public class ServletUtil extends HttpServlet {
 			throws Exception {
 
 		Session s = Activator.getDefault().getHiberSessionFactory()
-			.getCurrentSession();
+				.getCurrentSession();
 
 		// For standalone debug
 		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -387,7 +390,7 @@ public class ServletUtil extends HttpServlet {
 			tx = s.beginTransaction();
 
 			// Order by desc since we're pushing on stack: alpha first on top
-			
+
 			List<Test> tests = s
 					.createQuery(
 							"from Test as test where test.project.id = "
@@ -411,10 +414,14 @@ public class ServletUtil extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	public static int getRemoteUserID(String userName) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-		// For standalone debug
-		 //Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+
+		Session s = null;
+		if (Activator.getDefault() != null) {
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+		} else {
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 		Transaction tx = null;
 		int userId;
 		try {
@@ -432,5 +439,5 @@ public class ServletUtil extends HttpServlet {
 		}
 		return userId;
 	}
-	
+
 }

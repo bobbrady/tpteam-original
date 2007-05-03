@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Text;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 
 public class AddTestDialog extends TitleAreaDialog {
 	// ID for OK button

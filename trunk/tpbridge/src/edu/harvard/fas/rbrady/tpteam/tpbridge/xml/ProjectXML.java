@@ -65,6 +65,7 @@ public class ProjectXML {
 	 * @param xml String representing projects
 	 * @return ArrayList of project objects
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Project> getProjsFromXML(String xml)
 	{
 		ArrayList<Project> projs = null;

@@ -13,6 +13,8 @@ public class TpteamUser implements java.io.Serializable, Comparable<TpteamUser> 
 
 	// Fields
 
+	private static final long serialVersionUID = 1L;
+
 	private int id;
 
 	private Role role;

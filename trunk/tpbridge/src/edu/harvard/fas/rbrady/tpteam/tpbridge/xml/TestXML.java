@@ -4,15 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.betwixt.io.BeanWriter;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.AbstractTreeNode;
@@ -233,6 +230,7 @@ public class TestXML {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static TPEntity[] getTPEntitiesFromXML(String testPropXML) {
 		ArrayList<TPEntity> tpEntities = null;
 		try {

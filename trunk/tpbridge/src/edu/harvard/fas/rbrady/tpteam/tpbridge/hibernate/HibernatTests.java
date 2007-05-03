@@ -4,13 +4,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.osgi.service.event.Event;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
@@ -119,6 +117,7 @@ public class HibernatTests {
 		return id;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void insertProd() throws Exception {
 		System.out.println("Inserting Prod");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -206,6 +205,7 @@ public class HibernatTests {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void getProd(int id) throws Exception {
 		System.out.println("Getting Prod");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -240,8 +240,6 @@ public class HibernatTests {
 			tx = s.beginTransaction();
 			Test test = (Test) s.load(Test.class, new Integer(id));
 
-			String testType = test.getTestType().getName();
-
 			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
 					"Demo Project (TPTeam)", "user", test.getName(), String
 							.valueOf(id), "status");
@@ -258,17 +256,11 @@ public class HibernatTests {
 			}
 			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
 
-			Event myEvent = new Event(tpEvent.getTopic(), tpEvent
-					.getDictionary());
-
-			TPEvent tpEventFromOSGIEvent = new TPEvent(myEvent);
-
+		
 			String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
 			System.out.println("sendTo: " + sendTo);
 			String[] ECFIDs = sendTo.split("/");
 			for (String ECFID : ECFIDs) {
-				// sharedObject.getContext().sendMessage(client.getID(targetIMUser),tpEvent);
-				// sharedObject.getContext().sendMessage(client.getID(ECFID),tpEvent);
 				System.out.println("TPBridge.sendECFTPMsg: sent event "
 						+ tpEvent.getTestName() + " to " + ECFID);
 			}
@@ -283,6 +275,7 @@ public class HibernatTests {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void getTpteamUser(int id) throws Exception {
 		System.out.println("Getting TpTeamUser");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -518,34 +511,14 @@ public class HibernatTests {
 		return id;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void printTree() throws Exception {
 		System.out.println("Printing Test Tree");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		try {
 			tx = s.beginTransaction();
-
-			Test parent = (Test) s.load(Test.class, new Integer("21"));
-			/*
-			 * for(Test child : parent.getChildren())
-			 * System.out.println("\n\nChild: " + child.getName() + "\n\n");
-			 */
-			String sql = "select " + "t1.name, t1.path " + "from "
-					+ "Test as t1, Test as t2 " + "where "
-					+ "t1.path like t2.path || '%' " + "and "
-					+ "t2.parent is null " + "order by " + " t1.path";
-
-			/*
-			 * Iterator results = s.createQuery(sql).list().iterator();
-			 * 
-			 * ArrayList<String> folders = new ArrayList<String>(); String
-			 * dirPrefix = ""; int depth = 0; while (results.hasNext()) {
-			 * Object[] row = (Object[]) results.next(); String name = (String)
-			 * row[0]; String path = (String) row[1]; System.out.println("name: " +
-			 * name + ", path: " + path + ", depth: " + getDepth(path)); //
-			 * String[] nodes = path.split("\\."); for(String node : nodes)
-			 * //System.out.println("\t Node: " + node); }
-			 */
+	
 			List<Test> tests = s
 					.createQuery(
 							"from Test as test where test.parent is null order by test.path")
@@ -642,112 +615,8 @@ public class HibernatTests {
 		return pad;
 	}
 
-	private static String getRoleOptions() throws Exception {
-		// Session s =
-		// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		List<Role> roles = null;
-		String mRoleOptions = "";
-		try {
 
-			tx = s.beginTransaction();
-
-			roles = s.createQuery("from Role as role order by role.name asc")
-					.list();
-			for (Role role : roles) {
-				mRoleOptions += "<option value=\"" + role.getRoleId() + "\">"
-						+ role.getName() + "</option>";
-			}
-
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-
-		System.out.println(mRoleOptions);
-		return mRoleOptions;
-	}
-
-	private static String getProjOptions() throws Exception {
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		// Session s =
-		// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		List<Project> projs = null;
-		String mProjOptions = "";
-		try {
-
-			tx = s.beginTransaction();
-
-			projs = s.createQuery("from Project as p order by p.name asc")
-					.list();
-			for (Project proj : projs) {
-				mProjOptions += "<option value=\"" + proj.getId() + "\">"
-						+ proj.getName() + "</option>\n";
-			}
-
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-
-		mProjOptions = "<option selected>Choose Project</option>\n"
-				+ mProjOptions;
-
-		System.out.println(mProjOptions);
-
-		return mProjOptions;
-	}
-
-	private static void getProject(String projId) throws Exception {
-		System.out.println("Getting Proj");
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-
-			tx = s.beginTransaction();
-			Project proj = (Project) s.load(Project.class, new Integer(projId));
-			for (TpteamUser user : proj.getTpteamUsers()) {
-				System.out.println("user: " + user.getUserName());
-			}
-			System.out.println("product: " + proj.getProduct());
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-	}
-
-	private static void getProjByUser(int id) throws Exception {
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		// List<TpteamUser> users = null;
-		String teamOptions = "";
-		try {
-
-			tx = s.beginTransaction();
-
-			TpteamUser user = (TpteamUser) s.createQuery(
-					"from TpteamUser as user where user.id = " + id)
-					.uniqueResult();
-			Set<Project> projs = user.getProjects();
-			for (Project proj : projs)
-				System.out.println("Project: " + proj.getName());
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-
-	}
-
+	@SuppressWarnings("unchecked")
 	public static Test getInitTopLevelTests(int projID) throws Exception {
 		Test root = new Test();
 		List<Test> tests = null;

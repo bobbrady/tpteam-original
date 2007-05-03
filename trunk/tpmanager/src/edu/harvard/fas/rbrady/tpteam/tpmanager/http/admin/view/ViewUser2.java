@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
@@ -71,19 +72,21 @@ public class ViewUser2 extends ServletUtil {
 		}
 	}
 
-	public void getUser() throws Exception {
+	public TpteamUser getUser() throws Exception {
 		TpteamUser user = null;
 		Transaction tx = null;
 		try {
-			if(this instanceof UserServlet)
-			{
+			if (this instanceof UserServlet) {
 				mUserId = String.valueOf(getRemoteUserID(mRemoteUser));
 			}
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			// For standalone
-			// Session s =
-			// HibernateUtil.getSessionFactory().getCurrentSession();
+			Session s = null;
+			if (Activator.getDefault() != null) {
+				Activator.getDefault().getHiberSessionFactory()
+						.getCurrentSession();
+			} else {
+				// For standalone
+				s = HibernateUtil.getSessionFactory().getCurrentSession();
+			}
 
 			tx = s.beginTransaction();
 			user = (TpteamUser) s.load(TpteamUser.class, new Integer(mUserId));
@@ -101,6 +104,7 @@ public class ViewUser2 extends ServletUtil {
 				tx.rollback();
 			throw e;
 		}
+		return user;
 	}
 
 	protected void getProjects(Set<Project> projects) throws Exception {
@@ -143,5 +147,14 @@ public class ViewUser2 extends ServletUtil {
 		reply.append("</table>\n");
 
 		showPage(req, resp, reply, null, this);
+	}
+	
+	/** Setter, primarily used for test harness
+	 * 
+	 * @param userId
+	 */
+	public void setUserId(String userId)
+	{
+		mUserId = userId;
 	}
 }

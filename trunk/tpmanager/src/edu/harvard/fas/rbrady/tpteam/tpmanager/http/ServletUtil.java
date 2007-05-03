@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
@@ -201,6 +200,7 @@ public class ServletUtil extends HttpServlet {
 		return javaScript;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static String getTestTreeFolders(String projID) throws Exception {
 
 		Session s = Activator.getDefault().getHiberSessionFactory()
@@ -361,7 +361,6 @@ public class ServletUtil extends HttpServlet {
 
 	public static void main(String[] args) {
 		try {
-			ServletUtil serv = new ServletUtil();
 			// System.out.println(ServletUtil.getTestTreeFolders("1"));
 			// System.out.println(ServletUtil.getSHA1Hash("tpteam"));
 			System.out.println("userId: "
@@ -372,6 +371,7 @@ public class ServletUtil extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static String getTestTree(String projID, boolean onlyFolders)
 			throws Exception {
 
@@ -387,6 +387,7 @@ public class ServletUtil extends HttpServlet {
 			tx = s.beginTransaction();
 
 			// Order by desc since we're pushing on stack: alpha first on top
+			
 			List<Test> tests = s
 					.createQuery(
 							"from Test as test where test.project.id = "
@@ -408,6 +409,7 @@ public class ServletUtil extends HttpServlet {
 		return tree.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static int getRemoteUserID(String userName) throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

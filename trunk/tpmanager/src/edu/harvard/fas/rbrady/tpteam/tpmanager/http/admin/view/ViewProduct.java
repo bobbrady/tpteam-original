@@ -62,7 +62,7 @@ public class ViewProduct extends ServletUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected String getProdRows() throws Exception {
+	public String getProdRows() throws Exception {
 		Session s = null;
 		if (Activator.getDefault() != null) {
 			s = Activator.getDefault().getHiberSessionFactory()

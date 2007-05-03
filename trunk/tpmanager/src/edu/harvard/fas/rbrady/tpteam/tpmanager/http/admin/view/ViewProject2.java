@@ -10,7 +10,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;

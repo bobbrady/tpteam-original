@@ -66,6 +66,7 @@ public class ViewProject extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getProjRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

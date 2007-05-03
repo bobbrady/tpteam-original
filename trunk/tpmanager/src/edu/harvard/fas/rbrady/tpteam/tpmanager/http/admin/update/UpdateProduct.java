@@ -61,6 +61,7 @@ public class UpdateProduct extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private String getProdRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

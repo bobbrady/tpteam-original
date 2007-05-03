@@ -10,7 +10,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -23,8 +22,6 @@ import org.hibernate.Transaction;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class DeleteProduct extends ServletUtil {
@@ -67,6 +64,7 @@ public class DeleteProduct extends ServletUtil {
 			}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String getProdRows() throws Exception
 	{
 //		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();

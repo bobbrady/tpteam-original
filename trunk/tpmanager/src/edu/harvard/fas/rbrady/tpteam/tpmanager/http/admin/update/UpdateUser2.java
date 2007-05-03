@@ -110,6 +110,7 @@ public class UpdateUser2 extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getRoleOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

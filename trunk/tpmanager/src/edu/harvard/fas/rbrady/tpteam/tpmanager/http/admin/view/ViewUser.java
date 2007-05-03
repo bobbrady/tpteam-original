@@ -61,6 +61,7 @@ public class ViewUser extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getUserRows() throws Exception {
 		 Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 		// For standalone

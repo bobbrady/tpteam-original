@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
@@ -105,6 +104,7 @@ public class UpdateProject2 extends ServletUtil {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	private String getProdOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
@@ -143,6 +143,7 @@ public class UpdateProject2 extends ServletUtil {
 		return mProdOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	private String getTeamOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();

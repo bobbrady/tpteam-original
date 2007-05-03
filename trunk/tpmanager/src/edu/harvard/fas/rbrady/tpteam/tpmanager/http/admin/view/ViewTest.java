@@ -70,6 +70,7 @@ public class ViewTest extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getProjRows() throws Exception {
 		Transaction tx = null;
 		Set<Project> projs = new HashSet<Project>(0);

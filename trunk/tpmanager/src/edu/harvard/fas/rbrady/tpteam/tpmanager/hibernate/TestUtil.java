@@ -20,6 +20,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class TestUtil {
+	@SuppressWarnings("unchecked")
 	public static List<Test> getTestByProjID(String projID) throws Exception {
 		List<Test> tests = null;
 		Session s = null;

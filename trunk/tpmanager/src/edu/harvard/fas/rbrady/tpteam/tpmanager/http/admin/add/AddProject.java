@@ -60,6 +60,7 @@ public class AddProject extends ServletUtil {
 			}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String getProdOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
@@ -90,6 +91,7 @@ public class AddProject extends ServletUtil {
 		return mProdOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	private String getTeamOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();

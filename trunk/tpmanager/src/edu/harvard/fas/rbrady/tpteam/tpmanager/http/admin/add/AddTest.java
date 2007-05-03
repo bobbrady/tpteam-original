@@ -117,6 +117,7 @@ public class AddTest extends ServletUtil {
 		showAddTestPage2(req, resp);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getProjOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
@@ -154,6 +155,7 @@ public class AddTest extends ServletUtil {
 		return mProjOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getTestTypeOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

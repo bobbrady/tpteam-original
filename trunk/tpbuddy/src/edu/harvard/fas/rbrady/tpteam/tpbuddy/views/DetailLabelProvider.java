@@ -18,7 +18,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 

@@ -1,6 +1,5 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -72,37 +71,6 @@ public class DetailView extends ViewPart implements Observer {
 
 	}
 
-	private TPEntity[] getSamples() {
-		ArrayList<TPEntity> list = new ArrayList<TPEntity>();
-		TPEntity tpEntity = new TPEntity();
-
-		tpEntity.setType("ID");
-		tpEntity.setDescription("1");
-		list.add(tpEntity);
-
-		tpEntity = new TPEntity();
-		tpEntity.setType("Name");
-		tpEntity.setDescription("FooBar");
-		list.add(tpEntity);
-
-		tpEntity = new TPEntity();
-		tpEntity.setType("Description");
-		tpEntity.setDescription("Line1\r\nLine2");
-		list.add(tpEntity);
-
-		tpEntity = new TPEntity();
-		tpEntity.setType("TestType");
-		tpEntity.setDescription(TPEntity.JUNIT_TEST);
-		list.add(tpEntity);
-
-		tpEntity = new TPEntity();
-		tpEntity.setType(TPEntity.EXEC_PASS);
-		tpEntity.setDescription("pass foobar status");
-		list.add(tpEntity);
-	
-
-		return (TPEntity[]) list.toArray(new TPEntity[list.size()]);
-	}
 
 	public void update(Observable observable, Object object) {
 		if (observable instanceof EventAdminHandler

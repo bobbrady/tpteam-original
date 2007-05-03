@@ -1,7 +1,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -182,21 +181,8 @@ public class ReportView extends ViewPart implements Observer {
 
 	}
 
-	private void createAndShowBarChart() {
-
-		mChart = BarChart.getInstance().createChart();
-		mFrame.setChart(mChart);
-		mFrame.layout();
-	}
-
 	private void createAndShowBarChart(ChartDataSet[] dataSets) {
 		mChart = BarChart.getInstance().createChart(dataSets, mProjName);
-		mFrame.setChart(mChart);
-		mFrame.layout();
-	}
-
-	private void createAndShowLineChart() {
-		mChart = LineChart.getInstance().createChart();
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
@@ -205,21 +191,6 @@ public class ReportView extends ViewPart implements Observer {
 		mChart = LineChart.getInstance().createChart(dataSet, mProjName);
 		mFrame.setChart(mChart);
 		mFrame.layout();
-	}
-
-	private void createAndShowPieChart() {
-		mChart = PieChart.getInstance().createChart();
-
-		if (mFrame == null) {
-			mFrame = new ChartComposite(mParent, SWT.NONE, mChart, true);
-
-			GridData data = new GridData(GridData.FILL_BOTH);
-			mFrame.setLayoutData(data);
-			mFrame.pack(true);
-		} else {
-			mFrame.setChart(mChart);
-			mFrame.layout();
-		}
 	}
 
 	private void createAndShowPieChart(ChartDataSet dataSet) {

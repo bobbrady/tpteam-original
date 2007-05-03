@@ -20,56 +20,22 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.OpenViewAction;
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.EventHistoryView;
-import edu.harvard.fas.rbrady.tpteam.tpbuddy.views.TestView;
-
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
-	
-	private OpenViewAction openViewAction;
-	private OpenViewAction testViewAction;
-	
+		
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
         super(configurer);
     }
 
     protected void makeActions(IWorkbenchWindow window) {
-/*
-    	openViewAction = new OpenViewAction(window, "Open Event History View", EventHistoryView.ID,"/icons/event_message.gif");
-    	testViewAction = new OpenViewAction(window, "Open Test Plan View", TestView.ID,"icons/junit.gif");
-    	
-    	
-    	register(testViewAction);
-    	register(openViewAction);
-    	*/
-    
     }
 
     protected void fillMenuBar(IMenuManager menuBar) {
-    	/*
-    	MenuManager testMenu = new MenuManager("&Test", "test");
-    	testMenu.add(exitAction);
-    	MenuManager helpMenu = new MenuManager("&Help", "help");
-    	helpMenu.add(aboutAction);
-    	
-    	menuBar.add(testMenu);
-    	menuBar.add(helpMenu);
-    	*/
     }
     
     protected void fillCoolBar(ICoolBarManager coolbar)
     {
-    	/*
-    	IToolBarManager toolbar = new ToolBarManager(coolbar.getStyle());
-    	coolbar.add(toolbar);
-    	toolbar.add(testViewAction);
-    	toolbar.add(openViewAction);
-    	*/
-    	//toolbar.add(exitAction);
 		IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
-		coolbar.add(new ToolBarContributionItem(toolbar, "main"));
-
-    	
+		coolbar.add(new ToolBarContributionItem(toolbar, "main"));    	
     }
     
 	@SuppressWarnings("unused")

@@ -22,6 +22,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class ServletUtil extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	public static final String ADD_TEST_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test.js\">\n";

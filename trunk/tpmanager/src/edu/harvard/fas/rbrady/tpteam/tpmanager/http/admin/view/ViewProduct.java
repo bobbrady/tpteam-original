@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
@@ -43,16 +44,18 @@ public class ViewProduct extends ServletUtil {
 		try {
 			getProdRows();
 			if (mIsProdAvailable == false) {
-				StringBuffer error = new StringBuffer("<h3>Error: No Product Available</h3>");
+				StringBuffer error = new StringBuffer(
+						"<h3>Error: No Product Available</h3>");
 				throwError(req, resp, error, this);
 			} else {
-				StringBuffer reply = new StringBuffer("<h4>View Products</h4>\n<table border=\"1\">"
-					+ mRowHeader + mProdRows + "</table>");
+				StringBuffer reply = new StringBuffer(
+						"<h4>View Products</h4>\n<table border=\"1\">"
+								+ mRowHeader + mProdRows + "</table>");
 				showPage(req, resp, reply, null, this);
 			}
 		} catch (Exception e) {
-			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>");
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
 			throwError(req, resp, error, this);
 			return;
 		}
@@ -60,10 +63,14 @@ public class ViewProduct extends ServletUtil {
 
 	@SuppressWarnings("unchecked")
 	protected String getProdRows() throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-		// For standalone
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Session s = null;
+		if (Activator.getDefault() != null) {
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+		} else {
+			// For standalone outside OSGi
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 
 		Transaction tx = null;
 		List<Product> prods = null;

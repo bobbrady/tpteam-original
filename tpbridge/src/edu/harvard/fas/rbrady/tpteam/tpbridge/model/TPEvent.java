@@ -13,13 +13,8 @@ import java.util.Hashtable;
 
 import org.osgi.service.event.Event;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
-
 public class TPEvent implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7318549536622346381L;
 
 	public static final String PROJECT_KEY = "PROJECT";

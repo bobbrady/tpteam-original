@@ -8,9 +8,7 @@ import java.util.List;
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.betwixt.io.BeanWriter;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 
 public class ChartDataSetXML {
 
@@ -70,6 +68,7 @@ public class ChartDataSetXML {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static ChartDataSet[] getDataSetsFromXML(String dataSetListXML) {
 		ArrayList<ChartDataSet> dataSetList = null;
 		try {

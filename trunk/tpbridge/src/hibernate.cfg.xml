@@ -7,10 +7,10 @@
         <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
         <property name="hibernate.cache.region_prefix">hibernate.test</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">tpteam</property>
         <property name="hibernate.connection.pool_size">1</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost/tpteam</property>
         <property name="hibernate.connection.username">tpteam</property>
+        <property name="hibernate.connection.password">tpteam</property>
         <property name="hibernate.default_schema">TPTEAM</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.format_sql">true</property>

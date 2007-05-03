@@ -109,6 +109,7 @@ public class ProductTest extends HyadesTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public void testUpdateProduct() throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
@@ -148,6 +149,7 @@ public class ProductTest extends HyadesTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public void testDeleteProduct() throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
@@ -181,6 +183,7 @@ public class ProductTest extends HyadesTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public void testSelectProduct() throws Exception {
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;

@@ -19,10 +19,10 @@ import org.eclipse.ecf.core.identity.Namespace;
 import org.eclipse.ecf.core.security.ConnectContextFactory;
 import org.eclipse.ecf.core.util.ECFException;
 import org.osgi.framework.BundleContext;
+
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
-import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class TPBridgeClient extends Client{
 

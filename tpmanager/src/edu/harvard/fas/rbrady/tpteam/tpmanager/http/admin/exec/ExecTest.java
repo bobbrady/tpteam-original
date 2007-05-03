@@ -69,6 +69,7 @@ public class ExecTest extends ServletUtil {
 			}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected String getProjRows() throws Exception
 	{
 		Transaction tx = null;

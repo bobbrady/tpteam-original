@@ -63,6 +63,7 @@ public class UpdateUser extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getUserRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();

@@ -61,6 +61,7 @@ public class UpdateProject extends ServletUtil {
 			}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String getProjRows() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();

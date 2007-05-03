@@ -58,6 +58,7 @@ public class DeleteUser extends ServletUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private String getUserRows() throws Exception {
 		 Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 		// For standalone

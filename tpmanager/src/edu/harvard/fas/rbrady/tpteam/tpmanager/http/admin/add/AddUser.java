@@ -60,6 +60,7 @@ public class AddUser extends ServletUtil {
 			}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String getProjOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
@@ -90,6 +91,7 @@ public class AddUser extends ServletUtil {
 		return mProjOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	private String getRoleOptions() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();

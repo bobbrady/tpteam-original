@@ -10,7 +10,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,10 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 

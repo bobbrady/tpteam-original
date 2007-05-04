@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
@@ -17,12 +18,18 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 public class TestExecutionUtil {
 	
 	public static void insertTestExec(String testID, TPEvent tpEvent) throws Exception {
-		// For standalone
-		// Session s =
-		// HibernateUtil.getSessionFactory().getCurrentSession();
+		// Use plugin activator if in OSGi runtime
+		Session s = null;
+		if(Activator.getDefault() != null)
+		{
+			s = Activator.getDefault().getHiberSessionFactory()
+			.getCurrentSession();
+		}
+		else
+		{
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
 		Transaction tx = null;
 		try {
 

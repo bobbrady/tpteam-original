@@ -26,11 +26,13 @@ public class TestUtil {
 		Session s = null;
 		Transaction tx = null;
 		try {
-
-			s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-
-			// s = HibernateUtil.getSessionFactory().getCurrentSession();
+			// Use plugin activator if in OSGi runtime
+			if (Activator.getDefault() != null) {
+				s = Activator.getDefault().getHiberSessionFactory()
+						.getCurrentSession();
+			} else {
+				s = HibernateUtil.getSessionFactory().getCurrentSession();
+			}
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.parent is null and test.project.id =:projID";
 			Query query = s.createQuery(hql);
@@ -57,11 +59,13 @@ public class TestUtil {
 		Session s = null;
 		Transaction tx = null;
 		try {
-
-			// s =
-			// Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-
-			s = HibernateUtil.getSessionFactory().getCurrentSession();
+			// Use plugin activator if in OSGi runtime
+			if (Activator.getDefault() != null) {
+				s = Activator.getDefault().getHiberSessionFactory()
+						.getCurrentSession();
+			} else {
+				s = HibernateUtil.getSessionFactory().getCurrentSession();
+			}
 			tx = s.beginTransaction();
 			String hql = "from Test as test where test.id =:testID";
 			Query query = s.createQuery(hql);
@@ -107,16 +111,20 @@ public class TestUtil {
 	}
 
 	public static void updateTest(TPEvent tpEvent) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Session s = null;
+		// Use plugin activator if in OSGi runtime
+		if (Activator.getDefault() != null) {
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+		} else {
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 		Transaction tx = null;
 		try {
-			
+
 			String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
 			Test testStub = TestXML.getTestFromXML(testXML);
-			
+
 			tx = s.beginTransaction();
 
 			// Get the user who is requesting update
@@ -146,7 +154,7 @@ public class TestUtil {
 			}
 			test.setModifiedBy(updateUser);
 			test.setModifiedDate(new Date());
-			
+
 			// Collect project member ecfIDs
 			Set<TpteamUser> users = test.getProject().getTpteamUsers();
 			StringBuilder userECFIDs = new StringBuilder();
@@ -162,9 +170,10 @@ public class TestUtil {
 			tpEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
 			tpEvent.getDictionary().put(TPEvent.FROM, userECFIDs.toString());
 			tpEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
-			if(test.getDescription() != null)
-				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY, test.getDescription());
-			
+			if (test.getDescription() != null)
+				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY,
+						test.getDescription());
+
 			s.flush();
 			tx.commit();
 		} catch (Exception e) {
@@ -175,13 +184,17 @@ public class TestUtil {
 	}
 
 	public static void addTest(TPEvent tpEvent) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		Session s = null;
+		// Use plugin activator if in OSGi runtime
+		if (Activator.getDefault() != null) {
+			s = Activator.getDefault().getHiberSessionFactory()
+					.getCurrentSession();
+		} else {
+			s = HibernateUtil.getSessionFactory().getCurrentSession();
+		}
 		Transaction tx = null;
 		try {
-			
+
 			String testXML = tpEvent.getDictionary().get(TPEvent.TEST_XML_KEY);
 			Test testStub = TestXML.getTestFromXML(testXML);
 
@@ -233,13 +246,13 @@ public class TestUtil {
 			}
 			s.saveOrUpdate(test);
 			s.flush();
-			
+
 			// If parent is null, then is top level folder in project
-			if(test.getParent() != null)
+			if (test.getParent() != null)
 				test.setPath(test.getParent().getPath() + "." + test.getId());
 			else
 				test.setPath(String.valueOf(test.getId()));
-			
+
 			testStub.setId(test.getId());
 
 			// Collect project member ecfIDs
@@ -256,11 +269,14 @@ public class TestUtil {
 			String ECFID = tpEvent.getDictionary().get(TPEvent.FROM);
 			tpEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
 			tpEvent.getDictionary().put(TPEvent.FROM, userECFIDs.toString());
-			tpEvent.getDictionary().put(TPEvent.ID_KEY, String.valueOf(test.getId()));
+			tpEvent.getDictionary().put(TPEvent.ID_KEY,
+					String.valueOf(test.getId()));
 			tpEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
-			if(test.getDescription() != null)
-				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY, test.getDescription());
-			tpEvent.getDictionary().put(TPEvent.TEST_XML_KEY, TestXML.getXML(testStub));
+			if (test.getDescription() != null)
+				tpEvent.getDictionary().put(TPEvent.TEST_DESC_KEY,
+						test.getDescription());
+			tpEvent.getDictionary().put(TPEvent.TEST_XML_KEY,
+					TestXML.getXML(testStub));
 			s.flush();
 			tx.commit();
 		} catch (Exception e) {

@@ -16,9 +16,9 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 
 public class ProductTest extends HyadesTestCase {
 
-	private static final int mProdID = 1;
+	public static final int mProdID = 1;
 
-	private static final String mProdName = "TPTeam Dev";
+	public static final String mProdName = "TPTeam Dev";
 
 	private static final String mTempProdName = "TPTeam Temp Prod";
 

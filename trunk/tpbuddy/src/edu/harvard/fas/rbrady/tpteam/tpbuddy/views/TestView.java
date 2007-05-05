@@ -9,7 +9,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -57,7 +56,7 @@ public class TestView extends ViewPart implements Observer {
 	private Action mShowTest;
 
 	private Action mAddFolder;
-	
+
 	private Action mAddTest;
 
 	private TreeViewer mViewer;
@@ -67,41 +66,61 @@ public class TestView extends ViewPart implements Observer {
 	private TreeNodeModel mTreeNodeModel;
 
 	private String mProjID;
-	
+
 	private String mProjName;
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting execution
+	 * 
+	 * Performed when user clicks on exec test icon in view
+	 */
 	private void execTestAction() {
+		// Get selected node in test tree
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
-		Iterator selectionIter = selection.iterator();
-		while (selectionIter.hasNext()) {
-			TPEntity treeEnt = (TPEntity) selectionIter.next();
-			System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-			Hashtable<String, String> dictionary = new Hashtable<String, String>();
-			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
-			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
-					.getTPBridgeClient().getTPMgrECFID());
-			dictionary.put(TPEvent.FROM, Activator.getDefault()
-					.getTPBridgeClient().getTargetIDName());
-			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_REQ_TOPIC,
-					dictionary);
-			sendMsgToEventAdmin(tpEvent);
+		TPEntity treeEnt = (TPEntity) selection.getFirstElement();
+
+		// Get parent shell to display dialog, if necessary
+		Shell parent = getViewSite().getShell();
+
+		// Throw error dialog if execution attempted on folder node
+		if (treeEnt.getType().equals(TPEntity.FOLDER)) {
+			MessageDialog
+					.openError(parent, "Exec Test Error",
+							"Execute Test Error: Folders can not be executed as test definitions.");
+			return;
 		}
+
+		// Send TPEvent requesting test execution
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_REQ_TOPIC, dictionary);
+		sendMsgToEventAdmin(tpEvent);
 	}
 
 	private void delTestAction() {
+
+		// Get the selected node in test tree
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
-		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+
+		// Get parent shell in case error dialog needs to be shown
 		Shell parent = getViewSite().getShell();
 
+		// Show error dialog if user attemped to delete test tree root node
 		if (Integer.parseInt(treeEnt.getID()) < 1) {
 			MessageDialog.openError(parent, "Delete Test Error",
 					"Delete Test Error: The root node can not be deleted.");
 			return;
 		}
 
+		// Confirmation needed for deletions, for safety.
 		boolean confirm = MessageDialog.openConfirm(parent,
 				"Delete Test Confirmation",
 				"Are you sure you want to delete test entity "
@@ -109,6 +128,7 @@ public class TestView extends ViewPart implements Observer {
 		if (!confirm)
 			return;
 
+		// Wrap info into TPEvent and send delete request
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
@@ -120,22 +140,22 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void updateTestAction() {
+		// Get the selected node in test tree
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
 
-		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-		System.out.println("TestType: " + treeEnt.getType());
-		System.out.println("Test ID: " + treeEnt.getID());
-
+		// Get parent shell in case error dialog needs to be shown
 		Shell parent = getViewSite().getShell();
 
+		// Show error dialog if user attempts to update test tree root
 		if (Integer.parseInt(treeEnt.getID()) < 1) {
 			MessageDialog.openError(parent, "Update Test Error",
 					"Update Test Error: The root node can not be updated.");
 			return;
 		}
 
+		// Wrap update request into TPEvent and send
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
@@ -159,16 +179,15 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void addFolderAction() {
+		// Get parent folder where new child folder will be added
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
 
-		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-		System.out.println("TestType: " + treeEnt.getType());
-		System.out.println("Test ID: " + treeEnt.getID());
-
+		// Get the parent shell so add folder dialog can be shown
 		Shell parent = getViewSite().getShell();
 
+		// Error checking
 		if (!treeEnt.getType().equals(TPEntity.FOLDER)) {
 			MessageDialog
 					.openError(parent, "Add Test Error",
@@ -176,6 +195,7 @@ public class TestView extends ViewPart implements Observer {
 			return;
 		}
 
+		// Show add folder dialog and pull-out info
 		AddFolderDialog addFolderDialog = new AddFolderDialog(parent, Integer
 				.parseInt(treeEnt.getID()));
 
@@ -189,8 +209,8 @@ public class TestView extends ViewPart implements Observer {
 			proj.setId(Integer.parseInt(mProjID));
 			testStub.setProject(proj);
 			String testXML = TestXML.getXML(testStub);
-			System.out.println("testXML:\n" + testXML);
 
+			// Wrap info into TPEvent and send add folder request
 			Hashtable<String, String> dictionary = new Hashtable<String, String>();
 			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 			dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
@@ -204,18 +224,17 @@ public class TestView extends ViewPart implements Observer {
 			sendMsgToEventAdmin(tpEvent);
 		}
 	}
-	
+
 	private void addTestAction() {
+		// Get parent folder where test definition will be added
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
 
-		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
-		System.out.println("TestType: " + treeEnt.getType());
-		System.out.println("Test ID: " + treeEnt.getID());
-
+		// Get parent shell so add test dialog can be shown
 		Shell parent = getViewSite().getShell();
 
+		// Error check
 		if (!treeEnt.getType().equals(TPEntity.FOLDER)) {
 			MessageDialog
 					.openError(parent, "Add Test Error",
@@ -223,7 +242,9 @@ public class TestView extends ViewPart implements Observer {
 			return;
 		}
 
-		AddTestDialog addTestDialog = new AddTestDialog(parent, Integer.parseInt(treeEnt.getID()));
+		// Show add dialog and pullout info
+		AddTestDialog addTestDialog = new AddTestDialog(parent, Integer
+				.parseInt(treeEnt.getID()));
 
 		if (addTestDialog.open() == AddTestDialog.OK) {
 			Test testStub = addTestDialog.getTestStub();
@@ -235,8 +256,8 @@ public class TestView extends ViewPart implements Observer {
 			proj.setId(Integer.parseInt(mProjID));
 			testStub.setProject(proj);
 			String testXML = TestXML.getXML(testStub);
-			System.out.println("testXML:\n" + testXML);
 
+			// Wrap info into TPEvent and send add test request
 			Hashtable<String, String> dictionary = new Hashtable<String, String>();
 			dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 			dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
@@ -252,10 +273,12 @@ public class TestView extends ViewPart implements Observer {
 	}
 
 	private void showTestAction() {
+		// Get selected node
 		IStructuredSelection selection = (IStructuredSelection) mViewer
 				.getSelection();
 		final TPEntity treeEnt = (TPEntity) selection.getFirstElement();
-		System.out.println("\n\nTestView: Selection " + treeEnt.getName());
+
+		// Wrap info into TPEvent and send test detail request
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.ID_KEY, String.valueOf(treeEnt.getID()));
 		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
@@ -265,9 +288,14 @@ public class TestView extends ViewPart implements Observer {
 		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DETAIL_REQ_TOPIC,
 				dictionary);
 		sendMsgToEventAdmin(tpEvent);
+		// Give focus to test detail view now
 		showDetailView();
 	}
 
+	/**
+	 * Gives focus to test detail view while waiting for test detail results to
+	 * arrive.
+	 */
 	private void showDetailView() {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
@@ -280,27 +308,41 @@ public class TestView extends ViewPart implements Observer {
 			}
 		}
 	}
-	
-	private void getTestTreeAction() {
-			Hashtable<String, String> dictionary = new Hashtable<String, String>();
-			dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
-					.getTPBridgeClient().getTPMgrECFID());
-			dictionary.put(TPEvent.FROM, Activator.getDefault()
-					.getTPBridgeClient().getTargetIDName());
-			dictionary
-					.put(TPEvent.PROJECT_ID_KEY, mProjID);
-			dictionary.put(TPEvent.PROJECT_KEY, mProjName);
 
-			Activator.getDefault().getEventAdminClient().sendEvent(
-					ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
+	/**
+	 * Submits a TPEvent that request a response event containing
+	 * the entire project test tree in serialized XML form.
+	 *
+	 */
+	private void getTestTreeAction() {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTargetIDName());
+		dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+		dictionary.put(TPEvent.PROJECT_KEY, mProjName);
+
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				ITPBridge.TEST_TREE_GET_REQ_TOPIC, dictionary);
 	}
 
-
+	/**
+	 *  Sends a TPEvent to the EventAdmin, which will submit
+	 *  to the OSGi Event service and route to all interested
+	 *  subscribers
+	 *  
+	 * @param tpEvent
+	 */
 	private void sendMsgToEventAdmin(TPEvent tpEvent) {
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				tpEvent.getTopic(), tpEvent.getDictionary());
 	}
 
+	/**
+	 * Helper method to enable the various test tree 
+	 * actions a user can carry out through the view
+	 */
 	private void createActions() {
 		mExecTest.setEnabled(true);
 		mExecTest.setImageDescriptor(Activator
@@ -321,11 +363,10 @@ public class TestView extends ViewPart implements Observer {
 		mAddFolder.setEnabled(true);
 		mAddFolder.setImageDescriptor(Activator
 				.getImageDescriptor("icons/folderadd_pending.gif"));
-		
+
 		mAddTest.setEnabled(true);
 		mAddTest.setImageDescriptor(Activator
 				.getImageDescriptor("icons/new_testcase.gif"));
-
 
 		mViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -381,7 +422,7 @@ public class TestView extends ViewPart implements Observer {
 				addFolderAction();
 			}
 		};
-		
+
 		mAddTest = new Action("Add Test Definition...") {
 			public void run() {
 				addTestAction();
@@ -401,7 +442,7 @@ public class TestView extends ViewPart implements Observer {
 		getSite().setSelectionProvider(mViewer);
 
 		createActions();
-		
+
 		mProjID = Activator.getDefault().getProjID();
 		mProjName = Activator.getDefault().getProjName();
 
@@ -439,16 +480,13 @@ public class TestView extends ViewPart implements Observer {
 				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
 				Activator.getDefault().setProjID(mProjID);
 				Activator.getDefault().setProjName(mProjName);
-			} 
-			else if(((TPEvent) object).getTopic().equals(
-					ITPBridge.CHART_GET_DATA_REQ_TOPIC))
-			{
+			} else if (((TPEvent) object).getTopic().equals(
+					ITPBridge.CHART_GET_DATA_REQ_TOPIC)) {
 				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
 				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
 				Activator.getDefault().setProjID(mProjID);
 				Activator.getDefault().setProjName(mProjName);
-			}
-			else if (tpEvent.getTopic().equalsIgnoreCase(
+			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);
@@ -491,7 +529,7 @@ public class TestView extends ViewPart implements Observer {
 				});
 			} else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_ADD_RESP_TOPIC)) {
-					String testXML = tpEvent.getDictionary().get(
+				String testXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_XML_KEY);
 				System.out.println("testAddXML:\n" + testXML);
 				final Test testStub = TestXML.getTestFromXML(testXML);
@@ -500,13 +538,11 @@ public class TestView extends ViewPart implements Observer {
 					public void run() {
 						ITreeNode addNode = tpEntity;
 						ITreeNode parent = null;
-						if(testStub.getParent().getId() == 0)
-						{
+						if (testStub.getParent().getId() == 0) {
 							parent = mTreeNodeModel.get("0");
-						}
-						else
-						{
-							parent = mTreeNodeModel.get(String.valueOf(testStub.getParent().getId()));
+						} else {
+							parent = mTreeNodeModel.get(String.valueOf(testStub
+									.getParent().getId()));
 						}
 						if (parent != null) {
 							addNode.setParent(parent);

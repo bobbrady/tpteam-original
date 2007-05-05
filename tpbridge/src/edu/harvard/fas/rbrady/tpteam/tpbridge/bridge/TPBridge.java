@@ -8,7 +8,6 @@
  ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -28,7 +27,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
-public class TPBridge implements ITPBridge, IMessageReceiver {
+public class TPBridge implements ITPBridge {
 
 	private Hashtable<String, String> mTPBridgeProps = new Hashtable<String, String>();
 
@@ -74,17 +73,6 @@ public class TPBridge implements ITPBridge, IMessageReceiver {
 		createTrivialSharedObjectForContainer();
 	}
 
-	protected void sendSOMessage(String msg, String sendTo) {
-		if (mSharedObject != null) {
-
-			try {
-				mSharedObject.getContext().sendMessage(createID(sendTo), msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public boolean sendECFTPMsg(Event event) {
 		try {
@@ -121,22 +109,12 @@ public class TPBridge implements ITPBridge, IMessageReceiver {
 		mServiceTracker.close();
 	}
 
-	public synchronized void handleMessage(String from, String msg) {
-		// TODO Auto-generated method stub
-		notifyAll();
-
-	}
-
 	protected void createTrivialSharedObjectForContainer() throws ECFException {
 		// Create a new GUID for new TrivialSharedObject instance
-
 		ID newID = IDFactory.getDefault().createStringID(
 				TPSharedObject.class.getName());
 
-		// Create TrivialSharedObject
-		// sharedObject = new TrivialSharedObject();
 		mSharedObject = new TPSharedObject();
-		// sharedObject.addObserver(this);
 		mSharedObject.addObserver(Activator.getEventAdminHandler());
 		// Add shared object to container
 		((ISharedObjectContainer) mContainer

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import org.eclipse.ecf.core.ContainerFactory;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
-import org.eclipse.ecf.core.identity.IDCreateException;
 import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.identity.Namespace;
 import org.eclipse.ecf.core.security.ConnectContextFactory;
@@ -24,14 +23,15 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.Client;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
-public class TPBridgeClient extends Client{
+public class TPBridgeClient extends Client {
 
 	protected static String CONTAINER_TYPE = "ecf.xmpps.smack";
-	private Namespace mNamespace = null;
-	private IContainer mContainer = null;
-	private ID mTargetID = null;
-	
 
+	private Namespace mNamespace = null;
+
+	private IContainer mContainer = null;
+
+	private ID mTargetID = null;
 
 	public TPBridgeClient(BundleContext context) {
 		super(context);
@@ -39,9 +39,11 @@ public class TPBridgeClient extends Client{
 			setupContainer();
 			// Then connect
 			setTPMgrECFID(getTPTeamProps().getProperty(TPMANAGER_ECFID_KEY));
-			String tpMgrPass = getTPTeamProps().getProperty(TPMANAGER_ECFID_PASSWORD);
+			String tpMgrPass = getTPTeamProps().getProperty(
+					TPMANAGER_ECFID_PASSWORD);
 			doConnect(getTPMgrECFID(), tpMgrPass);
-			setContainer(getContainer(), mTargetID.getName(), ITPBridge.TPTEAM_MGR);
+			setContainer(getContainer(), mTargetID.getName(),
+					ITPBridge.TPTEAM_MGR);
 
 		} catch (ECFException e) {
 			// TODO Auto-generated catch block
@@ -49,7 +51,7 @@ public class TPBridgeClient extends Client{
 		}
 
 	}
-	
+
 	protected IContainer setupContainer() throws ECFException {
 		if (mContainer == null) {
 			mContainer = ContainerFactory.getDefault().createContainer(
@@ -58,7 +60,7 @@ public class TPBridgeClient extends Client{
 		}
 		return mContainer;
 	}
-	
+
 	protected IContainer getContainer() {
 		return mContainer;
 	}
@@ -78,17 +80,7 @@ public class TPBridgeClient extends Client{
 		ID targetID = IDFactory.getDefault().createID(mNamespace, account);
 		mContainer.connect(targetID, ConnectContextFactory
 				.createPasswordConnectContext(password));
-		createID(account);
 		mTargetID = targetID;
-	}
-
-	public ID createID(String name) {
-		try {
-			return IDFactory.getDefault().createID(mNamespace, name);
-		} catch (IDCreateException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	public synchronized boolean isConnected() {
@@ -104,8 +96,6 @@ public class TPBridgeClient extends Client{
 			mTargetID = null;
 		}
 	}
-
-
 
 	public ArrayList<TPEvent> getEventLog() {
 		ITPBridge tpBridge = (ITPBridge) mServiceTracker.getService();

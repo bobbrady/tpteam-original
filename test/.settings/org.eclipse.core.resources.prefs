@@ -1,10 +1,11 @@
-#Sat May 05 10:05:44 EDT 2007
+#Sat May 05 12:07:02 EDT 2007
 eclipse.preferences.version=1
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/bridge/TestTPBridge.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpbuddy/eventadmin/test/TestEventAdmin.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpbuddy/tpbridge/test/TestTPBridgeClient.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestChartUtil.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestProjectUtil.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestTPEventTestCRUD.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestTestUtil.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestServletUtil.java=UTF-8
 encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestViewProduct.java=UTF-8

@@ -27,8 +27,6 @@ public class TreeNodeModel extends HashMap<String, ITreeNode> implements
 
 	public void deleteNode(ITreeNode node) {
 		if (get(String.valueOf(node.getID())) != null) {
-			System.out.println("TreeNodeModel Got message to delete node: "
-					+ node.getName());
 			removeListenerFrom(node);
 			remove(String.valueOf(node.getID()));
 			for (ITreeNode child : node.getChildren()) {

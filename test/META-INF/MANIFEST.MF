@@ -17,5 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ecf.provider.xmpp,
  org.eclipse.ecf.sharedobject,
  edu.harvard.fas.rbrady.tpteam.tpbridge,
- edu.harvard.fas.rbrady.tpteam.tpbuddy
+ edu.harvard.fas.rbrady.tpteam.tpbuddy,
+ org.eclipse.equinox.event,
+ org.eclipse.osgi.services,
+ org.eclipse.osgi.util
 Eclipse-LazyStart: true

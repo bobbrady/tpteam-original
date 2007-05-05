@@ -21,10 +21,10 @@ public class TestTestUtil extends HyadesTestCase {
 	public static final String TEST_FOLDER_1_1_XML = "<children ID=\"4\" name=\"Folder_1.1\" type=\"FOLDER\" id=\"3\">";
 	
 	/** XML element for test database folder 2.1 */
-	public static final String TEST_FOLDER_2_1_XML = "<children ID=\"5\" name=\"Folder_2.1\" type=\"FOLDER\" id=\"5\">";
+	public static final String TEST_FOLDER_2_1_XML = "<children ID=\"5\" name=\"Folder_2.1\" type=\"FOLDER\" id=\"6\">";
 	
 	/** XML element for test database folder 3.1 */
-	public static final String TEST_FOLDER_3_1_XML = "<children ID=\"6\" name=\"Folder_3.1\" type=\"FOLDER\" id=\"7\">"; 
+	public static final String TEST_FOLDER_3_1_XML = "<children ID=\"6\" name=\"Folder_3.1\" type=\"FOLDER\" id=\"8\">"; 
 	
 	
 	/**

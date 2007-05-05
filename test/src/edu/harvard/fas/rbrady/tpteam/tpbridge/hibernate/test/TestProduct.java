@@ -14,7 +14,7 @@ import org.hibernate.Transaction;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 
-public class ProductTest extends HyadesTestCase {
+public class TestProduct extends HyadesTestCase {
 
 	public static final int mProdID = 1;
 
@@ -29,35 +29,35 @@ public class ProductTest extends HyadesTestCase {
 	 * 
 	 * @param name
 	 */
-	public ProductTest(String name) {
+	public TestProduct(String name) {
 		super(name);
 	}
 
 	/**
-	 * Returns the JUnit test suite that implements the <b>ProductTest</b>
+	 * Returns the JUnit test suite that implements the <b>TestProduct</b>
 	 * definition.
 	 */
 	public static Test suite() {
-		HyadesTestSuite productTest = new HyadesTestSuite("ProductTest");
-		productTest.setArbiter(DefaultTestArbiter.INSTANCE).setId(
+		HyadesTestSuite testProduct = new HyadesTestSuite("TestProduct");
+		testProduct.setArbiter(DefaultTestArbiter.INSTANCE).setId(
 				"E090CCFE7CE9A39D37C68F00A66C11DB");
 	
-		productTest.addTest(new ProductTest("testAddProduct").setId(
+		testProduct.addTest(new TestProduct("testAddProduct").setId(
 				"E090CCFE7CE9A39D50BE7720A66C11DB").setTestInvocationId(
 				"F56EDC6043A497F2642A1EE0F20211DB"));
 	
-		productTest.addTest(new ProductTest("testUpdateProduct").setId(
+		testProduct.addTest(new TestProduct("testUpdateProduct").setId(
 				"E090CCFE7CE9A39D50FBA730A66C11DB").setTestInvocationId(
 				"E090CCFE7CE9A39D935EE470A66C11DB"));
 	
-		productTest.addTest(new ProductTest("testDeleteProduct").setId(
+		testProduct.addTest(new TestProduct("testDeleteProduct").setId(
 				"E090CCFE7CE9A39D513ECAB0A66C11DB").setTestInvocationId(
 				"E090CCFE7CE9A39D93637850A66C11DB"));
 	
-		productTest.addTest(new ProductTest("testSelectProduct").setId(
+		testProduct.addTest(new TestProduct("testSelectProduct").setId(
 				"FDEFD17E4B7BA8088171E9E0A8A811DB").setTestInvocationId(
 				"FDEFD17E4B7BA80899C8D710A8A811DB"));
-		return productTest;
+		return testProduct;
 	}
 
 	/**

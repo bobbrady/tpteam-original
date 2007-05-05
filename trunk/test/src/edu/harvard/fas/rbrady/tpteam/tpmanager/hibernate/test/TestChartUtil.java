@@ -26,7 +26,8 @@ public class TestChartUtil extends HyadesTestCase {
 	 * Pie Chart Project Overview data point XML that should result from test
 	 * database query
 	 */
-	public static final String PIE_CHART_DATA_POINT_XML = "<chartDataPoint error=\"0\" fail=\"0\" inconcl=\"0\" notExec=\"0\" pass=\"0\" id=\"2\"/>";
+	public static final String PIE_CHART_DATA_POINT_XML = 
+		"<chartDataPoint error=\"0\" fail=\"0\" inconcl=\"0\" notExec=\"1\" pass=\"0\" id=\"2\"/>";
 
 	/**
 	 * Constructor for TestChartUtil.

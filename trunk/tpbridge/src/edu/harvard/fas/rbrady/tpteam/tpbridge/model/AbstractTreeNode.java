@@ -38,8 +38,6 @@ public abstract class AbstractTreeNode implements ITreeNode {
 
 	public boolean removeChild(ITreeNode child) {
 		boolean isRemoved = mChildren.remove(child);
-		System.out.println("AbstractTreeNode " + this.getName() + " removeChild: "
-				+ child.getName() + " " + isRemoved);
 		if (isRemoved)
 			fireNodeDeleted(child);
 		return isRemoved;

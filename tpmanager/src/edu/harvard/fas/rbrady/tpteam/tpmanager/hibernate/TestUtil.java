@@ -213,6 +213,7 @@ public class TestUtil {
 			Project proj = (Project) s.load(Project.class, testStub
 					.getProject().getId());
 			test.setProject(proj);
+
 			// Get the user who is requesting update
 			String hql = "from TpteamUser as user where user.ecfId =:ecfID";
 			Query query = s.createQuery(hql);
@@ -221,15 +222,19 @@ public class TestUtil {
 			TpteamUser addUser = (TpteamUser) query.list().get(0);
 			test.setCreatedBy(addUser);
 			test.setCreatedDate(new Date());
+
+			// Set the test type
+			hql = "from TestType as testType where testType.name =:name";
+			query = s.createQuery(hql);
+			query.setString("name", testStub.getTestType().getName());
+			TestType testType = (TestType) query.list().get(0);
+			test.setTestType(testType);
+
 			// Now, add test definition data
 			if (testStub.getIsFolder() == 'N') {
-				hql = "from TestType as testType where testType.name =:name";
-				query = s.createQuery(hql);
-				query.setString("name", testStub.getTestType().getName());
-				TestType testType = (TestType) query.list().get(0);
-				test.setTestType(testType);
+				// Need to save now so can associate test definition with test
+				// ID in database
 				Integer testID = (Integer) s.save(test);
-				s.saveOrUpdate(test);
 				// Next, create JUnit entity, pointing to parent test
 				JunitTest junitStub = ((JunitTest[]) testStub.getJunitTests()
 						.toArray(new JunitTest[0]))[0];

@@ -10,7 +10,7 @@ import org.eclipse.hyades.test.common.junit.HyadesTestCase;
 import org.eclipse.hyades.test.common.junit.HyadesTestSuite;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.test.ProductTest;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.test.TestProduct;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
 
@@ -97,10 +97,10 @@ public class TestProjectUtil extends HyadesTestCase {
 							.getDescription().equals(TEST_PROJ_DESC));
 			assertTrue("Error: ProjectUtil returned invalid Product Id"
 					+ proj.getProduct().getId() + ".", proj.getProduct()
-					.getId() == ProductTest.mProdID);
+					.getId() == TestProduct.mProdID);
 			assertTrue("Error: ProjectUtil returned invalid Product Name"
 					+ proj.getProduct().getName() + ".", proj.getProduct()
-					.getName().equals(ProductTest.mProdName));
+					.getName().equals(TestProduct.mProdName));
 		}
 	}
 

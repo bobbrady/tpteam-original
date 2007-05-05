@@ -11,15 +11,12 @@ package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDCreateException;
 import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.sharedobject.ISharedObjectContainer;
-import org.eclipse.ecf.core.sharedobject.events.ISharedObjectMessageEvent;
 import org.eclipse.ecf.core.util.ECFException;
 import org.hibernate.SessionFactory;
 import org.osgi.framework.BundleContext;
@@ -31,7 +28,7 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
-public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
+public class TPBridge implements ITPBridge, IMessageReceiver {
 
 	private Hashtable<String, String> mTPBridgeProps = new Hashtable<String, String>();
 
@@ -40,23 +37,21 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 	private TPSharedObject mSharedObject = null;
 
 	private IContainer mContainer;
-	
+
 	private String mTargetIDName;
-	
+
 	private String mClientType;
 
 	public TPBridge(BundleContext context) {
 		mTPBridgeProps.put(IMPLEMENTATION_TYPE, DEMO_IMPLEMENTATION_TYPE);
 		start(context);
 	}
-	
-	public String getTargetIDName()
-	{
+
+	public String getTargetIDName() {
 		return mTargetIDName;
 	}
-	
-	public String getClientType()
-	{
+
+	public String getClientType() {
 		return mClientType;
 	}
 
@@ -71,8 +66,8 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 		mServiceTracker.open();
 	}
 
-	public synchronized void setContainer(IContainer container, String targetIDName, String clientType)
-			throws ECFException {
+	public synchronized void setContainer(IContainer container,
+			String targetIDName, String clientType) throws ECFException {
 		mContainer = container;
 		mTargetIDName = targetIDName;
 		mClientType = clientType;
@@ -95,13 +90,13 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 		try {
 			TPEvent tpEvent = new TPEvent(event);
 			String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
-			
-			if(sendTo == null || sendTo.trim().equalsIgnoreCase(""))
+
+			if (sendTo == null || sendTo.trim().equalsIgnoreCase(""))
 				return false;
-			
+
 			String[] ecfIDs = sendTo.split("/");
 			for (String ecfID : ecfIDs) {
-				if(ecfID.equalsIgnoreCase(mTargetIDName))
+				if (ecfID.equalsIgnoreCase(mTargetIDName))
 					continue;
 				mSharedObject.getContext()
 						.sendMessage(createID(ecfID), tpEvent);
@@ -117,9 +112,8 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 	public ArrayList<TPEvent> getEventLog() {
 		return Activator.getEventAdminHandler().getEventLog();
 	}
-	
-	public SessionFactory getHibernateSessionFactory()
-	{
+
+	public SessionFactory getHibernateSessionFactory() {
 		return HibernateUtil.getSessionFactory();
 	}
 
@@ -135,10 +129,10 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 
 	protected void createTrivialSharedObjectForContainer() throws ECFException {
 		// Create a new GUID for new TrivialSharedObject instance
-		
+
 		ID newID = IDFactory.getDefault().createStringID(
 				TPSharedObject.class.getName());
-		
+
 		// Create TrivialSharedObject
 		// sharedObject = new TrivialSharedObject();
 		mSharedObject = new TPSharedObject();
@@ -152,16 +146,6 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 
 	}
 
-	public void update(Observable observable, Object object) {
-		// TODO Auto-generated method stub
-		if (observable instanceof TPSharedObject
-				&& object instanceof ISharedObjectMessageEvent) {
-			System.out.println("Got msg: "
-					+ ((ISharedObjectMessageEvent) object).getData());
-		}
-
-	}
-
 	public ID createID(String name) {
 		try {
 			return IDFactory.getDefault().createID(
@@ -171,10 +155,9 @@ public class TPBridge implements ITPBridge, IMessageReceiver, Observer {
 			return null;
 		}
 	}
-	
-	public boolean isSharedObjectActive()
-	{
-		if(mSharedObject != null)
+
+	public boolean isSharedObjectActive() {
+		if (mSharedObject != null)
 			return mSharedObject.getContext().isActive();
 		else
 			return false;

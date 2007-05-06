@@ -4,7 +4,6 @@ Bundle-Name: TPBridge Plug-in
 Bundle-SymbolicName: edu.harvard.fas.rbrady.tpteam.tpbridge
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.harvard.fas.rbrady.tpteam.tpbridge.Activator
-Bundle-Localization: plugin
 Import-Package: org.jivesoftware.smack,
  org.osgi.framework,
  org.osgi.service.event,

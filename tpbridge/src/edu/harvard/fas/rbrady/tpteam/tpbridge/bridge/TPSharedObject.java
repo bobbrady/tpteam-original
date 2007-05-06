@@ -90,7 +90,8 @@ public class TPSharedObject extends Observable implements ISharedObject {
     /* (non-Javadoc)
      * @see org.eclipse.ecf.core.ISharedObject#getAdapter(java.lang.Class)
      */
-    public Object getAdapter(Class clazz) {
+    @SuppressWarnings("unchecked")
+	public Object getAdapter(Class clazz) {
         return null;
     }
 }

@@ -100,9 +100,12 @@ public class TestTPBridge extends HyadesTestCase {
 			mTargetID = IDFactory.getDefault().createID(mNamespace, ECF_ID);
 			mContainer.connect(mTargetID, ConnectContextFactory
 					.createPasswordConnectContext(ECF_PASSWORD));
+			Thread.sleep(3000);
 		} catch (IDCreateException e) {
 			fail(e.getMessage());
 		} catch (ContainerConnectException e) {
+			fail(e.getMessage());
+		} catch (InterruptedException e) {
 			fail(e.getMessage());
 		}
 	}

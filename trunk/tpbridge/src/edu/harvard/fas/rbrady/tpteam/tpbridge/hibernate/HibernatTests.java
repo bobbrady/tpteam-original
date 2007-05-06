@@ -49,6 +49,7 @@ public class HibernatTests {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Integer insertTestExec(int testId) throws Exception {
 		System.out.println("Inserting TestExec");
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -654,6 +655,7 @@ public class HibernatTests {
 			printTest(child);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void getPieChartData(int id) throws Exception {
 		System.out.println("Gettign PieChartData w/Proj ID: " + id);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -713,6 +715,7 @@ public class HibernatTests {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void getBarChartData(int id) throws Exception {
 		System.out.println("Getting BarChartData w/Proj ID: " + id);
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -751,6 +754,7 @@ public class HibernatTests {
 		}
 	}
 		
+		@SuppressWarnings("unchecked")
 		public static void getLineChartData(int id) throws Exception {
 			System.out.println("Getting LineChartData w/Proj ID: " + id);
 			Session s = HibernateUtil.getSessionFactory().getCurrentSession();

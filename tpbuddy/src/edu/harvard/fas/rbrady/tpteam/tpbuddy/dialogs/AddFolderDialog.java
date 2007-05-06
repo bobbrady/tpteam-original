@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
 
 public class AddFolderDialog extends TitleAreaDialog {
 	// ID for OK button
@@ -126,6 +127,9 @@ public class AddFolderDialog extends TitleAreaDialog {
 					mTestStub.setName(mName.getText());
 					mTestStub.setDescription(mDescription.getText());
 					mTestStub.setIsFolder('Y');
+					TestType testType = new TestType();
+					testType.setName("Folder");
+					mTestStub.setTestType(testType);
 					Test parent = new Test();
 					parent.setId(mParentID);
 					parent.addChild(mTestStub);

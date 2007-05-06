@@ -25,7 +25,9 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
@@ -106,6 +108,8 @@ public class AdminProcessTestExec extends ServletUtil {
 			{
 				Activator.getDefault().getTPManager().runJUnitTest(mTestID, mTPEvent);
 			}
+			
+			sendTestExecResponse(mTPEvent);
 
 			reply
 					.append("<h3 align=\"center\">TPManager Test Execution Result Page</h3>");
@@ -113,8 +117,8 @@ public class AdminProcessTestExec extends ServletUtil {
 					+ "</h3>");
 			reply.append("<h3>Exec Username: " + mRemoteUser + "</h3>\n<h3>testID: "
 					+ mTestID + "</h3>");
-			reply.append("<h3>TestSuite Execution Status: "
-					+ mTPEvent.getStatus() + "</h3>");
+			reply.append("<h3>TestSuite Execution Verdict: "
+					+ mTPEvent.getDictionary().get(TPEvent.VERDICT_KEY) + "</h3>");
 			
 
 		} catch (Exception e) {
@@ -187,5 +191,23 @@ public class AdminProcessTestExec extends ServletUtil {
 				tx.rollback();
 			throw e;
 		}
+	}
+	
+	private void sendTestExecResponse(TPEvent tpEvent) {
+		tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
+		tpEvent.getDictionary().put(TPEvent.FROM,
+				Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
+
+		TPEntity execEntity = TestExecutionXML
+				.getTPEntityFromExecEvent(tpEvent);
+		String execXML = TestExecutionXML.getTPEntityXML(execEntity);
+		tpEvent.getDictionary().put(TPEvent.TEST_EXEC_XML_KEY, execXML);
+
+		System.out.println("TPManager runTests(): sending tpEvent w/status "
+				+ tpEvent.getStatus() + " & topic " + tpEvent.getTopic()
+				+ " to " + tpEvent.getDictionary().get(TPEvent.SEND_TO));
+
+		Activator.getDefault().getEventAdminClient().sendEvent(
+				tpEvent.getTopic(), tpEvent.getDictionary());
 	}
 }

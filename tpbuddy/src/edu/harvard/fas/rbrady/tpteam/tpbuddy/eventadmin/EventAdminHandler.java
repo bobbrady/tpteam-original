@@ -58,7 +58,7 @@ public class EventAdminHandler extends Observable implements EventHandler {
 
 	}
 
-	public ArrayList getEventLog() {
+	public ArrayList<Event> getEventLog() {
 		return mEvents;
 	}
 

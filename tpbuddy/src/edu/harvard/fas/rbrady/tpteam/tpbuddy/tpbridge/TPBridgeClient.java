@@ -29,7 +29,6 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 
 public class TPBridgeClient extends Client{
-	static Hashtable clients = new Hashtable();
 	PresenceUI presenceContainerUI = null;
 
 	public TPBridgeClient(BundleContext context) {

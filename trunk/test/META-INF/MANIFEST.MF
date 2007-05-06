@@ -4,7 +4,6 @@ Bundle-Name: Testplugin Plug-in
 Bundle-SymbolicName: edu.harvard.fas.rbrady.tpteam.testplugin
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.harvard.fas.rbrady.tpteam.testplugin.Activator
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.hyades.test.tools.core,

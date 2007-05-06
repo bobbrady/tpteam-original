@@ -17,6 +17,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
 public class TestExecutionUtil {
 	
+	@SuppressWarnings("unchecked")
 	public static void insertTestExec(String testID, TPEvent tpEvent) throws Exception {
 		// Use plugin activator if in OSGi runtime
 		Session s = null;

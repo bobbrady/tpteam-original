@@ -24,6 +24,7 @@ public class ChartUtil {
 
 	public static final int NUM_LINECHART_DAYS = 30;
 
+	@SuppressWarnings("unchecked")
 	private static ChartDataPoint getPieChartDataPoint(TPEvent tpEvent)
 			throws Exception {
 		Session s = null;
@@ -125,6 +126,7 @@ public class ChartUtil {
 		return ChartDataSetXML.getListXML(dataSetList);
 	}
 
+	@SuppressWarnings("unchecked")
 	private static ChartDataPoint getBarChartDataPoint(int projID, int userID)
 			throws Exception {
 		Session s = null;

@@ -17,6 +17,7 @@ import org.eclipse.hyades.automation.client.adapters.java.AutomationClientAdapte
 
 public class AutomationClient {
 
+	@SuppressWarnings("unchecked")
 	public String run(String eclipse, String workspace, String project,
 			String[] suites, String report, String connection) {
 

@@ -50,7 +50,7 @@ public class EventAdminHandler extends Observable implements EventHandler {
 		notifyObservers(tpEvent);
 	}
 
-	public ArrayList getEventLog() {
+	public ArrayList<Event> getEventLog() {
 		return mEvents;
 	}
 

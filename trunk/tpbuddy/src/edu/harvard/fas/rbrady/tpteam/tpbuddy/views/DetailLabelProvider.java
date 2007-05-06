@@ -26,6 +26,7 @@ public class DetailLabelProvider extends LabelProvider implements
 
 	private HashMap<ImageDescriptor, Image> imageCache = new HashMap<ImageDescriptor, Image>();
 
+	@SuppressWarnings("unchecked")
 	public void dispose() {
 		for (Iterator i = imageCache.values().iterator(); i.hasNext();) {
 			((Image) i.next()).dispose();

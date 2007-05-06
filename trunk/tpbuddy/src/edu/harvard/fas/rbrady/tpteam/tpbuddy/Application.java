@@ -15,11 +15,13 @@ import org.eclipse.ui.PlatformUI;
 /**
  * This class controls all aspects of the application's execution
  */
+@SuppressWarnings("deprecation")
 public class Application implements IPlatformRunnable {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
 	 */
+	@SuppressWarnings("deprecation")
 	public Object run(Object args) throws Exception {
 		Display display = PlatformUI.createDisplay();
 		try {

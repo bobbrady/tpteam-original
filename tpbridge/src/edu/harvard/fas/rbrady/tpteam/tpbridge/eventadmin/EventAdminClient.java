@@ -15,8 +15,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
-
 public class EventAdminClient {
 
 	private ServiceTracker mServiceTracker;
@@ -34,7 +32,7 @@ public class EventAdminClient {
 
 		if (eventAdmin != null) {
 			
-				System.out.println("TPBridge EventAdminClient: Sent " + topic + " Event for " + dictionary.get(TPEvent.TEST_NAME_KEY));			
+				System.out.println("TPBridge EventAdminClient: Sent " + topic + " Event" );			
 			eventAdmin.sendEvent(new Event(topic, dictionary));
 			messageSent = true;
 		}

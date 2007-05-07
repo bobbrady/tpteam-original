@@ -89,7 +89,7 @@ public class TPBridge implements ITPBridge {
 				mSharedObject.getContext()
 						.sendMessage(createID(ecfID), tpEvent);
 				System.out.println("TPBridge.sendECFTPMsg: sent event "
-						+ tpEvent.getTestName() + " to " + ecfID);
+						+ tpEvent.getTopic() + " to " + ecfID);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

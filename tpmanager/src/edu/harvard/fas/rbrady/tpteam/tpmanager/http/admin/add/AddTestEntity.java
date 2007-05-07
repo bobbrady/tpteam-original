@@ -103,7 +103,7 @@ public class AddTestEntity extends ServletUtil {
 				parent = (Test) s.load(Test.class, new Integer(mParentID));
 				test.setParent(parent);
 			}
-			if (mTestTypeID.equalsIgnoreCase("0")) {
+			if (mTestTypeName.equalsIgnoreCase("Folder")) {
 				isFolder = 'Y';
 			}
 			test.setIsFolder(isFolder);

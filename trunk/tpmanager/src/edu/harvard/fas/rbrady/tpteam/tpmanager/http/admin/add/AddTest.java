@@ -186,7 +186,6 @@ public class AddTest extends ServletUtil {
 			throw e;
 		}
 		mTestTypeOptions = "<option selected>Choose Test Type</option>"
-				+ "<option value=\"0:FOLDER\">Test Folder</option>"
 				+ mTestTypeOptions;
 
 		return mTestTypeOptions;
@@ -262,7 +261,7 @@ public class AddTest extends ServletUtil {
 		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
 			// testTypeJS = getJUnitJavaScript();
 			testTypeJS = ServletUtil.ADD_TEST_TYPE_JS;
-		} else if (mTestTypeName.equals("FOLDER")) {
+		} else if (mTestTypeName.equalsIgnoreCase("FOLDER")) {
 			testTypeJS = ServletUtil.ADD_TEST_FOLDER_JS;
 		}
 		return testTypeJS;

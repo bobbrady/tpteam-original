@@ -122,8 +122,8 @@ public class TPManagerThread implements Runnable {
 		String execXML = TestExecutionXML.getTPEntityXML(execEntity);
 		tpEvent.getDictionary().put(TPEvent.TEST_EXEC_XML_KEY, execXML);
 
-		System.out.println("TPManager runTests(): sending tpEvent w/status "
-				+ tpEvent.getStatus() + " & topic " + tpEvent.getTopic()
+		System.out.println("TPManager runTests(): sending tpEvent w/verdict "
+				+ tpEvent.getDictionary().get(TPEvent.VERDICT_KEY) + " & topic " + tpEvent.getTopic()
 				+ " to " + tpEvent.getDictionary().get(TPEvent.SEND_TO));
 
 		Activator.getDefault().getEventAdminClient().sendEvent(

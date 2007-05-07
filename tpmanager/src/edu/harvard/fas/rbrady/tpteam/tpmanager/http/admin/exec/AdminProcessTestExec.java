@@ -10,7 +10,6 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.exec;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,12 +22,12 @@ import org.hibernate.Transaction;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecutionUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 public class AdminProcessTestExec extends ServletUtil {
@@ -56,7 +55,6 @@ public class AdminProcessTestExec extends ServletUtil {
 			validateTestReq(req);
 			StringBuffer reply = new StringBuffer(execTest());
 			showPage(req, resp, reply, null, this);
-			insertTestExecResult(mTPEvent);
 		} catch (Exception e) {
 			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
 					+ e.getCause() + "</h3>");
@@ -100,6 +98,10 @@ public class AdminProcessTestExec extends ServletUtil {
 					userECF.append("/" + user.getEcfId());
 			}
 			mTPEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
+			String ECFID = Activator.getDefault().getTPBridgeClient().getTPMgrECFID();
+			mTPEvent.getDictionary().put(TPEvent.ECFID_KEY, ECFID);
+			mTPEvent.getDictionary().put(TPEvent.TEST_NAME_KEY, test.getName());
+
 			
 			s.flush();
 			tx.commit();			
@@ -108,7 +110,7 @@ public class AdminProcessTestExec extends ServletUtil {
 			{
 				Activator.getDefault().getTPManager().runJUnitTest(mTestID, mTPEvent);
 			}
-			
+			TestExecutionUtil.insertTestExec(mTestID, mTPEvent);
 			sendTestExecResponse(mTPEvent);
 
 			reply
@@ -129,39 +131,6 @@ public class AdminProcessTestExec extends ServletUtil {
 		return reply.toString();
 	}
 
-	protected void insertTestExecResult(TPEvent tpEvent) throws Exception {
-		Transaction tx = null;
-		try {
-			int remoteUserId = ServletUtil.getRemoteUserID(mRemoteUser);
-			// For standalone
-			// Session s =
-			// HibernateUtil.getSessionFactory().getCurrentSession();
-
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, new Integer(mTestID));
-			TestExecution testExec = new TestExecution();
-			testExec.setTest(test);
-			if (tpEvent.getStatus() != null
-					&& (tpEvent.getStatus().trim().indexOf("pass") != -1 || tpEvent
-							.getStatus().trim().indexOf("PASS") != -1)) {
-				testExec.setStatus('P');
-			} else {
-				testExec.setStatus('F');
-			}
-			testExec.setTpteamUser((TpteamUser) s.load(TpteamUser.class,
-					remoteUserId));
-			testExec.setExecDate(new Date());
-			s.save(testExec);
-			s.flush();
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-	}
 
 	protected void validateTestReq(HttpServletRequest req) throws Exception {
 		/*

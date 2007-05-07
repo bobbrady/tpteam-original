@@ -43,8 +43,7 @@ public class EventAdminHandler extends Observable implements EventHandler {
 
 	public void handleEvent(Event event) {
 		System.out.println("TPManager EventAdminHandler: Got "
-				+ event.getTopic() + " Event for "
-				+ event.getProperty(TPEvent.TEST_NAME_KEY));
+				+ event.getTopic() + " Event");
 		TPEvent tpEvent = new TPEvent(event);
 		setChanged();
 		notifyObservers(tpEvent);

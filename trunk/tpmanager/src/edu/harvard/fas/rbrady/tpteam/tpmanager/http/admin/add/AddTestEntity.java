@@ -33,21 +33,21 @@ public class AddTestEntity extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	String mTestName = null;
+	protected String mTestName = null;
 
-	String mTestDesc = null;
+	protected String mTestDesc = null;
 
-	String mTestTypeID = null;
+	protected String mTestTypeID = null;
 
-	String mTestTypeName = null;
+	protected String mTestTypeName = null;
 
-	String mProjID = null;
+	protected String mProjID = null;
 
-	String mParentID = null;
+	protected String mParentID = null;
 
-	String mRemoteUser = null;
+	protected String mRemoteUser = null;
 
-	Test mTestStub = null;
+	protected Test mTestStub = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -77,7 +77,7 @@ public class AddTestEntity extends ServletUtil {
 		}
 	}
 
-	private void saveTest(HttpServletRequest req, HttpServletResponse resp)
+	protected void saveTest(HttpServletRequest req, HttpServletResponse resp)
 			throws Exception {
 		mTestStub = new Test();
 		mTestStub.setName(mTestName);

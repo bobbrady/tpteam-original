@@ -10,21 +10,21 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.update;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Hashtable;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.tptp.TPTestCRUD;
 
 public class UpdateTestEntity extends ServletUtil {
 
@@ -42,6 +42,8 @@ public class UpdateTestEntity extends ServletUtil {
 
 	boolean mIsFolder = false;
 
+	protected Test mTestStub = null;
+
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	}
@@ -54,81 +56,51 @@ public class UpdateTestEntity extends ServletUtil {
 		mRemoteUser = req.getRemoteUser();
 
 		try {
-			updateTest();
-			updateTestType(req, resp, Integer.parseInt(mTestID));
-			StringBuffer reply = new StringBuffer("<h3>Update Test " + mTestName + " was Successful</h3>");
+			updateTest(req, resp);
+			StringBuffer reply = new StringBuffer("<h3>Update Test "
+					+ mTestName + " was Successful</h3>");
 			showPage(req, resp, reply, null, this);
 		} catch (Exception e) {
-			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
-					+ e.getCause() + "</h3>");
+			StringBuffer error = new StringBuffer("<h3>Error: "
+					+ e.getMessage() + "<br>" + e.getCause() + "</h3>");
+			e.printStackTrace();
 			throwError(req, resp, error, this);
 			return;
 		}
 	}
 
-	protected void updateTest() throws Exception {
-		// For standalone operation
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-			int remoteUserId = ServletUtil.getRemoteUserID(mRemoteUser);
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, new Integer(mTestID));
-			test.setName(mTestName);
-			test.setDescription(mTestDesc);
-			if (test.getIsFolder().toString().equalsIgnoreCase("Y")) {
-				mIsFolder = true;
-			}
-			if (test.getJunitTests().size() > 0) {
-				mTestTypeName = "JUNIT";
-			}
-			test.setModifiedBy((TpteamUser)s.load(TpteamUser.class, remoteUserId));
-			test.setModifiedDate(new Date());
-			s.flush();
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-	}
-
-	protected void updateTestType(HttpServletRequest req,
-			HttpServletResponse resp, Integer testID) throws Exception {
-		if (mIsFolder) {
-			return;
-		}
-		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
-			updateJUnitTestType(req, resp, testID);
-		}
-	}
-
-	protected void updateJUnitTestType(HttpServletRequest req,
-			HttpServletResponse resp, Integer testID) throws Exception {
-		// For standalone operation
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, testID);
-			JunitTest junit = (JunitTest) (test.getJunitTests().toArray(
-					new JunitTest[0])[0]);
+	protected void updateTest(HttpServletRequest req, HttpServletResponse resp)
+			throws Exception {
+		mTestStub = new Test();
+		mTestStub.setId(Integer.parseInt(mTestID));
+		mTestStub.setName(mTestName);
+		mTestStub.setDescription(mTestDesc);
+		if (req.getParameter("eclipseHome") != null
+				&& req.getParameter("eclipseHome").length() > 0
+				&& !req.getParameter("eclipseHome").equals("")) {
+			JunitTest junit = new JunitTest();
 			junit.setEclipseHome(req.getParameter("eclipseHome"));
-			junit.setProject(req.getParameter("eclipseProj"));
 			junit.setWorkspace(req.getParameter("eclipseWorkspace"));
+			junit.setProject(req.getParameter("eclipseProj"));
+			junit.setTestSuite(req.getParameter("testSuite"));
 			junit.setReportDir(req.getParameter("reportDir"));
 			junit.setTptpConnection(req.getParameter("tptpConn"));
-			junit.setTestSuite(req.getParameter("testSuite"));
-			s.flush();
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
+			mTestStub.addJunitTest(junit);
 		}
+		String testXML = TestXML.getXML(mTestStub);
+
+		// Wrap info into TPEvent
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(mTestID));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		dictionary.put(TPEvent.TEST_XML_KEY, testXML);
+
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_UPDATE_REQ_TOPIC,
+				dictionary);
+
+		TPTestCRUD.sendTestUpdateResponse(tpEvent);
 	}
 }

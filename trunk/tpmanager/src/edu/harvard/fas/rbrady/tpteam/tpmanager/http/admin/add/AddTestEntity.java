@@ -10,23 +10,24 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.add;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Hashtable;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.tptp.TPTestCRUD;
 
 public class AddTestEntity extends ServletUtil {
 
@@ -46,6 +47,8 @@ public class AddTestEntity extends ServletUtil {
 
 	String mRemoteUser = null;
 
+	Test mTestStub = null;
+
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	}
@@ -62,8 +65,7 @@ public class AddTestEntity extends ServletUtil {
 
 		try {
 
-			Integer testID = saveTest();
-			saveTestType(req, resp, testID);
+			saveTest(req, resp);
 			StringBuffer reply = new StringBuffer("<h3>Add Test " + mTestName
 					+ " was Successful</h3>");
 			showPage(req, resp, reply, null, this);
@@ -75,92 +77,53 @@ public class AddTestEntity extends ServletUtil {
 		}
 	}
 
-	private Integer saveTest() throws Exception {
-		Integer testID = null;
-		Transaction tx = null;
-		try {
-			int remoteUserId = ServletUtil.getRemoteUserID(mRemoteUser);
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			// For standalone operation
-			// Session s =
-			// HibernateUtil.getSessionFactory().getCurrentSession();
-
-			Character isFolder = 'N';
-			tx = s.beginTransaction();
-			Test test = new Test();
-			test.setName(mTestName);
-			test.setDescription(mTestDesc);
-			TestType testType = (TestType) s.load(TestType.class, new Integer(
-					mTestTypeID));
-			test.setTestType(testType);
-			Project proj = (Project) s
-					.load(Project.class, new Integer(mProjID));
-			test.setProject(proj);
-
-			Test parent = null;
-			if (!mParentID.equalsIgnoreCase("0")) {
-				parent = (Test) s.load(Test.class, new Integer(mParentID));
-				test.setParent(parent);
-			}
-			if (mTestTypeName.equalsIgnoreCase("Folder")) {
-				isFolder = 'Y';
-			}
-			test.setIsFolder(isFolder);
-			testID = (Integer) s.save(test);
-
-			if (parent != null) {
-				test.setPath(parent.getPath() + "." + testID);
-			} else {
-				test.setPath(String.valueOf(testID));
-			}
-			test.setCreatedBy((TpteamUser) s.load(TpteamUser.class,
-					remoteUserId));
-			test.setCreatedDate(new Date());
-
-			s.saveOrUpdate(test);
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-		return testID;
-	}
-
-	private void saveTestType(HttpServletRequest req, HttpServletResponse resp,
-			Integer testID) throws Exception {
-		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
-			saveJUnitTestType(req, resp, testID);
-		}
-	}
-
-	private void saveJUnitTestType(HttpServletRequest req,
-			HttpServletResponse resp, Integer testID) throws Exception {
-		Session s = Activator.getDefault().getHiberSessionFactory()
-				.getCurrentSession();
-		// For standalone operation
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, testID);
+	private void saveTest(HttpServletRequest req, HttpServletResponse resp)
+			throws Exception {
+		mTestStub = new Test();
+		mTestStub.setName(mTestName);
+		mTestStub.setDescription(mTestDesc);
+		Test parent = new Test();
+		parent.setId(Integer.parseInt(mParentID));
+		parent.addChild(mTestStub);
+		mTestStub.setParent(parent);
+		TestType testType = new TestType();
+		if (mTestTypeName.equalsIgnoreCase("Folder")) {
+			testType.setName("Folder");
+			mTestStub.setIsFolder('Y');
+		} else if (mTestTypeName.equalsIgnoreCase("JUnit")) {
+			mTestStub.setIsFolder('N');
+			testType.setName("JUnit");
 			JunitTest junit = new JunitTest();
-			junit.setId(testID);
-			junit.setTest(test);
 			junit.setEclipseHome(req.getParameter("eclipseHome"));
-			junit.setProject(req.getParameter("eclipseProj"));
 			junit.setWorkspace(req.getParameter("eclipseWorkspace"));
+			junit.setProject(req.getParameter("eclipseProj"));
+			junit.setTestSuite(req.getParameter("testSuite"));
 			junit.setReportDir(req.getParameter("reportDir"));
 			junit.setTptpConnection(req.getParameter("tptpConn"));
-			junit.setTestSuite(req.getParameter("testSuite"));
-			s.save(junit);
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
+			mTestStub.addJunitTest(junit);
 		}
+		mTestStub.setTestType(testType);
+
+		TpteamUser addUser = new TpteamUser();
+		addUser.setEcfId(Activator.getDefault().getTPBridgeClient()
+				.getTPMgrECFID());
+		mTestStub.setCreatedBy(addUser);
+		Project proj = new Project();
+		proj.setId(Integer.parseInt(mProjID));
+		mTestStub.setProject(proj);
+		String testXML = TestXML.getXML(mTestStub);
+
+		// Wrap info into TPEvent
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(mParentID));
+		dictionary.put(TPEvent.PROJECT_ID_KEY, mProjID);
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, addUser.getEcfId());
+		dictionary.put(TPEvent.TEST_XML_KEY, testXML);
+
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_ADD_REQ_TOPIC, dictionary);
+
+		TPTestCRUD.sendTestAddResponse(tpEvent);
 	}
 }

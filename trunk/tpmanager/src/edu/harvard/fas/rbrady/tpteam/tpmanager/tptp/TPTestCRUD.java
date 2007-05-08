@@ -140,7 +140,7 @@ public class TPTestCRUD {
 
 	}
 
-	public static synchronized void sendDelTestResponse(TPEvent tpEvent)
+	public static void sendDelTestResponse(TPEvent tpEvent)
 			throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(

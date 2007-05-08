@@ -122,7 +122,7 @@ public class TPTestExec {
 		}
 	}
 
-	public static synchronized void sendTestExecResponse(TPEvent tpEvent) {
+	public static void sendTestExecResponse(TPEvent tpEvent) {
 		tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
 		tpEvent.getDictionary().put(TPEvent.FROM,
 				Activator.getDefault().getTPBridgeClient().getTPMgrECFID());

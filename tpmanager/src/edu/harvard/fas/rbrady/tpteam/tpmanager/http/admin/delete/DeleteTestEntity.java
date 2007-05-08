@@ -10,26 +10,26 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
+import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
+import edu.harvard.fas.rbrady.tpteam.tpmanager.tptp.TPTestCRUD;
 
 public class DeleteTestEntity extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
 
-	String mTestID = null;
+	protected String mTestID = null;
 
-	String mTestName = null;
+	protected String mTestName = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -52,23 +52,16 @@ public class DeleteTestEntity extends ServletUtil {
 		}
 	}
 
-	private void deleteTest() throws Exception {
-		// For standalone operation
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-			Session s = Activator.getDefault().getHiberSessionFactory()
-					.getCurrentSession();
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, new Integer(mTestID));
-			mTestName = test.getName();
-			s.delete(test);
-			s.flush();
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
+	protected void deleteTest() throws Exception {
+		// Wrap info into TPEvent and send delete request
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(TPEvent.ID_KEY, String.valueOf(mTestID));
+		dictionary.put(TPEvent.SEND_TO, Activator.getDefault()
+				.getTPBridgeClient().getTPMgrECFID());
+		dictionary.put(TPEvent.FROM, Activator.getDefault().getTPBridgeClient().getTPMgrECFID());
+		TPEvent tpEvent = new TPEvent(ITPBridge.TEST_DEL_REQ_TOPIC, dictionary);
+		TPTestCRUD.deleteTest(tpEvent);
+		mTestName = tpEvent.getDictionary().get(TPEvent.TEST_NAME_KEY);
+		TPTestCRUD.sendDelTestResponse(tpEvent);
 	}
 }

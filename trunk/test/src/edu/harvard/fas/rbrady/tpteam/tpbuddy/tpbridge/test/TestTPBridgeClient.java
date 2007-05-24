@@ -69,7 +69,7 @@ public class TestTPBridgeClient extends HyadesTestCase {
 		TPBridgeClient tpBridgeClient = Activator.getDefault().getTPBridgeClient();
 		// Make sure starting out w/o connection
 		assertFalse(tpBridgeClient.isSharedObjectActive());
-		tpBridgeClient.createAndConnectClient("ecf.xmpps.smack", "tpteamtest@gmail.com", null, "hufogani_test", false);
+		tpBridgeClient.createAndConnectClient("ecf.xmpps.smack", "tpteamtest@gmail.com", null, "tpteamtest", false);
 		// Confirm connection made successfully by SharedObject being active
 		assertTrue(tpBridgeClient.isSharedObjectActive());
 		Thread.sleep(10000);

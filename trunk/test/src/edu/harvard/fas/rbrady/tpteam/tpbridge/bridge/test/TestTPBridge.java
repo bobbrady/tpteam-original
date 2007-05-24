@@ -34,7 +34,7 @@ public class TestTPBridge extends HyadesTestCase {
 
 	private final String ECF_ID = "tpteamtest@gmail.com";
 
-	private final String ECF_PASSWORD = "hufogani_test";
+	private final String ECF_PASSWORD = "tpteamtest";
 
 	private Namespace mNamespace = null;
 

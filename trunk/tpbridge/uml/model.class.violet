@@ -6,8 +6,8 @@
     <void property="bounds"> 
      <object class="java.awt.geom.Rectangle2D$Double"> 
       <void method="setRect"> 
-       <double>140.0</double> 
        <double>40.0</double> 
+       <double>340.0</double> 
        <double>240.0</double> 
        <double>480.0</double> 
       </void> 
@@ -59,10 +59,295 @@
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>140.0</double> 
      <double>40.0</double> 
+     <double>340.0</double> 
     </void> 
    </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode0" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>350.0</double> 
+       <double>340.0</double> 
+       <double>320.0</double> 
+       <double>160.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- mID: String
+- mName: String
+- mParent: AbstractTreeNode
+- mChangeListeners: List&lt;ITreeNodeChangeListeners&gt;
+- mChildren: List&lt;AbstractTreeNode&gt;
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string># fireNodeUpdated()
+# fireNodeAdded(child: ITreeNode)
+# fireNodeDeleted(child: ITreeNode)
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>AbstractTreeNode</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>350.0</double> 
+     <double>340.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="InterfaceNode0" class="com.horstmann.violet.InterfaceNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>350.0</double> 
+       <double>10.0</double> 
+       <double>320.0</double> 
+       <double>300.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ getID(): String
++ setID(id: String)
++ getName(): String
++ setName(name: String)
++ getChildren(): List&lt;ITreeNode&gt;
++ setChildren(List&lt;ITreeNode&gt;)
++ addChild(child: ITreeNode)
++ removeChild(child: ITreeNode): boolean
++ removeChild(childID: int): boolean
++ hasChildren(): boolean
++ getParent(): ITreeNode
++ setParent(parent: ITreeNode)
++ toString(): String
++ addChangeListener(listener: ITreeNodeListener)
++ removeChangeListener(listener: ITreeNodeListener)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>«interface»
+ITreeNode</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>350.0</double> 
+     <double>10.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode1" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>420.0</double> 
+       <double>530.0</double> 
+       <double>200.0</double> 
+       <double>260.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>+ FOLDER: String
++ JUNIT_TEST: String
++ PASS: String
++ FAIL: String
++ INCONCLUSIVE: String
++ ERROR: String
++ EXEC_PASS: String
++ EXEC_FAIL: String
++ EXEC_ERROR: String
++ EXEC_INCONCLUSIVE: String
++ EXEC: String
++ mDescription: String
++ mType: String
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TPEntity</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>420.0</double> 
+     <double>530.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode2" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>170.0</double> 
+       <double>300.0</double> 
+       <double>120.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ put(key: String, node: ITreeNode): ITreeNode
++ remove(key: String, node: ITreeNode): ITreeNode
++ clear()
++removeListenerFrom(node: ITreeNode)
++ addListenerTo(node: ITreeNode)
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TreeNodeModel</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>170.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="InterfaceNode1" class="com.horstmann.violet.InterfaceNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>10.0</double> 
+       <double>200.0</double> 
+       <double>100.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ updateNode(node: ITreeNode)
++ addNode(node: ITreeNode)
++ deleteNode(node: ITreeNode)
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>«interface»
+ITreeNodeChangeListener</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>10.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode3" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>210.0</double> 
+       <double>50.0</double> 
+       <double>120.0</double> 
+       <double>60.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>java.util.HashMap</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>210.0</double> 
+     <double>50.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode0"/> 
+   <object idref="InterfaceNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode1"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="InterfaceNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="ClassNode3"/> 
   </void> 
  </object> 
 </java> 

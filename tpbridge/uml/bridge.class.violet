@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_11" class="java.beans.XMLDecoder"> 
+ <object class="com.horstmann.violet.ClassDiagramGraph"> 
+  <void method="addNode"> 
+   <object id="ClassNode0" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>20.0</double> 
+       <double>440.0</double> 
+       <double>580.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>+ TEST_EXEC_REQ_TOPIC: String
++ TEST_EXEC_RESULT_TOPIC: String
++ TEST_DETAIL_REQ_TOPIC: String
++ TEST_DETAIL_RESP_TOPIC: String
++ TEST_ADD_REQ_TOPIC: String
++ TEST_ADD_RESP_TOPIC: String
++ TEST_UPDATE_DATA_REQ_TOPIC: String
++ TEST_UPDATE_DATA_RESP_TOPIC: String
++ TEST_UPDATE_REQ_TOPIC: String
++ TEST_UPDATE_RESP_TOPIC: String
++ TEST_DEL_REQ_TOPIC: String
++ TEST_DEL_RESP_TOPIC: String
++ TEST_TREE_GET_REQ_TOPIC: String
++ TEST_TREE_GET_RESP_TOPIC: String
++ PROJ_GET_REQ_TOPIC: String
++ PROJ_GET_RESP_TOPIC: String
++ CHART_GET_DATA_REQ_TOPIC: String
++ CHART_GET_DATA_RESP_TOPIC: String
++ IMPLEMENTATION_TYPE: String
++ DEMO_IMPLEMENTATION_TYPE: String
++ CONTAINER_ID_KEY: String
++ SHARED_OBJECT_ID_KEY: String
++ TARGET_ID_KEY: String
++ DEFAULT_CONTAINER_TYPE: String
++ DEFAULT_SHARED_OBJECT_ID: String
++ CLIENT_TYPE: String
++ TPTEAM_MGR: String
++ TPTEAM_BUDDY: String
++ BRIDGE_EA_CLIENT_TOPICS_KEY: String
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ createID(name: String) : ID
++ setContainer(container: IContainer , targetIDName: String , clientType: String) 
++ getClientType() : String
++ sendECFTPMsg(event: org.osgi.service.event.Event) : boolean
++ getEventLog() : List&lt;TPEvent&gt;
++ isSharedObjectActive() : boolean
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>ITPBridge</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>20.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode1" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>80.0</double> 
+       <double>690.0</double> 
+       <double>260.0</double> 
+       <double>160.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- mTPBridgeProps: Hashtable&lt;String,String&gt;
+- mServiceTracker: ServiceTracker
+- mContainer: IContainer
+- mTargetIDName: String
+- mClientType: String
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>- start(context: BundleContext)
+- stop(context: BundleContext)
+- createTrivialSharedObjectForContainer()
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TPBridge</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>80.0</double> 
+     <double>690.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode2" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>600.0</double> 
+       <double>730.0</double> 
+       <double>220.0</double> 
+       <double>80.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- config: ISharedObjectConfig
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>- getID() : ID
+- getContext() : ISharedObjectContext
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TPSharedObject</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>600.0</double> 
+     <double>730.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="InterfaceNode0" class="com.horstmann.violet.InterfaceNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>460.0</double> 
+       <double>460.0</double> 
+       <double>300.0</double> 
+       <double>140.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ init(arg0: ISharedObjectConfig)
++ handleEvent(arg0: org.eclipse.ecf.core.util.Event)
++ handleEvents(arg0: org.eclipse.ecf.core.util.Event[])
++ dispose(arg0: ID)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>«interface»
+org.eclipse.ecf.core.sharedobject
+ISharedObject</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>460.0</double> 
+     <double>460.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode3" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>780.0</double> 
+       <double>380.0</double> 
+       <double>180.0</double> 
+       <double>220.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- changed: boolean
+- obs: Vector</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ addObserver(o: Observer)
++ deleteObserver(o: Observer)
++ notifyObservers()
++ notifyObservers(arg: Object)
++ deleteObservers()
+# setChanged()
+# clearChanged()
++ hasChanged(): boolean
++ countObservers(): int
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>java.util
+Observable</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>780.0</double> 
+     <double>380.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>470.0</double> 
+       <double>80.0</double> 
+       <double>440.0</double> 
+       <double>180.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string># mServiceTracker: ServiceTracker
++ TPMANAGER_ECFID_KEY: String
++ TPMANAGER_ECFID_PASSWORD: String
+- mTPMgrECFID: String
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ setContainer(container: IContainer , targetIDName: String , clientType: String) 
++ getEventLog() : List&lt;TPEvent&gt;
++ getTPTeamProps(): Properties
++ getTargetIDName(): String
++ isSharedObjectActive(): boolean
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>Client</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>470.0</double> 
+     <double>80.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode1"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="V"/> 
+    </void> 
+    <void property="endLabel"> 
+     <string>1</string> 
+    </void> 
+    <void property="startLabel"> 
+     <string>1</string> 
+    </void> 
+   </object> 
+   <object idref="ClassNode1"/> 
+   <object idref="ClassNode2"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="InterfaceNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="ClassNode3"/> 
+  </void> 
+ </object> 
+</java> 

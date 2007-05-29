@@ -5,7 +5,11 @@ import java.awt.Color;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.AbstractDataset;
 
+import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
+
 public abstract class AbstractChart {
+	
+	protected static AbstractChart mChart = null;
 	
 	public static final String PASS = "Pass";
 
@@ -27,7 +31,17 @@ public abstract class AbstractChart {
 	
 	public static final Color PINK = new Color(255, 20, 147);
 	
-	protected abstract AbstractDataset createDataset();
+	public abstract AbstractDataset createDataset();
+	
+	public abstract AbstractDataset createDataset(ChartDataSet[] dataSet);
 	
 	public abstract JFreeChart createChart();
+	
+	public abstract JFreeChart createChart(ChartDataSet[] dataSets, String projName);
+	
+	public static AbstractChart getInstance()
+	{
+		return mChart;
+	}
+	
 }

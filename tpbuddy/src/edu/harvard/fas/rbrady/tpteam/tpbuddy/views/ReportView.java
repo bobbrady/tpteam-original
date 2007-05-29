@@ -188,13 +188,13 @@ public class ReportView extends ViewPart implements Observer {
 	}
 
 	private void createAndShowLineChart(ChartDataSet dataSet) {
-		mChart = LineChart.getInstance().createChart(dataSet, mProjName);
+		mChart = LineChart.getInstance().createChart(new ChartDataSet[]{dataSet}, mProjName);
 		mFrame.setChart(mChart);
 		mFrame.layout();
 	}
 
 	private void createAndShowPieChart(ChartDataSet dataSet) {
-		mChart = PieChart.getInstance().createChart(dataSet);
+		mChart = PieChart.getInstance().createChart(new ChartDataSet[]{dataSet}, mProjName);
 
 		if (mFrame == null) {
 			mFrame = new ChartComposite(mParent, SWT.NONE, mChart, true);

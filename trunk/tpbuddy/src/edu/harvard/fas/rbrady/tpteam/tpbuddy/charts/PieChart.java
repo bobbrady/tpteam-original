@@ -13,15 +13,12 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 
 public class PieChart extends AbstractChart {
 
-	private static PieChart mPieChart = null;
-
 	private PieChart() {
 	}
 
-	public static synchronized PieChart getInstance() {
-		if (mPieChart == null)
-			mPieChart = new PieChart();
-		return mPieChart;
+	public static synchronized AbstractChart getInstance() {
+		mChart = new PieChart();
+		return mChart;
 	}
 
 	/**
@@ -29,7 +26,7 @@ public class PieChart extends AbstractChart {
 	 * 
 	 * @return The dataset.
 	 */
-	protected AbstractDataset createDataset() {
+	public AbstractDataset createDataset() {
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue(PASS, 75.0);
 		dataset.setValue(FAIL, 20);
@@ -39,8 +36,8 @@ public class PieChart extends AbstractChart {
 		return dataset;
 	}
 
-	protected AbstractDataset createDataset(ChartDataSet dataSet) {
-		List<ChartDataPoint> dataPoints = dataSet.getChartDataPoints();
+	public AbstractDataset createDataset(ChartDataSet[] dataSet) {
+		List<ChartDataPoint> dataPoints = dataSet[0].getChartDataPoints();
 		ChartDataPoint dataPoint = dataPoints.get(0);
 
 		DefaultPieDataset dataset = new DefaultPieDataset();
@@ -83,7 +80,7 @@ public class PieChart extends AbstractChart {
 		return chart;
 	}
 
-	public JFreeChart createChart(ChartDataSet dataSet) {
+	public JFreeChart createChart(ChartDataSet[] dataSet, String projName) {
 
 		DefaultPieDataset dataset = (DefaultPieDataset) createDataset(dataSet);
 		int totalTests = 0;
@@ -91,7 +88,7 @@ public class PieChart extends AbstractChart {
 			totalTests += dataset.getValue(idx).intValue();
 
 		// create the chart...
-		JFreeChart chart = ChartFactory.createPieChart(dataSet.getProjName()
+		JFreeChart chart = ChartFactory.createPieChart(projName
 				+ " Test Plan Overview\nTotal Tests: " + totalTests, dataset,
 				true, // legend?
 				true, // tooltips?

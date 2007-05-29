@@ -93,7 +93,7 @@ public class TestPieChart extends HyadesTestCase {
 		dataSet.setType(ChartDataSet.PIE);
 		dataSet.setChartDataPoints(dataPoints);
 
-		JFreeChart pieChart = PieChart.getInstance().createChart(dataSet);
+		JFreeChart pieChart = PieChart.getInstance().createChart(new ChartDataSet[]{dataSet}, proj.getName());
 
 		// Extract Title and Legends
 

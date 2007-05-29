@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_11" class="java.beans.XMLDecoder"> 
+ <object class="com.horstmann.violet.ClassDiagramGraph"> 
+  <void method="addNode"> 
+   <object id="ClassNode0" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>50.0</double> 
+       <double>10.0</double> 
+       <double>480.0</double> 
+       <double>300.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string># mChart: AbstractChart
++ PASS: String
++ FAIL: String
++ ERR: String
++ INCONCL: String
++ NOTEXEC: String
++ RED: java.awt.Color
++ GREEN: java.awt.Color
++ BLUE: java.awt.Color
++ YELLOW: java.awt.Color
++ PINK: java.awt.Color</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ getInstance(): AbstractChart
++ createDataset(): org.jfree.data.general.AbstractDataSet
++ createDataset(dataSets: ChartDataSet[]): org.jfree.data.general.AbstractDataSet
++ createChart(dataSets: ChartDataSet[], String projName): org.jfree.chart.JFreeChart
++ createChart(): org.jfree.chart.JFreeChart
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>&lt;&lt;abstract&gt;&gt;
+AbstractChart</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>50.0</double> 
+     <double>10.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode1" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>230.0</double> 
+       <double>360.0</double> 
+       <double>100.0</double> 
+       <double>60.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>BarChart</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>230.0</double> 
+     <double>360.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode2" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>390.0</double> 
+       <double>360.0</double> 
+       <double>300.0</double> 
+       <double>80.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>+ NUM_DAYS_IN_SERIES: int
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ createTimeSeries(dataSet: ChartDataSet, 
+              seriesName: String): org.jfree.data.time.TimeSeries</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>LineChart</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>390.0</double> 
+     <double>360.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode3" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>360.0</double> 
+       <double>100.0</double> 
+       <double>60.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>PieChart</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>360.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode4" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>460.0</double> 
+       <double>280.0</double> 
+       <double>180.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- mUser: TpteamUser
+- mType: String
+- mProjName: String
+-  mChartDataPoints: List&lt;ChartDataPoint&gt;
++ PIE: String
++ BAR: String
++ LINE: String
++ CHART_TYPE: String
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ compareTo(chartDataSet: ChartDataSet): int
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>edu.harvard.fas.rbrady.tpteam.tpbridge.chart
+ChartDataSet</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>460.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode5" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>350.0</double> 
+       <double>470.0</double> 
+       <double>280.0</double> 
+       <double>160.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- mDate: Date
+- mPass: int
+- mFail: int
+- mError: int
+- mInconcl: int
+- mNotExec: int
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>edu.harvard.fas.rbrady.tpteam.tpbridge.chart
+ChartDataPoint</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>350.0</double> 
+     <double>470.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode3"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode1"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="V"/> 
+    </void> 
+    <void property="endLabel"> 
+     <string>*</string> 
+    </void> 
+    <void property="startArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="BLACK_DIAMOND"/> 
+    </void> 
+    <void property="startLabel"> 
+     <string>1</string> 
+    </void> 
+   </object> 
+   <object idref="ClassNode4"/> 
+   <object idref="ClassNode5"/> 
+  </void> 
+ </object> 
+</java> 

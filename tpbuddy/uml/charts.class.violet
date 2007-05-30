@@ -15,7 +15,7 @@
     </void> 
     <void property="attributes"> 
      <void property="text"> 
-      <string># mChart: AbstractChart
+      <string># mCharts: HashMap&lt;Class, AbstractChart&gt;
 + PASS: String
 + FAIL: String
 + ERR: String
@@ -156,7 +156,6 @@ AbstractChart</string>
       <string>- mUser: TpteamUser
 - mType: String
 - mProjName: String
--  mChartDataPoints: List&lt;ChartDataPoint&gt;
 + PIE: String
 + BAR: String
 + LINE: String

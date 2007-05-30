@@ -146,7 +146,7 @@
     <void property="bounds"> 
      <object class="java.awt.geom.Rectangle2D$Double"> 
       <void method="setRect"> 
-       <double>50.0</double> 
+       <double>70.0</double> 
        <double>0.0</double> 
        <double>380.0</double> 
        <double>80.0</double> 
@@ -167,7 +167,7 @@ java.util.Observer</string>
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>50.0</double> 
+     <double>70.0</double> 
      <double>0.0</double> 
     </void> 
    </object> 

@@ -6,10 +6,10 @@
     <void property="bounds"> 
      <object class="java.awt.geom.Rectangle2D$Double"> 
       <void method="setRect"> 
-       <double>320.0</double> 
-       <double>610.0</double> 
+       <double>10.0</double> 
+       <double>630.0</double> 
        <double>560.0</double> 
-       <double>200.0</double> 
+       <double>140.0</double> 
       </void> 
      </object> 
     </void> 
@@ -26,9 +26,7 @@
 + getParent(object: java.lang.Object)
 + getChildren(object: java.lang.Object)
 + hasChildren(object: java.lang.Object)
-+ updateNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
-+ addNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
-+ deleteNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)</string> 
+</string> 
      </void> 
     </void> 
     <void property="name"> 
@@ -39,8 +37,8 @@
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>320.0</double> 
-     <double>610.0</double> 
+     <double>10.0</double> 
+     <double>630.0</double> 
     </void> 
    </object> 
   </void> 
@@ -49,8 +47,8 @@
     <void property="bounds"> 
      <object class="java.awt.geom.Rectangle2D$Double"> 
       <void method="setRect"> 
-       <double>0.0</double> 
-       <double>610.0</double> 
+       <double>560.0</double> 
+       <double>160.0</double> 
        <double>300.0</double> 
        <double>120.0</double> 
       </void> 
@@ -78,8 +76,8 @@
    </object> 
    <object class="java.awt.geom.Point2D$Double"> 
     <void method="setLocation"> 
-     <double>0.0</double> 
-     <double>610.0</double> 
+     <double>560.0</double> 
+     <double>160.0</double> 
     </void> 
    </object> 
   </void> 
@@ -174,6 +172,41 @@ java.util.Observer</string>
     </void> 
    </object> 
   </void> 
+  <void method="addNode"> 
+   <object id="InterfaceNode1" class="com.horstmann.violet.InterfaceNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>540.0</double> 
+       <double>430.0</double> 
+       <double>280.0</double> 
+       <double>120.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ updateNode(node: ITreeNode)
++ addNode(node: ITreeNode)
++ deleteNode(node: ITreeNode)
+</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>«interface»
+edu.harvard.fas.rbrady.tpteam.tpbridge.model
+ITreeNodeChangeListener</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>540.0</double> 
+     <double>430.0</double> 
+    </void> 
+   </object> 
+  </void> 
   <void method="connect"> 
    <object class="com.horstmann.violet.ClassRelationshipEdge"> 
     <void property="bentStyle"> 
@@ -230,6 +263,21 @@ java.util.Observer</string>
    </object> 
    <object idref="ClassNode2"/> 
    <object idref="ClassNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode0"/> 
+   <object idref="InterfaceNode1"/> 
   </void> 
  </object> 
 </java> 

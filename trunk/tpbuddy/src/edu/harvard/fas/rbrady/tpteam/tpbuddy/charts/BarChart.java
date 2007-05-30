@@ -25,8 +25,11 @@ public class BarChart extends AbstractChart {
 	}
 
 	public static synchronized AbstractChart getInstance() {
-		mChart = new BarChart();
-		return mChart;
+		if(mCharts.get(BarChart.class) == null)
+		{
+			mCharts.put(BarChart.class, new BarChart());
+		}
+		return mCharts.get(BarChart.class);
 	}
 
 	/**
@@ -197,11 +200,5 @@ public class BarChart extends AbstractChart {
 
 		return chart;
 
-	}
-
-	public static void main(String[] args) {
-		System.out.println(BarChart.getInstance());
-		System.out.println(PieChart.getInstance());
-		System.out.println(LineChart.getInstance());
 	}
 }

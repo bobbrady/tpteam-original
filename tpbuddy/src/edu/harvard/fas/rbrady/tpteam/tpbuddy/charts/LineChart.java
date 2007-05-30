@@ -29,8 +29,11 @@ public class LineChart extends AbstractChart {
 	}
 
 	public static synchronized AbstractChart getInstance() {
-		mChart = new LineChart();
-		return mChart;
+		if(mCharts.get(LineChart.class) == null)
+		{
+			mCharts.put(LineChart.class, new LineChart());
+		}
+		return mCharts.get(LineChart.class);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.charts;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.AbstractDataset;
@@ -10,6 +11,8 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 public abstract class AbstractChart {
 	
 	protected static AbstractChart mChart = null;
+	
+	protected static HashMap<Class, AbstractChart> mCharts = new HashMap<Class, AbstractChart>();
 	
 	public static final String PASS = "Pass";
 
@@ -41,7 +44,7 @@ public abstract class AbstractChart {
 	
 	public static AbstractChart getInstance()
 	{
-		return mChart;
+		return null;
 	}
 	
 }

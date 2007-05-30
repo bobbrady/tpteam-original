@@ -17,8 +17,11 @@ public class PieChart extends AbstractChart {
 	}
 
 	public static synchronized AbstractChart getInstance() {
-		mChart = new PieChart();
-		return mChart;
+		if(mCharts.get(PieChart.class) == null)
+		{
+			mCharts.put(PieChart.class, new PieChart());
+		}
+		return mCharts.get(PieChart.class);
 	}
 
 	/**

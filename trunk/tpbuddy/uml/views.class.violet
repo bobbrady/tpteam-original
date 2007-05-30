@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_11" class="java.beans.XMLDecoder"> 
+ <object class="com.horstmann.violet.ClassDiagramGraph"> 
+  <void method="addNode"> 
+   <object id="ClassNode0" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>320.0</double> 
+       <double>610.0</double> 
+       <double>560.0</double> 
+       <double>200.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- mTreeViewer : org.eclipse.jface.viewers.TreeViewer</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ inputChanged(viewer: org.eclipse.jface.viewers.Viewer, old: java.lang.Object, new: java.lang.Object)
+# removeListenerFrom(edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
+# addListenerTo(edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
++ getParent(object: java.lang.Object)
++ getChildren(object: java.lang.Object)
++ hasChildren(object: java.lang.Object)
++ updateNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
++ addNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
++ deleteNode(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TestContentProvider</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>320.0</double> 
+     <double>610.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode1" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>610.0</double> 
+       <double>300.0</double> 
+       <double>120.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>- imageCache : HashMap&lt;ImageDescriptor, Image&gt;
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ dispose()
++ getText(object: java.lang.Object)
++ getImage(object: java.lang.Object)
+- getImageFromString(String)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TestLabelProvider</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>610.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="ClassNode2" class="com.horstmann.violet.ClassNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>0.0</double> 
+       <double>110.0</double> 
+       <double>500.0</double> 
+       <double>440.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="attributes"> 
+     <void property="text"> 
+      <string>+ID : String
+- mExecTest : org.eclipse.jface.action.Action
+- mDelTest : org.eclipse.jface.action.Action
+- mUpdateTest : org.eclipse.jface.action.Action
+- mShowTest : org.eclipse.jface.action.Action
+- mAddFolder : org.eclipse.jface.action.Action
+- mAddTest : org.eclipse.jface.action.Action
+- mViewer : org.eclipse.jface.viewers.TreeViewer
+- mTreeNodeModel : edu.harvard.fas.rbrady.tpteam.tpbridge.model.TreeNodeModel
+- mProjID : String
+- mProjName : String
+</string> 
+     </void> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>- execTestAction()
+- delTestAction()
+- updateTestAction()
+- addFolderAction()
+- addTestAction()
+- showTestAction()
+- showDetailView()
+- getTestTreeAction()
+- sendMsgToEventAdmin(tpEvent: edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent)
+- createActions()
++ createPartControl(parent: org.eclipse.swt.widgets.Composite)
++ setFocus()
+- populateModel(treeNode: edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode)
+- updateExecution(tpEvent: edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent)
++ dispose()</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>TestView</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>0.0</double> 
+     <double>110.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="addNode"> 
+   <object id="InterfaceNode0" class="com.horstmann.violet.InterfaceNode"> 
+    <void property="bounds"> 
+     <object class="java.awt.geom.Rectangle2D$Double"> 
+      <void method="setRect"> 
+       <double>50.0</double> 
+       <double>0.0</double> 
+       <double>380.0</double> 
+       <double>80.0</double> 
+      </void> 
+     </object> 
+    </void> 
+    <void property="methods"> 
+     <void property="text"> 
+      <string>+ update(observable: java.util.Observable, object: java.lang.Object)</string> 
+     </void> 
+    </void> 
+    <void property="name"> 
+     <void property="text"> 
+      <string>«interface»
+java.util.Observer</string> 
+     </void> 
+    </void> 
+   </object> 
+   <object class="java.awt.geom.Point2D$Double"> 
+    <void method="setLocation"> 
+     <double>50.0</double> 
+     <double>0.0</double> 
+    </void> 
+   </object> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="VHV"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+    <void property="lineStyle"> 
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="InterfaceNode0"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="V"/> 
+    </void> 
+    <void property="endLabel"> 
+     <string>1</string> 
+    </void> 
+    <void property="startArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="BLACK_DIAMOND"/> 
+    </void> 
+    <void property="startLabel"> 
+     <string>1</string> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="ClassNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.ClassRelationshipEdge"> 
+    <void property="bentStyle"> 
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/> 
+    </void> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="V"/> 
+    </void> 
+    <void property="endLabel"> 
+     <string>1</string> 
+    </void> 
+    <void property="startArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="BLACK_DIAMOND"/> 
+    </void> 
+    <void property="startLabel"> 
+     <string>1</string> 
+    </void> 
+   </object> 
+   <object idref="ClassNode2"/> 
+   <object idref="ClassNode0"/> 
+  </void> 
+ </object> 
+</java> 

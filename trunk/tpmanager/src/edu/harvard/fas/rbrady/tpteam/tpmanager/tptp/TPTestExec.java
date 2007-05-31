@@ -1,5 +1,8 @@
 package edu.harvard.fas.rbrady.tpteam.tpmanager.tptp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 import org.hibernate.Session;
@@ -17,6 +20,14 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecutionUtil;
 
 public class TPTestExec {
+	
+	/** Locale to format test result time */
+	public static final Locale USA_LOCALE = new Locale("en", "US");
+
+	/** DateTime format for test reusult */
+	public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat(
+			"MM/dd/yyyy HH:mm:ss.SSS z", USA_LOCALE);
+
 
 	public static synchronized void runTest(String testID, TPEvent tpEvent)
 			throws Exception {
@@ -70,7 +81,7 @@ public class TPTestExec {
 
 	}
 
-	public static synchronized void runJUnitTest(String testID, TPEvent tpEvent)
+	private static synchronized void runJUnitTest(String testID, TPEvent tpEvent)
 			throws Exception {
 		Transaction tx = null;
 		String eclipseHome = null;
@@ -112,8 +123,7 @@ public class TPTestExec {
 
 			tpEvent.getDictionary().put(TPEvent.VERDICT_KEY, verdict);
 			tpEvent.setStatus(verdict);
-			tpEvent.getDictionary().put(TPEvent.TIMESTAMP_KEY,
-					TPManager.getDateTime());
+			tpEvent.getDictionary().put(TPEvent.TIMESTAMP_KEY, getDateTime());
 
 		} catch (Exception e) {
 			if (tx != null)
@@ -139,6 +149,11 @@ public class TPTestExec {
 
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				tpEvent.getTopic(), tpEvent.getDictionary());
+	}
+	
+	private static String getDateTime() {
+		Date now = new Date();
+		return SIMPLE_DATE_FORMATTER.format(now);
 	}
 
 }

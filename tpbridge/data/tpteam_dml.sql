@@ -1,9 +1,12 @@
-/***************************************************************
-* File: tpteam_dml.sql
-* Description:  DML statements for inital TPTeam seed data
-* Author: Bob Brady, rpbrady@gmail.com
-* Date: 05Jun2007
-****************************************************************/
+/********************************************************************
+ * 
+ * File		:	tpteam_dml.sql
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	DML statements for inital TPTeam seed data
+ * 
+ ********************************************************************/
 
 /* Initial Roles, used by web interface */
 

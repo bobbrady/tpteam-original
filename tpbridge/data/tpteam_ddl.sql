@@ -1,9 +1,12 @@
-/***************************************************************
-* File: tpteam_ddl.sql
-* Description:  DDL statements for creating TPTeam schema
-* Author: Bob Brady, rpbrady@gmail.com
-* Date: 05Jun2007
-****************************************************************/
+/********************************************************************
+ * 
+ * File		:	tpteam_ddl.sql
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	DDL statements for creating TPTeam schema
+ * 
+ ********************************************************************/
 
 
 create table TPTEAM.TOKEN (USER_ID integer not null, TOKEN_ID text not null, CREATED_DATE datetime, HOST_IP_ADDR text, primary key (USER_ID, TOKEN_ID(500)));

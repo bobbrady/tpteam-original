@@ -5,7 +5,7 @@
  *
  *
  * @author Bob Brady, rpbrady@gmail.com
- * @version $Version$
+ * @version $Revision$
  * @date $Date$
  * Copyright (c) 2007 Bob Brady
  *

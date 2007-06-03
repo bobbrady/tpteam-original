@@ -22,14 +22,16 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.eventadmin.EventAdminClient;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.eventadmin.EventAdminHandler;
 
 /**
- * File: Activator.java
+ ***************************************************************************
+ * File			:	
  *
- * Description:	Controls the lifecycle of the TPBridge Plug-in
+ * Description	: 	
  *
  * @author Bob Brady, rpbrady@gmail.com
  * @version $Revision$
  * @date $Date$
  * Copyright (c) 2007 Bob Brady
+ ****************************************************************************
  */
 public class Activator implements BundleActivator {
 

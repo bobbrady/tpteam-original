@@ -1,14 +1,9 @@
 /**
  * File: Activator.java
  *
- * Description:
+ * Description:	Controls the lifecycle of the TPBridge Plug-in
  *
- *
- * @author Bob Brady, rpbrady@gmail.com
- * @version $Revision$
- * @date $Date$
- * Copyright (c) 2007 Bob Brady
- *
+ * Author: Bob Brady, rpbrady@gmail.com
  */
 package edu.harvard.fas.rbrady.tpteam.tpbridge;
 
@@ -26,6 +21,16 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.TPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.eventadmin.EventAdminClient;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.eventadmin.EventAdminHandler;
 
+/**
+ * File: Activator.java
+ *
+ * Description:	Controls the lifecycle of the TPBridge Plug-in
+ *
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$
+ * Copyright (c) 2007 Bob Brady
+ */
 public class Activator implements BundleActivator {
 
 	private static TPBridge mTPBridge;

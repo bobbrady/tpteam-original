@@ -1,3 +1,11 @@
+/***************************************************************
+* File: tpteam_ddl.sql
+* Description:  DDL statements for creating TPTeam schema
+* Author: Bob Brady, rpbrady@gmail.com
+* Date: 05Jun2007
+****************************************************************/
+
+
 create table TPTEAM.TOKEN (USER_ID integer not null, TOKEN_ID text not null, CREATED_DATE datetime, HOST_IP_ADDR text, primary key (USER_ID, TOKEN_ID(500)));
 create table TPTEAM.JUNIT_TEST (ID integer not null, ECLIPSE_HOME text, WORKSPACE text, PROJECT text, REPORT_DIR text, TPTP_CONNECTION text, TEST_SUITE text, primary key (ID));
 create table TPTEAM.PRODUCT (id integer not null auto_increment, NAME text, DESCRIPTION text, primary key (id), unique index PROD_NAME (NAME(512)));

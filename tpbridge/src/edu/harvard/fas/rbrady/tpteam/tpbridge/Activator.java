@@ -1,11 +1,15 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/**
+ * File: Activator.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Description:
+ *
+ *
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Version$
+ * @date $Date$
+ * Copyright (c) 2007 Bob Brady
+ *
+ */
 package edu.harvard.fas.rbrady.tpteam.tpbridge;
 
 import java.io.IOException;

@@ -3,6 +3,12 @@ package edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.test;
 import junit.framework.Test;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ecf.core.ContainerFactory;
+import org.eclipse.ecf.core.IContainer;
+import org.eclipse.ecf.core.identity.ID;
+import org.eclipse.ecf.core.identity.IDFactory;
+import org.eclipse.ecf.core.security.ConnectContextFactory;
+import org.eclipse.ecf.core.security.IConnectContext;
 import org.eclipse.hyades.test.common.junit.DefaultTestArbiter;
 import org.eclipse.hyades.test.common.junit.HyadesTestCase;
 import org.eclipse.hyades.test.common.junit.HyadesTestSuite;
@@ -69,10 +75,22 @@ public class TestTPBridgeClient extends HyadesTestCase {
 		TPBridgeClient tpBridgeClient = Activator.getDefault().getTPBridgeClient();
 		// Make sure starting out w/o connection
 		assertFalse(tpBridgeClient.isSharedObjectActive());
-		tpBridgeClient.createAndConnectClient("ecf.xmpps.smack", "tpteamtest@gmail.com", null, "tpteamtest", false);
+		
+		// Get ECF communication container
+		IContainer container = ContainerFactory.getDefault().createContainer("ecf.xmpps.smack");
+		// Create the targetID 
+		ID targetID = IDFactory.getDefault().createID(
+				container.getConnectNamespace(), "tpteamtest@gmail.com");
+		// Get security context
+		IConnectContext connectContext = ConnectContextFactory
+		.createPasswordConnectContext("hufogani_test");
+		
+		// Now get connection
+		tpBridgeClient.connect(container, targetID, connectContext);
+		
 		// Confirm connection made successfully by SharedObject being active
 		assertTrue(tpBridgeClient.isSharedObjectActive());
-		Thread.sleep(10000);
+
 	}
 
 }

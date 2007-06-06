@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Testplugin Plug-in
+Bundle-SymbolicName: edu.harvard.fas.rbrady.tpteam.testplugin
+Bundle-Version: 1.0.0
+Bundle-Activator: edu.harvard.fas.rbrady.tpteam.testplugin.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.hyades.test.tools.core,
+ org.junit,
+ org.eclipse.ecf,
+ org.eclipse.ecf.discovery,
+ org.eclipse.ecf.identity,
+ org.eclipse.ecf.presence,
+ org.eclipse.ecf.provider,
+ org.eclipse.ecf.provider.xmpp,
+ org.eclipse.ecf.sharedobject,
+ edu.harvard.fas.rbrady.tpteam.tpbridge,
+ edu.harvard.fas.rbrady.tpteam.tpbuddy,
+ org.eclipse.equinox.event,
+ org.eclipse.osgi.services,
+ org.eclipse.osgi.util
+Eclipse-LazyStart: true

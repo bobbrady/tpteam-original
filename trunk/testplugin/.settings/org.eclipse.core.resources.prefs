@@ -1,0 +1,18 @@
+#Sat May 05 16:50:29 EDT 2007
+eclipse.preferences.version=1
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/bridge/test/TestTPBridge.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/hibernate/test/TestTPTeamTest.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/model/test/TestTPEntity.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/model/test/TestTPEvent.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbridge/model/test/TestTreeNodeModel.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbuddy/eventadmin/test/TestEventAdmin.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpbuddy/tpbridge/test/TestTPBridgeClient.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestChartUtil.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestProjectUtil.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestTPEventTestCRUD.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestTPEventTestExec.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/TestTestUtil.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestServletUtil.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestViewProduct.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestViewProject.java=UTF-8
+encoding//src/edu/harvard/fas/rbrady/tpteam/tpmanager/http/test/TestViewUser.java=UTF-8

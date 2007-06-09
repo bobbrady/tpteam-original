@@ -81,7 +81,7 @@ public class ViewUser2 extends ServletUtil {
 			}
 			Session s = null;
 			if (Activator.getDefault() != null) {
-				Activator.getDefault().getHiberSessionFactory()
+				s = Activator.getDefault().getHiberSessionFactory()
 						.getCurrentSession();
 			} else {
 				// For standalone

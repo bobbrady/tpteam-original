@@ -60,6 +60,14 @@
             label="TPTeam"
             visible="true">
          <action
+      		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.ExitAction"
+               icon="icons/exit.gif"
+               id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.eventhistoryaction"
+               label="Exit"
+               style="push"
+               toolbarPath="edu.harvard.fas.rbrady.tpteam.tpbuddy.topseparator"               
+               tooltip="Exit TPBuddy"/>   
+         <action
       		   class="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.EventHistoryAction"
                icon="icons/event_message.gif"
                id="edu.harvard.fas.rbrady.tpteam.tpbuddy.actions.eventhistoryaction"

@@ -7,6 +7,7 @@
  * Contents	:	DML statements for inital TPTeam seed data
  * 
  ********************************************************************/
+USE TPTEAM;
 
 /* Initial Roles, used by web interface */
 
@@ -18,6 +19,8 @@ INSERT INTO ROLE (ROLE_ID, NAME, DESCRIPTION)
 
 /* Initial administrative user, for web interface 
    Note: Passwords are SHA1 hashes */
+   
+/* Inital password is "tpteam" for admin user tpteam1 */
 
 INSERT INTO TPTEAM_USER (ID, USER_NAME, PASSWORD, ROLE_ID) 
 	VALUES (1, 'tpteam1',  '84FE0D304EE0B3D09C860FA4544E17C5D94D29E0',1);

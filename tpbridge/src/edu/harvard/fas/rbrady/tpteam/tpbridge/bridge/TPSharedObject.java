@@ -1,15 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	TPSharedObject.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Implementation of the SharedObject for TPTeam 
+ * 				Messaging
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.bridge;
 
 import java.util.Observable;
-
 import org.eclipse.ecf.core.events.IContainerConnectedEvent;
 import org.eclipse.ecf.core.events.IContainerDisconnectedEvent;
 import org.eclipse.ecf.core.identity.ID;
@@ -22,33 +23,59 @@ import org.eclipse.ecf.core.sharedobject.events.ISharedObjectDeactivatedEvent;
 import org.eclipse.ecf.core.sharedobject.events.ISharedObjectMessageEvent;
 import org.eclipse.ecf.core.util.Event;
 
-
+/*******************************************************************************
+ * File 		: 	TPSharedObject.java
+ * 
+ * Description 	: 	Implementation of the SharedObject for TPTeam 
+ * 					Messaging
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TPSharedObject extends Observable implements ISharedObject {
 
+	/** The ECF Configuration of the shared object */
     ISharedObjectConfig config = null;
     
+    /**
+     * Default Constructor
+     */
     public TPSharedObject() {
         super();
     }
+    
+    /**
+     * Getter 
+     * @return The ECFID of the shared object
+     */
     protected ID getID() {
         return config.getSharedObjectID();
     }
+    
+    /**
+     * Getter
+     * @return The ECF context of the shared object
+     */
     protected ISharedObjectContext getContext() {
         if (config == null) return null;
         else return config.getContext();
     }
-    /* (non-Javadoc)
-     * @see org.eclipse.ecf.core.ISharedObject#init(org.eclipse.ecf.core.ISharedObjectConfig)
+
+    /**
+     * Initializes the shared object
      */
     public void init(ISharedObjectConfig initData)
             throws SharedObjectInitException {
         this.config = initData;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ecf.core.ISharedObject#handleEvent(org.eclipse.ecf.core.util.Event)
+    /**
+     * Handles the all possible ECF Events that the shared object
+     * may experience from its ECF communications container
      */
     public void handleEvent(Event event) {
+    	// First handle info type events
         if (event instanceof ISharedObjectActivatedEvent) {
             System.out.println("HELLO WORLD from "+getID()+".  I'm activated!");
         } else if (event instanceof ISharedObjectDeactivatedEvent) {
@@ -57,22 +84,15 @@ public class TPSharedObject extends Observable implements ISharedObject {
             System.out.println("Remote "+((IContainerConnectedEvent)event).getTargetID()+" joined!");
         } else if (event instanceof IContainerDisconnectedEvent) {
             System.out.println("Remote "+((IContainerDisconnectedEvent)event).getTargetID()+" departed!");
+        // Now handle TPTeam Events that need to be acted upon by observing objects
         } else if (event instanceof ISharedObjectMessageEvent) {
             setChanged();
             notifyObservers(event);
         }
-        /*
-        ID[] objectIDs = getContext().getSharedObjectManager().getSharedObjectIDs();
-        for(ID myID : objectIDs)
-        {
-        	System.out.println("SharedObjectMgr, SharedObject ID: " + myID.getName() );
-        }
-        System.out.println("\n\n");
-        */
     }
-    
-    /* (non-Javadoc)
-     * @see org.eclipse.ecf.core.ISharedObject#handleEvents(org.eclipse.ecf.core.util.Event[])
+
+    /**
+     * Handles many ECF Events at once
      */
     public void handleEvents(Event[] events) {
         for(int i=0; i < events.length; i++) {
@@ -80,15 +100,15 @@ public class TPSharedObject extends Observable implements ISharedObject {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ecf.core.ISharedObject#dispose(org.eclipse.ecf.core.identity.ID)
+    /**
+     * Dispose of this shared object
      */
     public void dispose(ID containerID) {
         this.config = null;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ecf.core.ISharedObject#getAdapter(java.lang.Class)
+    /**
+     * Required ECF ISharedObject interface method, not used.
      */
     @SuppressWarnings("unchecked")
 	public Object getAdapter(Class clazz) {

@@ -1,4 +1,16 @@
+<!--
+	File		:	chartdatapoint.betwixt
+	
+	Author		: 	Bob Brady, rpbrady@gmail.com
+	
+	Contents	:	Betwixt custom serialization file
+					for ChartDataPoint objects
+-->
 <?xml version='1.0' encoding='UTF-8' ?>
+<!-- 
+	Put all Java primitive types as attributes within
+    top-level tag
+-->
 <info primitiveTypes="attribute">
 <element name='chartDataPoint'>
 <addDefaults/>

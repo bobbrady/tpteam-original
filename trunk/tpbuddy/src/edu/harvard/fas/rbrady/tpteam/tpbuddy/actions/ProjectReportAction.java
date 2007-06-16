@@ -34,6 +34,7 @@ public class ProjectReportAction extends ActionDelegate implements
 
 	private IWorkbenchWindow window;
 
+	/** The ID of the ReportView */
 	private final String viewID = ReportView.ID;
 
 	public void run() {

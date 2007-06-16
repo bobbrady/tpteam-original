@@ -35,6 +35,7 @@ public class TestDetailAction extends ActionDelegate implements
 
 	private IWorkbenchWindow window;
 
+	/** The ID of the DetailView */
 	private final String viewID = DetailView.ID;
 
 	public void run() {

@@ -33,6 +33,7 @@ public class TestTreeAction extends ActionDelegate implements
 		IWorkbenchWindowActionDelegate {
 	
 	private IWorkbenchWindow window;
+	/** The ID of the TestView */
 	private final String viewID = TestView.ID;
 
 	public void run() {

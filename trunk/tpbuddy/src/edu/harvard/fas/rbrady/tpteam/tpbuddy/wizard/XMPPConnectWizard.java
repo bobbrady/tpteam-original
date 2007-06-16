@@ -1,7 +1,16 @@
+/********************************************************************
+ * 
+ * File		:	XMPPConnectWizard.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a Wizard dialog for connecting to an XMPP
+ * 				account
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.wizard;
 
 import java.util.StringTokenizer;
-
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.IDCreateException;
@@ -20,31 +29,39 @@ import org.eclipse.ui.IWorkbench;
 import org.jivesoftware.smack.GoogleTalkConnection;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.TPBridgeClient;
 
+/*******************************************************************************
+ * File 		: 	XMPPConnectWizard.java
+ * 
+ * Description 	: 	Provides a Wizard dialog for connecting to an XMPP
+ * 					account
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class XMPPConnectWizard extends Wizard implements IConnectWizard {
 
 	/** Default ECF Connection Container Type */
 	public static final String CONTAINER_TYPE = "ecf.xmpps.smack";
-	
 	/** Default Google Talk Server */
 	public static final String GOOGLE_TALK_HOST = "gmail.com";
-
+	/** The XMPPConnectWizard page used for collecting data */
 	XMPPConnectWizardPage page;
-
+    /** The parent Shell */
 	private Shell shell;
-
 	/** The ECF Communication Container to be connected */
 	private IContainer container;
-
 	/** Ecf ID of user */
 	private ID targetID;
-
 	/** User ECF Security Context */
 	private IConnectContext connectContext;
 
+	/**
+	 * Adds Wizard pages to the Wizard 
+	 */
 	public void addPages() {
 		page = new XMPPConnectWizardPage();
 		addPage(page);
@@ -122,9 +139,9 @@ public class XMPPConnectWizard extends Wizard implements IConnectWizard {
 	 * Helper method to determine if a Google Talk 
 	 * connection userName/Password is a valid pair
 	 * 
-	 * @param userName
-	 * @param password
-	 * @return
+	 * @param userName the name of the Google Talk account
+	 * @param password the password of the Google Talk account
+	 * @return true if the connection is valid, false otherwise
 	 */
 	private boolean isGoogleTalkConnValid(String userName, String password) {
 		GoogleTalkConnection gtc;
@@ -146,10 +163,10 @@ public class XMPPConnectWizard extends Wizard implements IConnectWizard {
 	 * connection userName/Password is a valid pair
 	 * for a given hostName
 	 * 
-	 * @param hostName
-	 * @param userName
-	 * @param password
-	 * @return
+	 * @param hostName name of the XMPP server host
+	 * @param userName name of the XMPP account
+	 * @param password password of the XMPP account
+	 * @return true if the connection is valid, false otherwise
 	 */
 	private boolean isXMPPConnValid(String hostName, String userName,
 			String password) {

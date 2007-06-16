@@ -42,7 +42,7 @@ public class EventAdminClient {
 	}
 
 	/**
-	 * 
+	 * Sends an OSGi Event to the OSGi EventAdmin Service
 	 * @param topic the event topic String
 	 * @param dictionary a table of key=value pairs
 	 * @return true if message sent successfully, false otherwise

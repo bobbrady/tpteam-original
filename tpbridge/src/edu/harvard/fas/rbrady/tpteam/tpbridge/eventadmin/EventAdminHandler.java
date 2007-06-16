@@ -41,7 +41,7 @@ public class EventAdminHandler implements EventHandler, Observer {
 
 	/** Table of key=value pairs of the OSGi Event */
 	private Hashtable<String, String[]> mDictionary = new Hashtable<String, String[]>();
-	/** A list log of all TPEvents received */
+	/** A List log of all TPEvents received */
 	private ArrayList<TPEvent> mEvents;
 
 	/**

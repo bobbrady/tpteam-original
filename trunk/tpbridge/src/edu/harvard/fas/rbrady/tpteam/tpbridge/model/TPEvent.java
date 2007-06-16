@@ -1,66 +1,66 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	TPEvent.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A serializable object that contains information about
+ * 				TPTeam CRUD and execution events
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.model;
 
 import java.io.Serializable;
 import java.util.Hashtable;
-
 import org.osgi.service.event.Event;
 
+/*******************************************************************************
+* File 			:  	TPEvent.java
+* 
+* Description 	: 	A serializable object that contains information about
+* 					TPTeam CRUD and execution events
+* 
+* @author Bob Brady, rpbrady@gmail.com
+* @version $Revision$
+* @date $Date$ Copyright (c) 2007 Bob Brady
+******************************************************************************/
 public class TPEvent implements Serializable {
 
+	// Fields 
 	private static final long serialVersionUID = 7318549536622346381L;
-
+	// Helper keys used to perform look-ups in dicitonary
 	public static final String PROJECT_KEY = "PROJECT";
-
 	public static final String PROJECT_ID_KEY = "PROJ_ID";
-
 	public static final String PROJ_PROD_XML_KEY = "PROD_PROJ_XML";
-
 	public static final String TEST_XML_KEY = "TEST_XML";
-
 	public static final String TEST_TREE_XML_KEY = "TEST_TREE_XML";
-
 	public static final String TEST_EXEC_XML_KEY = "TEST_EXEC_XML";
-
 	public static final String TEST_PROP_XML_KEY = "TEST_PROP_XML";
-
 	public static final String CHART_DATASET_XML_KEY = "CHART_DATASET_XML_KEY";
-
-	public static final String PARENT_CONTAINER_KEY = "PARENT_CONTAINER";
-
 	public static final String VERDICT_KEY = "VERDICT";
-
 	public static final String TEST_NAME_KEY = "TEST_NAME";
-
 	public static final String TEST_DESC_KEY = "TEST_DESC";
-
 	public static final String TIMESTAMP_KEY = "TIMESTAMP";
-
 	public static final String COMMENTS_KEY = "COMMENTS";
-
+	/** The ID from the TPTeam Database */
 	public static final String ID_KEY = "ID";
-
+	/** The ID of the parent entity from the TPTeam database */
 	public static final String PARENT_ID_KEY = "PARENT_ID";
-
 	public static final String ECFID_KEY = "ECFID";
-
 	public static final String STATUS_KEY = "STATUS";
-
+	/** The ECF ID of the intended recipient */
 	public static final String SEND_TO = "SEND_TO";
-
+	/** The ECF ID of the sender */
 	public static final String FROM = "FROM";
-
+	/** The table of key=value pairs */
 	private Hashtable<String, String> mDictionary;
-
+	/** The topic of the event */
 	private String mTopic;
 
+	/**
+	 * Constructor
+	 * @param event The corresponding OSGi Event
+	 */
 	public TPEvent(Event event) {
 		mDictionary = new Hashtable<String, String>();
 		for (String propName : event.getPropertyNames())
@@ -69,23 +69,19 @@ public class TPEvent implements Serializable {
 		mTopic = event.getTopic();
 	}
 
-	public TPEvent(String topic, String project, String parent, String name,
-			String id, String status) {
-		mDictionary = new Hashtable<String, String>();
-		mDictionary.put(PROJECT_KEY, project);
-		mDictionary.put(PARENT_CONTAINER_KEY, parent);
-		mDictionary.put(TEST_NAME_KEY, name);
-		mDictionary.put(ID_KEY, id);
-		mDictionary.put(STATUS_KEY, status);
-		mTopic = topic;
-	}
-
+	/**
+	 * Constructor 
+	 * @param topic the topic of the TPTeam event
+	 * @param dictionary map of key=value pairs
+	 */
 	public TPEvent(String topic, Hashtable<String, String> dictionary) {
 
 		mDictionary = dictionary;
 		mTopic = topic;
 	}
 
+	// Public accessors
+	
 	public void setTopic(String topic) {
 		mTopic = topic;
 	}
@@ -100,10 +96,6 @@ public class TPEvent implements Serializable {
 
 	public String getProject() {
 		return (String) mDictionary.get(PROJECT_KEY);
-	}
-
-	public String getParentContainer() {
-		return (String) mDictionary.get(PARENT_CONTAINER_KEY);
 	}
 
 	public String getTestName() {

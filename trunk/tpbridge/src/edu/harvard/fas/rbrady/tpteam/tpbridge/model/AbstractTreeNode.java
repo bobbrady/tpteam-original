@@ -1,20 +1,41 @@
+/********************************************************************
+ * 
+ * File		:	AbstractTreeNode.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Base class for tree nodes
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*******************************************************************************
+ * File 		:  	AbstractTreeNode.java
+ * 
+ * Description 	: 	Base class for tree nodes
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public abstract class AbstractTreeNode implements ITreeNode {
 
+	/** The TPTeam ID of the tree node */
 	private String mID;
-
+	/** The TPTeam name of the tree node */
 	private String mName;
-
+	/** The parent of this tree node */
 	private ITreeNode mParent = null;
-
+	/** List of all listeners of this tree node */
 	private List<ITreeNodeChangeListener> mChangeListeners;
-	
+	/** The children of this tree node */
 	private List<ITreeNode> mChildren = new ArrayList<ITreeNode>();
+	
+	// Property accessors
 	
 	public List<ITreeNode> getChildren() {
 		return mChildren;
@@ -111,16 +132,32 @@ public abstract class AbstractTreeNode implements ITreeNode {
 		return mChangeListeners;
 	}
 
+	/**
+	 * Notifies all listeners when this node has had
+	 * one of its properties updated
+	 */
 	protected void fireNodeUpdated() {
 		for (ITreeNodeChangeListener listener : getChangedListeners())
 			listener.updateNode(this);
 	}
 
+	/**
+	 * Notifies all listeners when this node adds 
+	 * a child node
+	 * 
+	 * @param child the child tree node to be added
+	 */
 	protected void fireNodeAdded(ITreeNode child) {
 		for (ITreeNodeChangeListener listener : getChangedListeners())
 			listener.addNode(child);
 	}
 
+	/**
+	 * Notifies all listeners when this node deletes
+	 * a child node
+	 * 
+	 * @param child the child tree node to be deleted
+	 */
 	protected void fireNodeDeleted(ITreeNode child) {
 		for (ITreeNodeChangeListener listener : getChangedListeners()) {
 			System.out.println("Node " + this.getName() + " fireNodeDeleted");

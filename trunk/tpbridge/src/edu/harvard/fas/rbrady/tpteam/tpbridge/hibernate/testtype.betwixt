@@ -1,5 +1,22 @@
+<!--
+	File		:	test.betwixt
+	
+	Author		: 	Bob Brady, rpbrady@gmail.com
+	
+	Contents	:	Betwixt custom serialization file
+					for Test objects
+-->
 <?xml version='1.0' encoding='UTF-8' ?>
+<!--
+	Put all Java primitive types into the top-level
+	tag as attributes
+-->
 <info primitiveTypes="attribute">
+<!--
+	Do not include all tests having the given 
+	test type, the test type ID, or test type
+	description as part of the serialization
+-->
 <hide property="tests" />
 <hide property="id" />
 <hide property="description" />

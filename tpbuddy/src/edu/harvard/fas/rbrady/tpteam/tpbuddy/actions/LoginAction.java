@@ -1,11 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2005 Ed Burnette, Composent, Inc. and others. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
  * 
- * Contributors: Ed Burnette, Composent, Inc. - initial API and implementation
- ******************************************************************************/
+ * File		:	LoginAction.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Action that displays the XMPPConnectionWizard dialog
+ * 				so that user may login to TPTeam
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.actions;
 
 import org.eclipse.ecf.core.ContainerCreateException;
@@ -20,9 +22,18 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionDelegate;
-
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.wizard.XMPPConnectWizard;
 
+/*******************************************************************************
+ * File : LoginAction.java
+ * 
+ * Description : Action that displays the XMPPConnectionWizard dialog so that
+ * user may login to TPTeam
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ******************************************************************************/
 public class LoginAction extends ActionDelegate implements
 		IWorkbenchWindowActionDelegate {
 
@@ -33,24 +44,20 @@ public class LoginAction extends ActionDelegate implements
 		return PlatformUI.getWorkbench();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
 	 */
 	public void dispose() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
 	 */
 	public void init(IWorkbenchWindow window) {
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Opens an XMPPConnectWizard dialog so that a user may login to TPTeam
 	 * 
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
@@ -58,9 +65,13 @@ public class LoginAction extends ActionDelegate implements
 		// Create the wizard dialog
 		IContainer container = null;
 		try {
-			container = ContainerFactory.getDefault().createContainer(XMPPConnectWizard.CONTAINER_TYPE);
+			container = ContainerFactory.getDefault().createContainer(
+					XMPPConnectWizard.CONTAINER_TYPE);
 		} catch (ContainerCreateException e) {
-			MessageDialog.openError(getWorkbench().getActiveWorkbenchWindow().getShell(), "Create Error", "Could not create XMPP container.\n\nError: "+e.getLocalizedMessage());
+			MessageDialog.openError(getWorkbench().getActiveWorkbenchWindow()
+					.getShell(), "Create Error",
+					"Could not create XMPP container.\n\nError: "
+							+ e.getLocalizedMessage());
 		}
 		XMPPConnectWizard connectWizard = new XMPPConnectWizard();
 		connectWizard.init(getWorkbench(), container);

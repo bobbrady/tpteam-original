@@ -1,3 +1,14 @@
+/********************************************************************
+ * 
+ * File		:	LineChart.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	TPTeam implementation of a lne chart showing the 
+ * 				time history of test executions for the given 
+ * 				project
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.charts;
 
 import java.awt.Color;
@@ -5,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
@@ -17,17 +27,37 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 
+/*************************************************************************
+ * File 		: 	LineChart.java
+ * 
+ * Description 	: 	TPTeam implementation of a lne chart showing the 
+ * 					time history of test executions for the given 
+ * 					project
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ***********************************************************************/
 public class LineChart extends AbstractChart {
 
+	/** Number of days in the time history window to be plotted */
 	public static final int NUM_DAYS_IN_SERIES = 30;
 
+	/**
+	 * Default Constructor
+	 */
 	private LineChart() {
 	}
 
+	/**
+	 * Gets the static instance of the LineChart for
+	 * faster rendering time
+	 * 
+	 * @return the LineChart instance
+	 */
 	public static synchronized AbstractChart getInstance() {
 		if(mCharts.get(LineChart.class) == null)
 		{

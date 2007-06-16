@@ -1,8 +1,18 @@
+/********************************************************************
+ * 
+ * File		:	BarChart.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	TPTeam implementation of a bar chart showing the 
+ * 				project distribution of test executions by TPTeam 
+ * 				user
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.charts;
 
 import java.awt.Color;
 import java.util.Arrays;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -14,16 +24,35 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 
+/*************************************************************************
+ * File 		: 	BarChart.java
+ * 
+ * Description 	: 	TPTeam implementation of a bar chart showing the 
+ * 					distribution of project test executions by 
+ * 					TPTeam user
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ************************************************************************/
 public class BarChart extends AbstractChart {
 
+	/**
+	 * Default Constructor
+	 */
 	private BarChart() {
 	}
 
+	/**
+	 * Gets the static instance of the BarChart for
+	 * faster rendering time
+	 * 
+	 * @return the BarChart instance
+	 */
 	public static synchronized AbstractChart getInstance() {
 		if(mCharts.get(BarChart.class) == null)
 		{

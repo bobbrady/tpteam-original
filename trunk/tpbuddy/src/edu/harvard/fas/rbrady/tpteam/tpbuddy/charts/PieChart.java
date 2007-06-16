@@ -1,21 +1,50 @@
+/********************************************************************
+ * 
+ * File		:	PieChart.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	TPTeam implementation of a pie chart showing the 
+ * 				top-level current snapshot of test execution status 
+ * 				for the given project
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.charts;
 
 import java.util.List;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DefaultPieDataset;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 
+/*************************************************************************
+ * File 		: 	PieChart.java
+ * 
+ * Description 	: 	TPTeam implementation of a pie chart showing the 
+ * 					top-level current snapshot of test execution status 
+ * 					for the given project
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ***********************************************************************/
 public class PieChart extends AbstractChart {
 
+	/**
+	 * Default Constructor
+	 */
 	private PieChart() {
 	}
 
+	/**
+	 * Gets the static instance of the PieChart for
+	 * faster rendering time
+	 * 
+	 * @return the PieChart instance
+	 */
 	public static synchronized AbstractChart getInstance() {
 		if(mCharts.get(PieChart.class) == null)
 		{
@@ -39,6 +68,12 @@ public class PieChart extends AbstractChart {
 		return dataset;
 	}
 
+	/**
+	 * Gets the data set in JFreeChart format
+	 * 
+	 * @param dataSet the TPTeam set of data points
+	 * @return the data points in JFreeChart abstract form
+	 */
 	public AbstractDataset createDataset(ChartDataSet[] dataSet) {
 		List<ChartDataPoint> dataPoints = dataSet[0].getChartDataPoints();
 		ChartDataPoint dataPoint = dataPoints.get(0);
@@ -83,6 +118,13 @@ public class PieChart extends AbstractChart {
 		return chart;
 	}
 
+	/**
+	 * Creates a pie chart sliced by test execution status
+	 * 
+	 * @param dataSet the set of data points
+	 * @param projName the name of the TPTeam test project
+	 * @return a JFreeChart pie chart 
+	 */
 	public JFreeChart createChart(ChartDataSet[] dataSet, String projName) {
 
 		DefaultPieDataset dataset = (DefaultPieDataset) createDataset(dataSet);

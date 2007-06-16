@@ -135,6 +135,11 @@ public class LineChart extends AbstractChart {
 		return chart;
 	}
 
+	/**
+	 * Helper method to create a sample time series
+	 * @param seriesName
+	 * @return
+	 */
 	private TimeSeries createTimeSeries(String seriesName) {
 		Calendar cal = Calendar.getInstance();
 		Date today = new Date();
@@ -156,6 +161,13 @@ public class LineChart extends AbstractChart {
 
 	}
 
+	/**
+	 * Helper method to create the chart time series
+	 * 
+	 * @param dataSet the chart data set
+	 * @param seriesName the name of the time series
+	 * @return a JFreeChart representation of the time series
+	 */
 	private TimeSeries createTimeSeries(ChartDataSet dataSet, String seriesName) {
 		TimeSeries timeSeries = new TimeSeries(seriesName, Day.class);
 		List<ChartDataPoint> dataPoints = dataSet.getChartDataPoints();

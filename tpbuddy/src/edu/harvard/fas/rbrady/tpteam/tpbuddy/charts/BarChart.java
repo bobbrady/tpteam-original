@@ -181,6 +181,14 @@ public class BarChart extends AbstractChart {
 
 	}
 
+	/**
+	 * Creates a bar chart of test execution status for
+	 * each user in a project
+	 * 
+	 * @param dataSets the chart data points
+	 * @param projName the name of the test project
+	 * @return the bar chart 
+	 */
 	public JFreeChart createChart(ChartDataSet[] dataSets, String projName) {
 
 		CategoryDataset dataset = (CategoryDataset) createDataset(dataSets);

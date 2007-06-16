@@ -1,21 +1,45 @@
+/********************************************************************
+ * 
+ * File		:	TestExecutionXML.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Contains various utility methods for the
+ * 				XML serialization and deserialization of 
+ * 				TestExecution objects.
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.xml;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.util.Date;
-import java.util.Hashtable;
-
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.betwixt.io.BeanWriter;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.AbstractTreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNodeChangeListener;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
+/**********************************************************************
+ * File 		: 	TestExecutionXML.java
+ * 
+ * Description 	: 	Contains various utility methods for the XML 
+ * 					serialization and deserialization of TestExecution 
+ * 					objects.
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ***********************************************************************/
 public class TestExecutionXML {
 
+	/**
+	 * Extracts a TestExecution TPEntity from a TPEvent
+	 * 
+	 * @param tpEvent the TPEvent
+	 * @return the corresponding TPEntity
+	 */
 	public static TPEntity getTPEntityFromExecEvent(TPEvent tpEvent)
 	{
 		TPEntity tpEntity = null;
@@ -38,6 +62,12 @@ public class TestExecutionXML {
 		return tpEntity;
 	}
 	
+	/**
+	 * Gets the TestExecution TPEntity name based on the 
+	 * execution verdict, timestamp, and execution ID
+	 * @param tpEvent the TPEvent
+	 * @return the TPEntity name
+	 */
 	private static String getExecEntityName(TPEvent tpEvent)
 	{
 		StringBuilder nameBuffer = new StringBuilder();
@@ -48,6 +78,11 @@ public class TestExecutionXML {
 		return nameBuffer.toString();
 	}
 	
+	/**
+	 * Gets the String XML serialization of the TPEntity
+	 * @param tpEntity the TPEntity to be serialized
+	 * @return the String XML serialization
+	 */
 	public static String getTPEntityXML(TPEntity tpEntity)
 	{
 		ByteArrayOutputStream baos = null;
@@ -66,6 +101,13 @@ public class TestExecutionXML {
 		return baos.toString();
 	}
 	
+	/**
+	 * Reconstitutes the TPEntity object from its
+	 * given String XML serialization
+	 * 
+	 * @param entityXML the String XML serialization
+	 * @return the reconstituted TPEntity object
+	 */
 	public static TPEntity getTPEntityFromXML(String entityXML)
 	{
 		TPEntity tpEntity = null;
@@ -85,25 +127,4 @@ public class TestExecutionXML {
 		}
 		return tpEntity;
 	}
-	
-	
-		public static void main(String[] args)
-	{
-		String topic = "test_topic";
-		Hashtable<String, String> dict = new Hashtable<String, String>();
-		dict.put(TPEvent.ID_KEY, TPEntity.EXEC + "_" + "2");
-		dict.put(TPEvent.PARENT_ID_KEY, "1");
-		dict.put(TPEvent.VERDICT_KEY, "pass");
-		dict.put(TPEvent.TIMESTAMP_KEY, new Date().toString());
-		dict.put(TPEvent.ECFID_KEY, "foobar.gmail.com");
-		TPEvent tpEvent = new TPEvent(topic, dict);
-
-		String xml = getTPEntityXML(getTPEntityFromExecEvent(tpEvent));
-		System.out.println("TPEntity XML:\n" + xml);
-		
-		TPEntity tpEntity = getTPEntityFromXML(xml);
-		System.out.println("TPEntity ID: " + tpEntity.getID() + ", Name: " + tpEntity.getName() + ", ParentID: " 
-				+ tpEntity.getParent().getID());
-	}
-
 }

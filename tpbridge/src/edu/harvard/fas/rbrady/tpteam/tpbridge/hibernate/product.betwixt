@@ -1,4 +1,16 @@
+<!--
+	File		:	product.betwixt
+	
+	Author		: 	Bob Brady, rpbrady@gmail.com
+	
+	Contents	:	Betwixt custom serialization file
+					for Product objects
+-->
 <?xml version='1.0' encoding='UTF-8' ?>
+<!--
+	Put all Java primitive types into the top-level
+	tag as attributes
+-->
 <info primitiveTypes="attribute">
 <element name='product'>
 <addDefaults/>

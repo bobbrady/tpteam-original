@@ -10,9 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
-import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
-
 public class HibernatTests {
 
 	public static void main(String[] args) {
@@ -233,48 +230,6 @@ public class HibernatTests {
 		}
 	}
 
-	public static void getTPEventSendTo(int id) throws Exception {
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction tx = null;
-		try {
-
-			tx = s.beginTransaction();
-			Test test = (Test) s.load(Test.class, new Integer(id));
-
-			TPEvent tpEvent = new TPEvent(ITPBridge.TEST_EXEC_RESULT_TOPIC,
-					"Demo Project (TPTeam)", "user", test.getName(), String
-							.valueOf(id), "status");
-
-			// Add all project user's ECF IDs to SEND_TO field of event
-			Project proj = (Project) s.load(Project.class, new Integer(test
-					.getProject().getId()));
-			StringBuffer userECF = new StringBuffer();
-			for (TpteamUser user : proj.getTpteamUsers()) {
-				if (userECF.length() == 0)
-					userECF.append(user.getEcfId());
-				else
-					userECF.append("/" + user.getEcfId());
-			}
-			tpEvent.getDictionary().put(TPEvent.SEND_TO, userECF.toString());
-
-		
-			String sendTo = tpEvent.getDictionary().get(TPEvent.SEND_TO);
-			System.out.println("sendTo: " + sendTo);
-			String[] ECFIDs = sendTo.split("/");
-			for (String ECFID : ECFIDs) {
-				System.out.println("TPBridge.sendECFTPMsg: sent event "
-						+ tpEvent.getTestName() + " to " + ECFID);
-			}
-
-			s.flush();
-
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-			throw e;
-		}
-	}
 
 	@SuppressWarnings("unchecked")
 	public static void getTpteamUser(int id) throws Exception {

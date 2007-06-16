@@ -1,12 +1,36 @@
+/********************************************************************
+ * 
+ * File		:	TreeNodeModel.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A container for ITreeNode objects that provides
+ * 				O(1) look-ups and listens for ITreeNode events for
+ * 				automated updating of its model
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.model;
 
 import java.util.HashMap;
 
+/*******************************************************************************
+* File 			:  	TreeNodeModel.java
+* 
+* Description 	: 	A container for ITreeNode objects that provides
+* 					O(1) look-ups and listens for ITreeNode events for
+* 					automated updating of its model
+* 
+* @author Bob Brady, rpbrady@gmail.com
+* @version $Revision$
+* @date $Date$ Copyright (c) 2007 Bob Brady
+******************************************************************************/
 public class TreeNodeModel extends HashMap<String, ITreeNode> implements
 		ITreeNodeChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
+	// Public accessors
+	
 	public ITreeNode put(String key, ITreeNode node) {
 		node.addChangeListener(this);
 		return super.put(key, node);
@@ -39,6 +63,11 @@ public class TreeNodeModel extends HashMap<String, ITreeNode> implements
 		// NOOP
 	}
 
+	/**
+	 * Removes this TreeNodeModel as a listener
+	 * from all contained nodes, then clears its
+	 * HashMap
+	 */
 	public void clear() {
 		for (String key : keySet()) {
 			removeListenerFrom(get(key));
@@ -46,6 +75,12 @@ public class TreeNodeModel extends HashMap<String, ITreeNode> implements
 		super.clear();
 	}
 
+	/**
+	 * Removes this TreeNodeModel as a listener 
+	 * from the given ITreeNode
+	 * 
+	 * @param node the ITreeNode
+	 */
 	protected void removeListenerFrom(ITreeNode node) {
 		node.removeChangeListener(this);
 		for (ITreeNode child : node.getChildren()) {
@@ -53,6 +88,12 @@ public class TreeNodeModel extends HashMap<String, ITreeNode> implements
 		}
 	}
 
+	/**
+	 * Adds this TreeNodeModel as a listener 
+	 * to the given ITreeNode
+	 * 
+	 * @param node the ITreeNode
+	 */
 	protected void addListenerTo(ITreeNode node) {
 		node.addChangeListener(this);
 		for (ITreeNode child : node.getChildren()) {

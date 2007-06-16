@@ -1,5 +1,21 @@
+<!--
+	File		:	test.betwixt
+	
+	Author		: 	Bob Brady, rpbrady@gmail.com
+	
+	Contents	:	Betwixt custom serialization file
+					for Test objects
+-->
 <?xml version='1.0' encoding='UTF-8' ?>
+<!--
+	Put all Java primitive types into the top-level
+	tag as attributes
+-->
 <info primitiveTypes="attribute">
+<!--
+	Do not include test executions as part of
+	the serialization
+-->
 <hide property="testExecutions" />
 <element name='test'>
 <addDefaults/>

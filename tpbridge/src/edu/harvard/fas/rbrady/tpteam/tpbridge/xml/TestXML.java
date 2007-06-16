@@ -1,3 +1,14 @@
+/********************************************************************
+ * 
+ * File		:	TestXML.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Contains various utility methods for the
+ * 				XML serialization and deserialization of 
+ * 				Test objects.
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbridge.xml;
 
 import java.io.ByteArrayOutputStream;
@@ -5,10 +16,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.betwixt.io.BeanWriter;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
@@ -17,8 +26,26 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNodeChangeListener;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 
+/**********************************************************************
+ * File 		: 	TestXML.java
+ * 
+ * Description 	: 	Contains various utility methods for the XML 
+ * 					serialization and deserialization of Test 
+ * 					objects.
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ***********************************************************************/
 public class TestXML {
 
+	/**
+	 * Extracts a skeletonized Test TPEntity from the corresponding
+	 * TPTeam Test object
+	 * 
+	 * @param test the TPTeam Test object
+	 * @return the skeletonized TPEntity
+	 */
 	public static TPEntity getTPEntityFromTest(Test test) {
 		TPEntity tpEntity = null;
 		String id = String.valueOf(test.getId());
@@ -36,6 +63,13 @@ public class TestXML {
 
 	}
 
+	/**
+	 * Gets the String XML serialization of the 
+	 * given TPTeam Test object
+	 * 
+	 * @param test the TPTeam Test object 
+	 * @return the String XML serialization
+	 */
 	public static String getXML(Test test) {
 		ByteArrayOutputStream baos = null;
 		try {
@@ -53,6 +87,15 @@ public class TestXML {
 		return baos.toString();
 	}
 
+	/**
+	 * Gets the String XML serialization of a List of TPTeam
+	 * Test objecs
+	 * 
+	 * @param tests the List of TPTeam Test objects 
+	 * @param projName the name of the parent TPTeam 
+	 * 	test project
+	 * @return String XML serialization
+	 */
 	public static String getTPEntityXML(List<Test> tests, String projName) {
 		ArrayList<ITreeNode> tpEntities = new ArrayList<ITreeNode>();
 		TPEntity rootEntity = new TPEntity("0", projName, projName,
@@ -79,6 +122,14 @@ public class TestXML {
 		return baos.toString();
 	}
 
+	/**
+	 * Converts a TPTeam Test object into its corresponding
+	 * TPEntity and adds it as a child to the given parent
+	 * 
+	 * @param test the TPTeam Test
+	 * @param parent the TPEntity to acting as parent
+	 * @return the TPEntity object of the conversion
+	 */
 	public static TPEntity getTPEntity(Test test, TPEntity parent) {
 		TPEntity tpEntity = null;
 		String id = String.valueOf(test.getId());
@@ -103,6 +154,13 @@ public class TestXML {
 		return tpEntity;
 	}
 
+	/**
+	 * Reconstitutes a TPEntity from its String XML
+	 * serialization
+	 * 
+	 * @param entityXML the String XML serializaiton
+	 * @return the resconstituted TPEntity
+	 */
 	public static TPEntity getTPEntityFromXML(String entityXML) {
 		TPEntity tpEntity = null;
 		try {
@@ -119,6 +177,13 @@ public class TestXML {
 		return tpEntity;
 	}
 	
+	/**
+	 * Reconstitutes a TPTeam Test object from its
+	 * String XML serialization
+	 * 
+	 * @param testXML the String XML serialization
+	 * @return the reconstituted TPTeam Test object
+	 */
 	public static Test getTestFromXML(String testXML) {
 		Test test = null;
 		try {
@@ -132,6 +197,13 @@ public class TestXML {
 		return test;
 	}
 
+	/**
+	 * Gets String XML serialization of Test object's
+	 * properites, including all test executions
+	 * 
+	 * @param test the Test to be serialized
+	 * @return the String XML serialization
+	 */
 	public static String getTestPropXML(Test test) {
 		TPEntity[] tpEntities = getTPEntityTestProps(test);
 		ByteArrayOutputStream baos = null;
@@ -154,6 +226,13 @@ public class TestXML {
 
 	}
 
+	/**
+	 * Gets an array of TPEntities corresponding to the
+	 * given Test's properites
+	 * 
+	 * @param test the TPTeam Test
+	 * @return the test properties as an array of TPEntity
+	 */
 	private static TPEntity[] getTPEntityTestProps(Test test) {
 		ArrayList<TPEntity> list = new ArrayList<TPEntity>();
 
@@ -185,6 +264,15 @@ public class TestXML {
 		return (TPEntity[]) list.toArray(new TPEntity[list.size()]);
 	}
 
+	/**
+	 * Adds a simple TPEntity having type and description
+	 * properties to a list of TPEntities
+	 * 
+	 * @param list the List of TPEntities
+	 * @param type the type property of the TPEntity to be added
+	 * @param desc the description property of the TPEntity to
+	 * 	be added
+	 */
 	private static void addProp(ArrayList<TPEntity> list, String type,
 			String desc) {
 		TPEntity tpEntity = new TPEntity();
@@ -196,6 +284,13 @@ public class TestXML {
 		list.add(tpEntity);
 	}
 
+	/**
+	 * Adds the JUnit properties of a given TPTeam Test
+	 * object to a List of TPEntities
+	 * 
+	 * @param list the List of TPEntities
+	 * @param test the given Test object
+	 */
 	private static void addJunitProps(ArrayList<TPEntity> list, Test test) {
 		for (JunitTest junit : test.getJunitTests()) {
 			addProp(list, "Eclipse Home", junit.getEclipseHome());
@@ -207,6 +302,13 @@ public class TestXML {
 		}
 	}
 
+	/**
+	 * Adds the test execution properties of a given TPTeam 
+	 * Test object to a List of TPEntities
+	 * 
+	 * @param list the List of TPEntities
+	 * @param test the given Test object
+	 */
 	private static void addExecProps(ArrayList<TPEntity> list, Test test) {
 		TestExecution[] testExecs = test.getTestExecutions().toArray(new TestExecution[test.getTestExecutions().size()]); 
 		Arrays.sort(testExecs);
@@ -230,6 +332,13 @@ public class TestXML {
 		}
 	}
 
+	/**
+	 * Reconstitutes an array of Test object property TPEntities
+	 * from an XML String serialization
+	 * 
+	 * @param testPropXML the String XML serialization
+	 * @return the array of reconstituted TPEntity objects
+	 */
 	@SuppressWarnings("unchecked")
 	public static TPEntity[] getTPEntitiesFromXML(String testPropXML) {
 		ArrayList<TPEntity> tpEntities = null;
@@ -244,5 +353,4 @@ public class TestXML {
 		}
 		return (TPEntity[]) tpEntities.toArray(new TPEntity[tpEntities.size()]);
 	}
-
 }

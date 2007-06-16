@@ -35,6 +35,7 @@ public class ProjectViewAction extends ActionDelegate implements
 
 	private IWorkbenchWindow window;
 
+	/** The ID of the ProjectView */
 	private final String viewID = ProjectView.ID;
 
 	public void run() {

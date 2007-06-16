@@ -1,18 +1,19 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	ProjectView.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a view of the TPTeam projects available
+ * 				to a user
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -29,7 +30,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
@@ -38,18 +38,34 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
+/*******************************************************************************
+ * File 		: 	ProjectView.java
+ * 
+ * Description 	: 	Provides a view of the TPTeam projects available
+ * 					to a user
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ProjectView extends ViewPart implements Observer {
-
+	/** The view ID */
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.projectview";
-
+	/** The encapsulated SWT Table */
 	private Table mTable;
-
+	/** The TableView that encapsulates the SWT Table */
 	private TableViewer mTableViewer;
-
+	/** Action for requesting a project's test tree */
 	private Action mGetTestTree;
-	
+	/** Action for requesting a project's report charts */
 	private Action mGetProjReports;
 
+	/**
+	 * Constructor
+	 *
+	 * Adds this view as an observer to the TPBuddy EventAdminHandler.
+	 * Creates the test tree and report request Actions.
+	 */
 	public ProjectView() {
 		Activator.getDefault().getEventAdminHandler().addObserver(this);
 		mGetTestTree = new Action("Get Proj TestTree") {
@@ -65,6 +81,10 @@ public class ProjectView extends ViewPart implements Observer {
 
 	}
 
+	/**
+	 * Requests the test tree TPEntity from the TPManager for 
+	 * the selected project in the view. 
+	 */
 	private void getTestTreeAction() {
 		IStructuredSelection selection = (IStructuredSelection) mTableViewer
 				.getSelection();
@@ -84,6 +104,10 @@ public class ProjectView extends ViewPart implements Observer {
 
 	}
 	
+	/**
+	 * Requests the pie chart TPEntity from the TPManager for 
+	 * the selected project in the view. 
+	 */
 
 	private void getProjReportsAction() {
 		IStructuredSelection selection = (IStructuredSelection) mTableViewer
@@ -99,9 +123,7 @@ public class ProjectView extends ViewPart implements Observer {
 					.put(TPEvent.PROJECT_ID_KEY, String.valueOf(proj.getId()));
 			dictionary.put(TPEvent.PROJECT_KEY, proj.getName());
 			dictionary.put(ChartDataSet.CHART_TYPE, ChartDataSet.PIE);
-			
 			showProjReportView();
-			
 			Activator.getDefault().getEventAdminClient().sendEvent(
 					ITPBridge.CHART_GET_DATA_REQ_TOPIC, dictionary);
 		
@@ -116,10 +138,13 @@ public class ProjectView extends ViewPart implements Observer {
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Helper method that will give the test tree
+	 * view focus in the tabbed view of TPBuddy
+	 */
 	private void showTestView() {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
@@ -127,12 +152,15 @@ public class ProjectView extends ViewPart implements Observer {
 			try {
 				page.showView(TestView.ID);
 			} catch (PartInitException e) {
-
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
+	/**
+	 * Helper method that will give the report
+	 * view focus in the tabbed view of TPBuddy
+	 */
 	private void showProjReportView() {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
@@ -146,25 +174,22 @@ public class ProjectView extends ViewPart implements Observer {
 		}
 	}
 
-
+	/**
+	 * Helper class that initializes Actions 
+	 */
 	private void createActions() {
-		
 		mGetProjReports.setEnabled(true);
 		mGetProjReports.setImageDescriptor(Activator
 				.getImageDescriptor("icons/report.gif"));
-
-		
 		mGetTestTree.setEnabled(true);
 		mGetTestTree.setImageDescriptor(Activator
 				.getImageDescriptor("icons/testhier.gif"));
-
 		mTableViewer
 				.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent event) {
 						// updateAction();
 					}
 				});
-
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		mgr.add(mGetProjReports);
 		mgr.add(mGetTestTree);
@@ -175,7 +200,6 @@ public class ProjectView extends ViewPart implements Observer {
 		mTableViewer = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION);
 		initTable();
 		initColumns();
-
 		mTableViewer.setLabelProvider(new ProjectLabelProvider());
 		mTableViewer.setContentProvider(new ArrayContentProvider());
 	}
@@ -186,6 +210,10 @@ public class ProjectView extends ViewPart implements Observer {
 		mTable.setLinesVisible(true);
 	}
 
+	/**
+	 * Initializes the TableView column sizes, headers,
+	 * and other properties
+	 */
 	private void initColumns() {
 		String[] columnNames = new String[] { "ID", "Name", "Description",
 				"Product" };
@@ -206,8 +234,14 @@ public class ProjectView extends ViewPart implements Observer {
 		Activator.getDefault().getEventAdminHandler().deleteObserver(this);
 	}
 
+	/**
+	 * Update used to refresh view when a project/product get
+	 * response is received
+	 * 
+	 * @param observable the object issuing the update
+	 * @param object the TPEvent to be handled
+	 */
 	public void update(Observable observable, Object object) {
-
 		if (observable instanceof EventAdminHandler
 				&& object instanceof TPEvent
 				&& ((TPEvent) object).getTopic().equals(
@@ -215,18 +249,14 @@ public class ProjectView extends ViewPart implements Observer {
 			TPEvent tpEvent = (TPEvent) object;
 			System.out.println("ProjectView: update called for "
 					+ tpEvent.getTopic());
-
 			final List<Project> projs = ProjectXML.getProjsFromXML(tpEvent
 					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
-			
 			System.out.println(tpEvent
 					.getDictionary().get(TPEvent.PROJ_PROD_XML_KEY));
-			
 			for(Project proj : projs)
 			{
 				System.out.println("Proj Name: " + proj.getName() + ", Desc: " + proj.getDescription());
 			}
-
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					mTableViewer.setInput(projs);

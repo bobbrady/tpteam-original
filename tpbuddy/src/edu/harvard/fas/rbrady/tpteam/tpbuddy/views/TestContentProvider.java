@@ -1,27 +1,47 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	TestContentProvider.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides the content for the Test View
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNode;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.ITreeNodeChangeListener;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 
+/*******************************************************************************
+ * File 		: 	TestContentProvider.java
+ * 
+ * Description 	: 	Provides the content for the Test View
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TestContentProvider extends ArrayContentProvider implements
 		ITreeContentProvider, ITreeNodeChangeListener {
 
+	/** The Test View TreeViewer */
 	private TreeViewer mTreeViewer;
 
+	/**
+	 * Refreshes the tree when input has changed
+	 * 
+	 * @param viewer
+	 *            the TestView's TreeViewer
+	 * @param oldInput
+	 *            the old data input
+	 * @param newIput
+	 *            the new data input
+	 */
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		mTreeViewer = (TreeViewer) viewer;
 		if (oldInput != null) {
@@ -36,7 +56,11 @@ public class TestContentProvider extends ArrayContentProvider implements
 
 	/**
 	 * Because the domain model does not have a richer listener model,
-	 * recursively remove this listener from each child box of the given box.
+	 * recursively remove this listener from each child node of the given
+	 * ITreeNode.
+	 * 
+	 * @param node
+	 *            the ITreeNode
 	 */
 	protected void removeListenerFrom(ITreeNode node) {
 		node.removeChangeListener(this);
@@ -47,7 +71,10 @@ public class TestContentProvider extends ArrayContentProvider implements
 
 	/**
 	 * Because the domain model does not have a richer listener model,
-	 * recursively add this listener to each child box of the given box.
+	 * recursively add this listener to each child node of the given 
+	 * ITreeNode.
+	 * 
+	 * @param node the ITreeNode
 	 */
 	protected void addListenerTo(ITreeNode node) {
 		node.addChangeListener(this);
@@ -56,6 +83,25 @@ public class TestContentProvider extends ArrayContentProvider implements
 		}
 	}
 
+	// TreeViewer refresh operations in response to node CRUD
+	
+	public void updateNode(ITreeNode node) {
+		mTreeViewer.refresh(node.getParent(), true);
+	}
+
+	public void addNode(ITreeNode node) {
+		addListenerTo(node);
+		mTreeViewer.refresh(node.getParent(), false);
+	}
+
+	public void deleteNode(ITreeNode node) {
+		removeListenerFrom(node);
+		mTreeViewer.refresh(node.getParent(), true);
+	}
+
+
+	// Public accessors
+	
 	public Object getParent(Object child) {
 		return ((ITreeNode) child).getParent();
 	}
@@ -67,20 +113,4 @@ public class TestContentProvider extends ArrayContentProvider implements
 	public boolean hasChildren(Object parent) {
 		return ((ITreeNode) parent).getChildren().size() > 0;
 	}
-
-	public void updateNode(ITreeNode node) {
-		mTreeViewer.refresh(node.getParent(), true);
-	}
-
-	public void addNode(ITreeNode node) {
-		addListenerTo(node);
-		mTreeViewer.refresh(node.getParent(), false);
-	}
-
-	public void deleteNode(ITreeNode node) {
-		System.out.println("TestContentProvider Got message to delete node: " + node.getName());
-		removeListenerFrom(node);
-		mTreeViewer.refresh(node.getParent(), true);
-	}
-
 }

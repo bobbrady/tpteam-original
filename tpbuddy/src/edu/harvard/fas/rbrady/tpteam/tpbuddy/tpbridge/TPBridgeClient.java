@@ -7,7 +7,6 @@
  * Contents	:	Convenience client for the TPBridge OSGi Service
  * 
  ********************************************************************/
-
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge;
 
 import java.util.Hashtable;

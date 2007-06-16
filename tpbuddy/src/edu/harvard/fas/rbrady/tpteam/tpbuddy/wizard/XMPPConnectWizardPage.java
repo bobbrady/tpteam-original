@@ -1,13 +1,13 @@
-/****************************************************************************
- * Copyright (c) 2007 Remy Suen, Composent Inc., and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	XMPPConnectWizardPage.java
  *
- * Contributors:
- *    Remy Suen <remy.suen@gmail.com> - initial API and implementation
- *****************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a Wizard page for connecting to an XMPP
+ * 				account
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.wizard;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -21,17 +21,31 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/*******************************************************************************
+* File 			: 	XMPPConnectWizardPage.java
+* 
+* Description 	: 	Provides a Wizard page for connecting to an XMPP
+* 					account 
+* 
+* @author Bob Brady, rpbrady@gmail.com
+* @version $Revision$
+* @date $Date$ Copyright (c) 2007 Bob Brady
+******************************************************************************/
 public class XMPPConnectWizardPage extends WizardPage {
 
+	/** XMPP account connection String, e.g., user@server.com */
 	Text connectText;
-
+	/** XMPP account password */
 	Text passwordText;
-
+	/** Classname of companion Wizard */
 	protected static final String CLASSNAME = XMPPConnectWizardPage.class
 			.getName();
-
+	/** Settings key for saving/retrieving dialog setting */
 	private static final String DIALOG_SETTINGS = CLASSNAME;
 
+	/**
+	 * Constructor
+	 */
 	XMPPConnectWizardPage() {
 		super("");
 		setTitle("XMPPS Connection Wizard");
@@ -39,6 +53,9 @@ public class XMPPConnectWizardPage extends WizardPage {
 		setPageComplete(false);
 	}
 
+	/**
+	 * Creates the displayed Composite for the page
+	 */
 	public void createControl(Composite parent) {
 		parent.setLayout(new GridLayout());
 		GridData fillData = new GridData(SWT.FILL, SWT.CENTER, true, false);
@@ -52,7 +69,7 @@ public class XMPPConnectWizardPage extends WizardPage {
 		connectText.setLayoutData(fillData);
 		connectText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				if (!connectText.getText().equals("")) { //$NON-NLS-1$
+				if (!connectText.getText().equals("")) {
 					updateStatus(null);
 				} else {
 					updateStatus("An connect ID must be specified.");
@@ -72,13 +89,6 @@ public class XMPPConnectWizardPage extends WizardPage {
 		setControl(parent);
 	}
 
-	String getConnectID() {
-		return connectText.getText();
-	}
-
-	String getPassword() {
-		return passwordText.getText();
-	}
 
 	protected void updateStatus(String message) {
 		setErrorMessage(message);
@@ -110,5 +120,16 @@ public class XMPPConnectWizardPage extends WizardPage {
 			pageSettings.put("connectText", connectText.getText());
 		}
 	}
+
+	// Accessors 
+	
+	String getConnectID() {
+		return connectText.getText();
+	}
+
+	String getPassword() {
+		return passwordText.getText();
+	}
+
 
 }

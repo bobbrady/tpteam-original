@@ -1,17 +1,8 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
 import java.util.Observable;
 import java.util.Observer;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -27,7 +18,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
@@ -45,35 +35,36 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.UpdateDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
 public class TestView extends ViewPart implements Observer {
+	/** The view ID */
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview";
-
+	/** An Action to request test executions */
 	private Action mExecTest;
-
+	/** An Action to request test deletions */
 	private Action mDelTest;
-
+	/** An Action to request test updates */
 	private Action mUpdateTest;
-
+	/** An Action to request test details */
 	private Action mShowTest;
-
+	/** An Action to request new test folders */
 	private Action mAddFolder;
-
+	/** An Action to request new test definitions */
 	private Action mAddTest;
-
+	/** The Test tree TreeViewer */
 	private TreeViewer mViewer;
-
+    /** The test tree content provider */
 	private TestContentProvider mTestContentProvider;
-
+	/** The model providing input to the content provider */
 	private TreeNodeModel mTreeNodeModel;
-
+	/** The TPTeam databasee ID of the project */
 	private String mProjID;
-
+	/** The TPTeam name of the project */
 	private String mProjName;
 
 	/**
 	 * Extracts node information from tree, wraps into
-	 * TPEvent requesting execution
+	 * TPEvent requesting execution of the selected node
 	 * 
-	 * Performed when user clicks on exec test icon in view
+	 * Performed when user clicks on exec test action icon in view
 	 */
 	private void execTestAction() {
 		// Get selected node in test tree
@@ -103,6 +94,12 @@ public class TestView extends ViewPart implements Observer {
 		sendMsgToEventAdmin(tpEvent);
 	}
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting deletion of the selected node
+	 * 
+	 * Performed when user clicks on delete test action icon in view
+	 */
 	private void delTestAction() {
 
 		// Get the selected node in test tree
@@ -139,6 +136,14 @@ public class TestView extends ViewPart implements Observer {
 		sendMsgToEventAdmin(tpEvent);
 	}
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting update of the selected node.
+	 * 
+	 * Launches an update dialog to collect data from user.
+	 * 
+	 * Performed when user clicks on update test action icon in view
+	 */
 	private void updateTestAction() {
 		// Get the selected node in test tree
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -178,6 +183,15 @@ public class TestView extends ViewPart implements Observer {
 		}
 	}
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting addition of a new folder using
+	 * the selected node as parent.
+	 * 
+	 * Launches an add folder dialog to collect user input.
+	 * 
+	 * Performed when user clicks on add test folder action icon in view
+	 */
 	private void addFolderAction() {
 		// Get parent folder where new child folder will be added
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -225,6 +239,15 @@ public class TestView extends ViewPart implements Observer {
 		}
 	}
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting addition of a new test definition using
+	 * the selected node as parent.
+	 * 
+	 * Launches an add test dialog to collect user input.
+	 * 
+	 * Performed when user clicks on add test defiinition action icon in view
+	 */
 	private void addTestAction() {
 		// Get parent folder where test definition will be added
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -272,6 +295,13 @@ public class TestView extends ViewPart implements Observer {
 		}
 	}
 
+	/**
+	 * Extracts node information from tree, wraps into
+	 * TPEvent requesting details of the selected test
+	 * node.
+	 * 
+	 * Performed when user clicks on test details action icon in view
+	 */
 	private void showTestAction() {
 		// Get selected node
 		IStructuredSelection selection = (IStructuredSelection) mViewer
@@ -459,34 +489,36 @@ public class TestView extends ViewPart implements Observer {
 		mViewer.getControl().setFocus();
 	}
 
+	/**
+	 * Update used to refresh view when a test
+	 * response TPEvent is received
+	 * 
+	 * @param observable the object issuing the update
+	 * @param object the TPEvent to be handled
+	 */
 	public void update(Observable observable, Object object) {
 		if (observable instanceof EventAdminHandler
 				&& object instanceof TPEvent) {
 			TPEvent tpEvent = (TPEvent) object;
-			// final TPTestEntity tpEntity = mTPEntities.get(tpEvent.getID());
 
-			System.out.println("TestView Got Update: " + tpEvent.getTopic());
 			if (tpEvent.getTopic().equals(ITPBridge.TEST_EXEC_RESULT_TOPIC)) {
-
-				System.out.println("TestView: update called for "
-						+ tpEvent.getTopic() + " Event for "
-						+ tpEvent.getTestName());
-
 				updateExecution(tpEvent);
-
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} 
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_REQ_TOPIC)) {
 				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
 				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
 				Activator.getDefault().setProjID(mProjID);
 				Activator.getDefault().setProjName(mProjName);
-			} else if (((TPEvent) object).getTopic().equals(
+			} 
+			else if (((TPEvent) object).getTopic().equals(
 					ITPBridge.CHART_GET_DATA_REQ_TOPIC)) {
 				mProjID = tpEvent.getDictionary().get(TPEvent.PROJECT_ID_KEY);
 				mProjName = tpEvent.getDictionary().get(TPEvent.PROJECT_KEY);
 				Activator.getDefault().setProjID(mProjID);
 				Activator.getDefault().setProjName(mProjName);
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} 
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_TREE_GET_RESP_TOPIC)) {
 				String testTreeXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_TREE_XML_KEY);
@@ -503,7 +535,8 @@ public class TestView extends ViewPart implements Observer {
 								.setInput(new TPEntity[] { projRoot } /* projRoot.getChildren() */);
 					}
 				});
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} 
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_DEL_RESP_TOPIC)) {
 				final String nodeID = tpEvent.getID();
 				Display.getDefault().syncExec(new Runnable() {
@@ -516,7 +549,8 @@ public class TestView extends ViewPart implements Observer {
 						}
 					}
 				});
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} 
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_UPDATE_RESP_TOPIC)) {
 				final String nodeID = tpEvent.getID();
 				final String testName = tpEvent.getDictionary().get(
@@ -527,7 +561,8 @@ public class TestView extends ViewPart implements Observer {
 						updateNode.setName(testName);
 					}
 				});
-			} else if (tpEvent.getTopic().equalsIgnoreCase(
+			} 
+			else if (tpEvent.getTopic().equalsIgnoreCase(
 					ITPBridge.TEST_ADD_RESP_TOPIC)) {
 				String testXML = tpEvent.getDictionary().get(
 						TPEvent.TEST_XML_KEY);
@@ -556,12 +591,23 @@ public class TestView extends ViewPart implements Observer {
 		}
 	}
 
+	/**
+	 * Populates the view's model with a root
+	 * ITreeNode
+	 * @param treeNode the root ITreeNode
+	 */
 	private void populateModel(ITreeNode treeNode) {
 		mTreeNodeModel.put(treeNode.getID(), treeNode);
 		for (ITreeNode child : treeNode.getChildren())
 			populateModel(child);
 	}
 
+	/**
+	 * Helper method used to add a test execution
+	 * as a child to a test definition tree node
+	 * 
+	 * @param tpEvent the TPEvent containing the execution
+	 */
 	private void updateExecution(final TPEvent tpEvent) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
@@ -582,5 +628,4 @@ public class TestView extends ViewPart implements Observer {
 		super.dispose();
 		Activator.getDefault().getEventAdminHandler().deleteObserver(this);
 	}
-
 }

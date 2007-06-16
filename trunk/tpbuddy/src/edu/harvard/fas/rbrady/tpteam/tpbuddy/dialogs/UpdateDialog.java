@@ -1,8 +1,17 @@
+/********************************************************************
+ * 
+ * File		:	UpdateDialog.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a dialog for users to enter data for the 
+ * 				update of a test folder or test definition
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -16,7 +25,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
@@ -25,34 +33,42 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
+/*************************************************************************
+ * File 		: 	UpdateDialog.java
+ * 
+ * Description 	: 	Provides a dialog for users to enter data for the 
+ * 					update of a test folder or test definition
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ***********************************************************************/
 public class UpdateDialog extends TitleAreaDialog implements Observer {
-	// ID for OK button
-	// We use large integer so as not
-	// to conflict with system constants
+	/** ID for OK, large integer used to avoid system conflicts */
 	public static final int OK = 9999;
-
+	/** dialog OK button */
 	private Button mOKBtn;
-
+	/** Test GUI type */
 	private boolean mIsFolder;
-
+	/** Name of the test definition */
 	private Text mName;
-
+	/** Description of the test definition */
 	private Text mDescription;
-
+	/** Home directory of the test */
 	private Text mHome;
-
+	/** Workspace directory location */
 	private Text mWorkspace;
-
+	/** Test project directory */
 	private Text mProject;
-
+	/** Test suite directory */
 	private Text mTestSuite;
-
+	/** Test report directory */
 	private Text mReportDir;
-
+	/** TPTP connection URL to be used for execution */
 	private Text mConnURL;
-	
+	/** Stubbed version of Test object */
 	private Test mTestStub;
-	
+	/** TPTeam database ID of test */
 	private int mTestID;
 
 	/**
@@ -67,8 +83,9 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	}
 
 	/**
-	 * @see org.eclipse.jface.window.Window#create() We complete the dialog with
+	 * Complete the dialog with
 	 *      a title and a message
+	 * @see org.eclipse.jface.window.Window#create() 
 	 */
 	public void create() {
 		super.create();
@@ -82,9 +99,9 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	}
 
 	/**
+	 * Fill center area of the dialog
 	 * @see org.eclipse.jface.dialogs.Dialog#
-	 *      createDialogArea(org.eclipse.swt.widgets.Composite) Here we fill the
-	 *      center area of the dialog
+	 *      createDialogArea(org.eclipse.swt.widgets.Composite)
 	 */
 	protected Control createDialogArea(Composite parent) {
 
@@ -130,6 +147,12 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 		return area;
 	}
 
+	/**
+	 * Helper function to create additional test 
+	 * definition data inputs to dialog area
+	 * 
+	 * @param area the dialog area
+	 */
 	protected void createTestArea(Composite area) {
 		Label homeLabel = new Label(area, SWT.NONE);
 		homeLabel.setText("Eclipse Home:");
@@ -194,6 +217,10 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 		mConnURL.setLayoutData(data2);
 	}
 
+	/**
+	 * Validates user input
+	 * @return true if required data present, false otherwise
+	 */
 	private boolean validate() {
 		boolean returnVal = false;
 		if (mName.getText() == null || mName.getText().equals("")) {
@@ -222,10 +249,9 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 	}
 
 	/**
+	 * Replace the OK button by createButton() from Dialog
 	 * @see org.eclipse.jface.dialogs.Dialog#
-	 *      createButtonsForButtonBar(org.eclipse.swt.widgets.Composite) We
-	 *      replace the OK button by our own creation We use the method
-	 *      createButton() (from Dialog), to create the new button
+	 *      createButtonsForButtonBar(org.eclipse.swt.widgets.Composite) 
 	 */
 	protected void createButtonsForButtonBar(Composite parent) {
 		// Create Ok button
@@ -315,6 +341,10 @@ public class UpdateDialog extends TitleAreaDialog implements Observer {
 		return true;
 	}
 	
+	/**
+	 * Getter 
+	 * @return the test stub
+	 */
 	public Test getTestStub()
 	{
 		return mTestStub;

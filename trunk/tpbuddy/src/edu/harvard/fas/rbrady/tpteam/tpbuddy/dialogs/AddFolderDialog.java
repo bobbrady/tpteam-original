@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	AddFolderDialog.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a dialog for users to enter data for new
+ * 				test folder creation
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -12,28 +22,35 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
 
+/*************************************************************************
+ * File 		: 	AddFolderDialog.java
+ * 
+ * Description 	: 	Provides a dialog for users to enter data for new
+ * 					test folder creation
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c)2007 Bob Brady
+ ***********************************************************************/
 public class AddFolderDialog extends TitleAreaDialog {
-	// ID for OK button
-	// We use large integer so as not
-	// to conflict with system constants
+	/** ID for OK, large integer used to avoid system conflicts */
 	public static final int OK = 9999;
-
+	/** dialog OK button */
 	private Button mOKBtn;
-
+	/** Test folder name */
 	private Text mName;
-
+	/** Test folder description */
 	private Text mDescription;
-
+	/** Stubbed Test object to represent test folder */
 	private Test mTestStub;
-
+	/** TPTeam database ID of parent test folder */
 	private int mParentID;
 
 	/**
-	 * Constructor for UpdateDialog.
+	 * Constructor
 	 * 
 	 * @param shell -
 	 *            Containing shell
@@ -44,8 +61,9 @@ public class AddFolderDialog extends TitleAreaDialog {
 	}
 
 	/**
-	 * @see org.eclipse.jface.window.Window#create() We complete the dialog with
+	 * Complete the dialog with
 	 *      a title and a message
+	 * @see org.eclipse.jface.window.Window#create() 
 	 */
 	public void create() {
 		super.create();
@@ -54,9 +72,9 @@ public class AddFolderDialog extends TitleAreaDialog {
 	}
 
 	/**
+	 * Fill center area of the dialog
 	 * @see org.eclipse.jface.dialogs.Dialog#
-	 *      createDialogArea(org.eclipse.swt.widgets.Composite) Here we fill the
-	 *      center area of the dialog
+	 *      createDialogArea(org.eclipse.swt.widgets.Composite)
 	 */
 	protected Control createDialogArea(Composite parent) {
 
@@ -109,10 +127,9 @@ public class AddFolderDialog extends TitleAreaDialog {
 	}
 
 	/**
+	 * Replace the OK button by createButton() from Dialog
 	 * @see org.eclipse.jface.dialogs.Dialog#
-	 *      createButtonsForButtonBar(org.eclipse.swt.widgets.Composite) We
-	 *      replace the OK button by our own creation We use the method
-	 *      createButton() (from Dialog), to create the new button
+	 *      createButtonsForButtonBar(org.eclipse.swt.widgets.Composite) 
 	 */
 	protected void createButtonsForButtonBar(Composite parent) {
 		// Create Ok button
@@ -151,6 +168,10 @@ public class AddFolderDialog extends TitleAreaDialog {
 		});
 	}
 
+	/**
+	 * Getter 
+	 * @return the test stub representing the folder
+	 */
 	public Test getTestStub() {
 		return mTestStub;
 	}

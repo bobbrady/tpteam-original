@@ -1,3 +1,12 @@
+/********************************************************************
+ * 
+ * File		:	ServletUtil.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A utility class for rendering HTML  
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http;
 
 import java.io.IOException;
@@ -7,24 +16,31 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Stack;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
+/*******************************************************************************
+ * File 		: 	ServletUtil.java
+ * 
+ * Description 	: 	A utility class for rendering HTML
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ServletUtil extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	// JavaScript and Custom Style Sheet convenience Strings
 	public static final String ADD_TEST_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test.js\">\n";
 
 	public static final String ADD_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/add_test_tree.js\">\n";
@@ -61,9 +77,19 @@ public class ServletUtil extends HttpServlet {
 
 	public static final String EXEC_TEST_TREE_JS = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"/bridge/tpteam/scripts/exec_test_tree.js\">\n";
 
+	/** Timestamp data format to be used in TPManager operations */
 	public static final SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat(
 			"dd-MMM-yyyy HH:mm:ss.SSS zzz");
 
+	/**
+	 * Provides the HTML header for all TPTeam administrative
+	 * Web pages
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @param javaScript JavaScript string to be included
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void adminHeader(HttpServletRequest request,
 			HttpServletResponse response, String javaScript)
 			throws ServletException, IOException {
@@ -79,6 +105,15 @@ public class ServletUtil extends HttpServlet {
 		out.println(header);
 	}
 
+	/**
+	 * Provides the HTML header for all TPTeam user
+	 * Web pages
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @param javaScript JavaScript string to be included
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void userHeader(HttpServletRequest request,
 			HttpServletResponse response, String javaScript)
 			throws ServletException, IOException {
@@ -94,6 +129,14 @@ public class ServletUtil extends HttpServlet {
 		out.println(header);
 	}
 
+	/**
+	 * Provides the HTML footer for all TPTeam administrative
+	 * Web pages
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void adminFooter(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
@@ -102,11 +145,28 @@ public class ServletUtil extends HttpServlet {
 		out.close();
 	}
 
+	/**
+	 * Provides the HTML footer for all TPTeam user
+	 * Web pages
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void userFooter(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		adminFooter(request, response);
 	}
 
+	/**
+	 * Provides the HTML reply (excluding header & footer) 
+	 * for all TPTeam administrative Web pages
+	 * 
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void adminReply(HttpServletRequest request,
 			HttpServletResponse response, String reply)
 			throws ServletException, IOException {
@@ -114,12 +174,31 @@ public class ServletUtil extends HttpServlet {
 		out.println(reply);
 	}
 
+	/**
+	 * Provides the HTML reply (excluding header & footer) 
+	 * for all TPTeam user Web pages
+	 * 
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void userReply(HttpServletRequest request,
 			HttpServletResponse response, String reply)
 			throws ServletException, IOException {
 		adminReply(request, response, reply);
 	}
 
+	/**
+	 * Provides the HTML error reply, excluding
+	 * header and footer, for all TPTeam 
+	 * administrative Web pages
+	 * 
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void adminError(HttpServletRequest request,
 			HttpServletResponse response, String error)
 			throws ServletException, IOException {
@@ -129,6 +208,16 @@ public class ServletUtil extends HttpServlet {
 		adminFooter(request, response);
 	}
 
+	/**
+	 * Provides the HTML error reply, excluding
+	 * header and footer, for all TPTeam 
+	 * user Web pages
+	 * 
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void userError(HttpServletRequest request,
 			HttpServletResponse response, String error)
 			throws ServletException, IOException {
@@ -138,6 +227,15 @@ public class ServletUtil extends HttpServlet {
 		userFooter(request, response);
 	}
 
+	/**
+	 * Rendors an HTML error message
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @param error the error message
+	 * @param servlet the servlet throwing the error
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void throwError(HttpServletRequest req, HttpServletResponse resp,
 			StringBuffer error, HttpServlet servlet) throws ServletException,
 			IOException {
@@ -147,6 +245,16 @@ public class ServletUtil extends HttpServlet {
 			adminError(req, resp, error.toString());
 	}
 
+	/**
+	 * Rendors an entire HTML page
+	 * 
+	 * @param request the servlet request object
+	 * @param response the servlet response object
+	 * @param javaScript the Web page JavaScript
+	 * @param servlet the servlet throwing the error
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void showPage(HttpServletRequest req, HttpServletResponse resp,
 			StringBuffer reply, String javaScript, HttpServlet servlet)
 			throws ServletException, IOException, Exception {
@@ -162,6 +270,10 @@ public class ServletUtil extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Gets the JavaScript for rendering a test tree
+	 * @return the JavaScript String
+	 */
 	public String getTreeJavaScript() {
 		String javaScript = ""
 				+ " var openImg = new Image();\n"
@@ -201,6 +313,14 @@ public class ServletUtil extends HttpServlet {
 		return javaScript;
 	}
 
+	/**
+	 * Gets all top-level test folders for
+	 * a given project
+	 * 
+	 * @param projID the ID of the project
+	 * @return the HTML String of the folders
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static String getTestTreeFolders(String projID) throws Exception {
 
@@ -241,11 +361,24 @@ public class ServletUtil extends HttpServlet {
 		return tree.toString();
 	}
 
+	/**
+	 * Extracts the depth of a test tree node
+	 * from the path
+	 * 
+	 * @param path the path
+	 * @return the depth
+	 */
 	public static int getDepth(String path) {
 		String pathNoDots = path.replaceAll("\\.", "");
 		return path.length() - pathNoDots.length();
 	}
 
+	/**
+	 * Gets the String representation of a test tree
+	 * @param tests the List of tests
+	 * @param onlyFolders true if only display folders, false otherwise
+	 * @return the test tree
+	 */
 	public static String getTree(List<Test> tests, boolean onlyFolders) {
 		Stack<Test> nodes = new Stack<Test>();
 		nodes.addAll(tests);
@@ -316,6 +449,10 @@ public class ServletUtil extends HttpServlet {
 		return header.toString();
 	}
 
+	/**
+	 * Helper method to get the test tree header
+	 * @return the header
+	 */
 	private static String getRootHeader() {
 		StringBuffer header = new StringBuffer();
 		header
@@ -329,6 +466,13 @@ public class ServletUtil extends HttpServlet {
 		return header.toString();
 	}
 
+	/**
+	 * Helper method to get a test tree node footer
+	 * 
+	 * @param depth the node depth
+	 * @param currLevel the current level in the tree
+	 * @return the footer
+	 */
 	private static String getNodeFooter(int depth, int currLevel) {
 		StringBuffer footer = new StringBuffer();
 		while (currLevel > depth)
@@ -336,10 +480,22 @@ public class ServletUtil extends HttpServlet {
 		return footer.toString();
 	}
 
+	/**
+	 * Helper method to get the test tree node footer
+	 * 
+	 * @param depth the depth of the node in the tree
+	 * @return the footer
+	 */
 	private static String getNodeFooter(int depth) {
 		return getPad(depth) + "</SPAN>\n";
 	}
 
+	/**
+	 * Helper method to get the node footer padding
+	 * 
+	 * @param depth the node depth
+	 * @return the padding
+	 */
 	private static String getPad(int depth) {
 		StringBuffer pad = new StringBuffer();
 		for (int idx = 0; idx < depth; idx++)
@@ -347,6 +503,14 @@ public class ServletUtil extends HttpServlet {
 		return pad.toString();
 	}
 
+	/**
+	 * Gets the hash of a plaintext String using
+	 * the SHA1 algorithm
+	 * 
+	 * @param plainText the plain text
+	 * @return the hash
+	 * @throws NoSuchAlgorithmException
+	 */
 	public static String getSHA1Hash(String plainText)
 			throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance("SHA1");
@@ -363,18 +527,16 @@ public class ServletUtil extends HttpServlet {
 		return hexString.toString().toUpperCase();
 	}
 
-	public static void main(String[] args) {
-		try {
-			// System.out.println(ServletUtil.getTestTreeFolders("1"));
-			// System.out.println(ServletUtil.getSHA1Hash("tpteam"));
-			System.out.println("userId: "
-					+ ServletUtil.getRemoteUserID("tpmgr"));
-			System.out.println(ServletUtil.getTestTree("1", false));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+	/**
+	 * Gets the String representation of a project's test
+	 * tree 
+	 * 
+	 * @param projID the ID of the project
+	 * @param onlyFolders true if include only folders, 
+	 * 	false otherwise
+	 * @return the test tree String
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static String getTestTree(String projID, boolean onlyFolders)
 			throws Exception {
@@ -413,6 +575,14 @@ public class ServletUtil extends HttpServlet {
 		return tree.toString();
 	}
 
+	/**
+	 * Gets the TPTeam user ID of the servlet's 
+	 * remote user
+	 * 
+	 * @param userName the servlet remote user's name
+	 * @return the TPTeam ID of the user
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static int getRemoteUserID(String userName) throws Exception {
 

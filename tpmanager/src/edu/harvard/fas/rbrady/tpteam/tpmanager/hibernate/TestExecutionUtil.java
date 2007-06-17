@@ -1,12 +1,19 @@
+/********************************************************************
+ * 
+ * File		:	TestExecutionUtil.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A utility class for TPTeam TestExecution operations
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.Date;
 import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
@@ -15,8 +22,24 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEntity;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
+/*******************************************************************************
+ * File 		: 	TestExecutionUtil.java
+ * 
+ * Description 	: 	A utility class for TPTeam TestExecution operations
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TestExecutionUtil {
 	
+	/**
+	 * Inserts a test execution into the TPTeam database
+	 * 
+	 * @param testID the ID of the test
+	 * @param tpEvent the TPEvent containing the request
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static void insertTestExec(String testID, TPEvent tpEvent) throws Exception {
 		// Use plugin activator if in OSGi runtime

@@ -1,16 +1,22 @@
+/********************************************************************
+ * 
+ * File		:	ChartUtil.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A TPTeam project chart utility class. 
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataPoint;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
@@ -20,10 +26,32 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ChartDataSetXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
+/*******************************************************************************
+ * File 		: 	ChartUtil.java
+ * 
+ * Description 	: 	A TPTeam project chart utility class.  Contains methods for
+ * 					creating data points from Hibernate database calls.  Serializes 
+ * 					charts into XML Strings.
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ChartUtil {
 
+	/** Number of history days to display on line charts */
 	public static final int NUM_LINECHART_DAYS = 30;
 
+	/**
+	 * Gets a data point for a single pie chart.  The data point
+	 * contains the number of test execution successes, failures,
+	 * errors, inconclusive, and not-executed results for a given 
+	 * project.
+	 * 
+	 * @param tpEvent the TPEvent containing project metadata
+	 * @return the ChartDataPoint
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private static ChartDataPoint getPieChartDataPoint(TPEvent tpEvent)
 			throws Exception {
@@ -92,6 +120,13 @@ public class ChartUtil {
 		return dataPoint;
 	}
 
+	/**
+	 * Gets the String XML serialization for a pie chart 
+	 * 
+	 * @param tpEvent the TPEvent holding the project metadata
+	 * @return the XML serialization String
+	 * @throws Exception
+	 */
 	public static String getPieChartXML(TPEvent tpEvent) throws Exception {
 		ChartDataPoint dataPoint = getPieChartDataPoint(tpEvent);
 		ChartDataSet dataSet = new ChartDataSet();
@@ -105,6 +140,13 @@ public class ChartUtil {
 		return ChartDataSetXML.getXML(dataSet);
 	}
 
+	/**
+	 * Gets the String XML serialization for a bar chart 
+	 * 
+	 * @param tpEvent the TPEvent holding the project metadata
+	 * @return the XML serialization String
+	 * @throws Exception
+	 */
 	public static String getBarChartXML(TPEvent tpEvent) throws Exception {
 		List<ChartDataSet> dataSetList = new ArrayList<ChartDataSet>();
 		int projID = Integer.parseInt(tpEvent.getDictionary().get(
@@ -126,6 +168,18 @@ public class ChartUtil {
 		return ChartDataSetXML.getListXML(dataSetList);
 	}
 
+	/**
+	 * Gets a bar chart data point for a particular user.  
+	 * The data point contains the number of test execution 
+	 * successes, failures, errors, inconclusive, and 
+	 * not-executed results associated with the TPTeam user 
+	 * of a given project.
+	 * 
+	 * @param projID the TPTeam ID of the project
+	 * @param userID the TPteam ID of the user
+	 * @return the ChartDataPoint
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private static ChartDataPoint getBarChartDataPoint(int projID, int userID)
 			throws Exception {
@@ -192,6 +246,14 @@ public class ChartUtil {
 		return dataPoint;
 	}
 
+	/**
+	 * Helper method to return the TPTeam users associated
+	 * with the given project.
+	 * 
+	 * @param projID the ID of the project
+	 * @return an array of the associated TPTeam users
+	 * @throws Exception
+	 */
 	public static TpteamUser[] getProjUsers(int projID) throws Exception {
 		List<TpteamUser> projUsers = new ArrayList<TpteamUser>();
 		Session s = null;
@@ -225,6 +287,13 @@ public class ChartUtil {
 				.toArray(new TpteamUser[projUsers.size()]);
 	}
 
+	/**
+	 * Gets the String XML serialization for a line chart 
+	 * 
+	 * @param tpEvent the TPEvent holding the project metadata
+	 * @return the XML serialization String
+	 * @throws Exception
+	 */
 	public static String getLineChartXML(TPEvent tpEvent) throws Exception {
 		int projID = Integer.parseInt(tpEvent.getDictionary().get(
 				TPEvent.PROJECT_ID_KEY));
@@ -245,6 +314,19 @@ public class ChartUtil {
 		return ChartDataSetXML.getXML(dataSet);
 	}
 
+	/**
+	 * Gets the line chart data point.  
+	 * The data point contains the number of test execution 
+	 * successes, failures, errors, inconclusive, and 
+	 * not-executed results associated with a given project
+	 * for a particular number of days.
+	 * 
+	 * @param projID the TPTeam ID of the project
+	 * @param daysPrev the number of previous days to include
+	 * @param Calendar a calendar to help with date math
+	 * @return the ChartDataPoint
+	 * @throws Exception
+	 */
 	private static ChartDataPoint getLineChartDataPoint(int projID,
 			int daysPrev, Calendar cal) throws Exception {
 		Session s = null;
@@ -335,70 +417,4 @@ public class ChartUtil {
 		}
 		return dataPoint;
 	}
-
-	public static void main(String[] args) {
-
-		/***********************************************************************
-		 * Test Getting Pie Chart
-		 **********************************************************************/
-
-		/*
-		 * Hashtable<String,String> dict = new Hashtable<String,String>();
-		 * dict.put(TPEvent.PROJECT_ID_KEY, "1"); dict.put(TPEvent.PROJECT_KEY,
-		 * "Proj Name"); TPEvent tpEvent = new TPEvent("test_topic", dict); try {
-		 * String pieChartXML = getPieChartXML(tpEvent);
-		 * System.out.println("pieChartXML:\n" + pieChartXML); ChartDataSet
-		 * dataSet = ChartDataSetXML.getDataSetFromXML(pieChartXML);
-		 * System.out.println("Pass: " +
-		 * dataSet.getChartDataPoints().get(0).getPass()); } catch (Exception e) {
-		 * e.printStackTrace(); }
-		 */
-
-		/***********************************************************************
-		 * Test Getting Bar Chart
-		 **********************************************************************/
-
-		/*
-		 * Hashtable<String,String> dict = new Hashtable<String,String>();
-		 * dict.put(TPEvent.PROJECT_ID_KEY, "1"); dict.put(TPEvent.PROJECT_KEY,
-		 * "Proj Name"); TPEvent tpEvent = new TPEvent("test_topic", dict); try {
-		 * String barChartXML = getBarChartXML(tpEvent);
-		 * System.out.println("barChartXML:\n" + barChartXML); ChartDataSet[]
-		 * dataSets = ChartDataSetXML.getDataSetsFromXML(barChartXML);
-		 * for(ChartDataSet dataSet : dataSets) { TpteamUser user =
-		 * dataSet.getUser(); String projName = dataSet.getProjName(); String
-		 * type = dataSet.getType(); List<ChartDataPoint> dataPoints =
-		 * dataSet.getChartDataPoints(); } } catch (Exception e) {
-		 * e.printStackTrace(); }
-		 */
-
-		/***********************************************************************
-		 * Test Getting Line Chart
-		 **********************************************************************/
-
-		Hashtable<String, String> dict = new Hashtable<String, String>();
-		dict.put(TPEvent.PROJECT_ID_KEY, "1");
-		dict.put(TPEvent.PROJECT_KEY, "Proj Name");
-		TPEvent tpEvent = new TPEvent("test_topic", dict);
-		try {
-			String lineChartXML = getLineChartXML(tpEvent);
-			System.out.println("lineChartXML:\n" + lineChartXML);
-
-			ChartDataSet dataSet = ChartDataSetXML
-					.getDataSetFromXML(lineChartXML);
-			String projName = dataSet.getProjName();
-			String type = dataSet.getType();
-			List<ChartDataPoint> dataPoints = dataSet.getChartDataPoints();
-			System.out.println("Proj Name: " + projName + ", Type: " + type);
-			for (ChartDataPoint dataPoint : dataPoints) {
-				System.out.println(dataPoint.getDate() + " Pass: "
-						+ dataPoint.getPass());
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 }

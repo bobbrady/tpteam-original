@@ -1,13 +1,19 @@
+/********************************************************************
+ * 
+ * File		:	ProjetUtil.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A utility class for TPTeam Project operations
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
@@ -16,8 +22,25 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.ProjectXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
+/*******************************************************************************
+ * File 		: 	ProjectUtil.java
+ * 
+ * Description 	: 	A utility class for TPTeam Project operations.  Performs 
+ * 					XML serialization of Project objects and look-ups by ECF ID.
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ProjectUtil {
 
+	/**
+	 * Gets all TPTeam projects associated with a given TPTeam user
+	 * 
+	 * @param ecfID The ECF ID of the TPTeam user.
+	 * @return a Set of all associated projects
+	 * @throws Exception
+	 */
 	public static Set<Project> getProjByECFID(String ecfID) throws Exception {
 		Set<Project> projs = null;
 		Session s = null;
@@ -53,6 +76,14 @@ public class ProjectUtil {
 		return projs;
 	}
 
+	/**
+	 * Gets all TPTeam project/product information stored in the
+	 * TPTeam database
+	 *   
+	 * @param tpEvent The TPEvent holding the request information
+	 * @return an XML String  
+	 * @throws Exception
+	 */
 	public static String getProjProdXML(TPEvent tpEvent) throws Exception {
 		Set<Project> projs = getProjByECFID(tpEvent.getDictionary().get(
 				TPEvent.FROM));
@@ -74,26 +105,4 @@ public class ProjectUtil {
 		}
 		return ProjectXML.getXML(stubProjs);
 	}
-
-	public static void main(String[] args) {
-		Set<Project> projs;
-		try {
-			projs = getProjByECFID("tpteam1@gmail.com");
-			for (Project proj : projs) {
-				System.out.println("Proj ID: " + proj.getId() + ", Name: "
-						+ proj.getName() + ", Desc: " + proj.getDescription());
-				System.out.println("Prod ID: " + proj.getProduct().getId()
-						+ ", Name: " + proj.getProduct().getName());
-			}
-
-			Hashtable<String, String> hash = new Hashtable<String, String>();
-			hash.put(TPEvent.FROM, "tpteam1@gmail.com");
-			TPEvent tpEvent = new TPEvent("topic", hash);
-			String xml = getProjProdXML(tpEvent);
-			System.out.println("ProjProdXML: \n" + xml);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

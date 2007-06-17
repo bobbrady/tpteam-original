@@ -1,14 +1,20 @@
+/********************************************************************
+ * 
+ * File		:	TestUtil.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A utility class for TPTeam Test operations
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate;
 
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
@@ -19,7 +25,25 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 
+/*******************************************************************************
+ * File 		: 	TestUtil.java
+ * 
+ * Description 	: 	A utility class for TPTeam Test operations.  Performs 
+ * 					XML serialization and database operations upon Test objects.
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TestUtil {
+	
+	/**
+	 * Gets a List of all Test objects associated with
+	 * a given project 
+	 * @param projID the ID of the project
+	 * @return the List of Tests
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<Test> getTestByProjID(String projID) throws Exception {
 		List<Test> tests = null;
@@ -53,6 +77,14 @@ public class TestUtil {
 		return tests;
 	}
 
+	/**
+	 * Gets a Test object from the database 
+	 * @param testID the ID of the Test
+	 * @param includeExec true if test executions should be 
+	 * 	included, false otherwise
+	 * @return the Test object
+	 * @throws Exception
+	 */
 	public static Test getTestByID(String testID, boolean includeExec)
 			throws Exception {
 		Test test = null;
@@ -81,6 +113,13 @@ public class TestUtil {
 		return test;
 	}
 
+	/**
+	 * Gets the XML String serialization of a project test tree
+	 * 
+	 * @param tpEvent the TPEvent containing the request
+	 * @return the XML serialization
+	 * @throws Exception
+	 */
 	public static String getTestTreeXML(TPEvent tpEvent) throws Exception {
 		List<Test> tests = getTestByProjID(tpEvent.getDictionary().get(
 				TPEvent.PROJECT_ID_KEY));
@@ -88,6 +127,12 @@ public class TestUtil {
 				TPEvent.PROJECT_KEY));
 	}
 
+	/**
+	 * Gets a stubbed Test object for update operations
+	 * 
+	 * @param test the Test object to be stubbed
+	 * @return a stubbed test object
+	 */
 	public static Test getTestUpdateStub(Test test) {
 		Test testStub = new Test();
 		testStub.setId(test.getId());
@@ -110,6 +155,12 @@ public class TestUtil {
 		return testStub;
 	}
 
+	/**
+	 * Updates a Test in the datbase
+	 * 
+	 * @param tpEvent the TPEvent containing the request
+	 * @throws Exception
+	 */
 	public static void updateTest(TPEvent tpEvent) throws Exception {
 		Session s = null;
 		// Use plugin activator if in OSGi runtime
@@ -183,6 +234,12 @@ public class TestUtil {
 		}
 	}
 
+	/**
+	 * Adds a Test object to the database
+	 * 
+	 * @param tpEvent the TPEvent containing the request
+	 * @throws Exception
+	 */
 	public static void addTest(TPEvent tpEvent) throws Exception {
 		Session s = null;
 		// Use plugin activator if in OSGi runtime
@@ -290,16 +347,4 @@ public class TestUtil {
 			throw e;
 		}
 	}
-
-	public static void main(String[] args) {
-		try {
-			Hashtable<String, String> hash = new Hashtable<String, String>();
-			hash.put(TPEvent.PROJECT_ID_KEY, "1");
-			TPEvent tpEvent = new TPEvent("TEST_TOPIC", hash);
-			System.out.println("Test XML: \n" + getTestTreeXML(tpEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

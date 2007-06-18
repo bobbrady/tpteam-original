@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 /*******************************************************************************
- * File 		: 	DeleteTest2.java
+ * File 		: 	UpdateTest2.java
  * 
  * Description 	: 	Servlet that displays an input form for updating
  * 					a TPTeam Test by selecting it from the Test tree

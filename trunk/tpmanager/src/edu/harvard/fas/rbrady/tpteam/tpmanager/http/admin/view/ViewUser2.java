@@ -1,25 +1,23 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	ViewUser2.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays the details of a particular
+ * 				TPTeam user 
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 
 import java.io.IOException;
 import java.util.Set;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
@@ -27,6 +25,16 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 
+/*******************************************************************************
+ * File 		: 	ViewUser2.java
+ * 
+ * Description 	: 	Servlet that displays the details of a particular
+ * 					TPTeam user in a form for editable updating
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ViewUser2 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -57,6 +65,14 @@ public class ViewUser2 extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Gathers the details of TPTeam user selected, renders HTML
+	 *
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
@@ -72,6 +88,12 @@ public class ViewUser2 extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Loads a TPTeam user from the database, populates
+	 * member variables for viewing details
+	 * 
+	 * @throws Exception
+	 */
 	public TpteamUser getUser() throws Exception {
 		TpteamUser user = null;
 		Transaction tx = null;
@@ -107,6 +129,14 @@ public class ViewUser2 extends ServletUtil {
 		return user;
 	}
 
+
+	/**
+	 * Helper method to get all Projects associated with
+	 * the selected TPTeam user
+	 * 
+	 * @param projects the Projects
+	 * @throws Exception
+	 */
 	protected void getProjects(Set<Project> projects) throws Exception {
 		StringBuffer projs = new StringBuffer();
 		if (projects == null || projects.size() < 1) {
@@ -119,6 +149,14 @@ public class ViewUser2 extends ServletUtil {
 		mProjects = projs.toString();
 	}
 
+	/**
+	 * Helper method to render the HTML page
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, Exception {
 		StringBuffer reply = new StringBuffer();

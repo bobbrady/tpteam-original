@@ -1,30 +1,38 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	ViewProduct.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for selecting
+ * 				a particular TPTeam Product for viewing
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	ViewProduct.java
+ * 
+ * Description 	: 	Servlet that displays an input form for selecting
+ * 					a particular TPTeam Product for viewing
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ViewProduct extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -39,6 +47,12 @@ public class ViewProduct extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Renders the new Product input form
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
@@ -61,6 +75,13 @@ public class ViewProduct extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Helper method that gets all Products and wraps 
+	 * them in HTML option tags
+	 * 
+	 * @return The Product option tags
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public String getProdRows() throws Exception {
 		Session s = null;

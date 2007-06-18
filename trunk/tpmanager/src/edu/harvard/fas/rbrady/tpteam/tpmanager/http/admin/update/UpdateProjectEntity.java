@@ -25,7 +25,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 /*******************************************************************************
- * File 		: 	UpdateProductEntity.java
+ * File 		: 	UpdateProjectEntity.java
  * 
  * Description 	: 	Servlet that updates a Project in the TPTeam 
  * 					database

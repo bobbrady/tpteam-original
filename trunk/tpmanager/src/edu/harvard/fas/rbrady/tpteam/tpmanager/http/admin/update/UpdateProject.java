@@ -5,7 +5,7 @@
  * Author	:	Bob Brady, rpbrady@gmail.com
  * 
  * Contents	:	Servlet that displays an input form for updating
- * 				a new TPTeam Project
+ * 				a TPTeam Project
  *  
  ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.update;
@@ -22,7 +22,16 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
-
+/*******************************************************************************
+ * File 		: 	UpdateProduct.java
+ * 
+ * Description 	: 	Servlet that displays an input form for updating
+ * 					a TPTeam Project
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class UpdateProject extends ServletUtil {
 	private static final long serialVersionUID = 7456848419577223441L;
 

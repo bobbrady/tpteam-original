@@ -5,7 +5,7 @@
  * Author	:	Bob Brady, rpbrady@gmail.com
  * 
  * Contents	:	Servlet that displays an input form for updating
- * 				a new TPTeam Product
+ * 				a TPTeam Product
  *  
  ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.update;
@@ -26,7 +26,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
  * File 		: 	UpdateProduct.java
  * 
  * Description 	: 	Servlet that displays an input form for updating
- * 					a new TPTeam Product
+ * 					a TPTeam Product
  * 
  * @author Bob Brady, rpbrady@gmail.com
  * @version $Revision$

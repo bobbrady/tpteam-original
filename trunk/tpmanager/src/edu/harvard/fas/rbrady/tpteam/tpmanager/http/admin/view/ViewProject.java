@@ -1,29 +1,37 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	UpdateProject.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for viewing
+ * 				a particular TPTeam Project
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	ViewProduct.java
+ * 
+ * Description 	: 	Servlet that displays an input form for viewing
+ * 					a particular TPTeam Project
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ViewProject extends ServletUtil {
 	private static final long serialVersionUID = 7456848419577223441L;
 
@@ -43,6 +51,14 @@ public class ViewProject extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Renders the update Project input form for selecting one Project
+	 * 
+	 * @param req
+	 *            The Servlet Request
+	 * @param resp
+	 *            The Servlet Response
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
@@ -66,13 +82,16 @@ public class ViewProject extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Helper method that gets all Project and wraps them in HTML option tags
+	 * 
+	 * @return The Product option tags
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getProjRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
-		// For standalone
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-
 		Transaction tx = null;
 		List<Project> projs = null;
 		StringBuffer projRows = new StringBuffer();

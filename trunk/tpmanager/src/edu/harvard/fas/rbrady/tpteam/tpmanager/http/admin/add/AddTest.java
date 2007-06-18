@@ -1,30 +1,38 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	AddTest.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays input forms for creating
+ * 				a new TPTeam Test
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.add;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestType;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	AddTest.java
+ * 
+ * Description 	: 	Servlet that displays input forms for creating
+ * 					a new TPTeam Test
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class AddTest extends ServletUtil {
 
 	protected static final long serialVersionUID = 7456848419577223441L;
@@ -53,6 +61,8 @@ public class AddTest extends ServletUtil {
 
 	protected String mRemoteUser = null;
 
+	// Default values for JUnit tests
+	
 	public static final String ECLIPSE_HOME = "c:/Java/Eclipse3.2.1/eclipse";
 
 	public static final String ECLIPSE_WORKSPACE = "c:/workspace_tpteam_test";
@@ -67,6 +77,15 @@ public class AddTest extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Renders the appropriate form for a new Test, folder or 
+	 * definiton.  Displays any errors to the user.
+	 * 
+	 * @param req the Servlet request
+	 * @param resp the Servlet response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
@@ -94,6 +113,16 @@ public class AddTest extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Renders the core data input form for a new Test:
+	 * name, description, and type.
+	 * 
+	 * @param req the Servlet Request
+	 * @param resp the Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	public void getPage1(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, Exception {
 		getProjOptions();
@@ -107,6 +136,16 @@ public class AddTest extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Renders the detailed form input for a new Test:
+	 * the parent folder and any test definition details.
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	public void getPage2(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException, Exception {
 		// Split out IDs and Names from form parameters
@@ -117,13 +156,19 @@ public class AddTest extends ServletUtil {
 		showAddTestPage2(req, resp);
 	}
 
+
+	/**
+	 * Gets all TPTeam Projects and wraps them 
+	 * into HTML select option tags
+	 * 
+	 * @return The Project select option tags
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getProjOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
 
-		// For standalone debug
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		List<Project> projs = null;
 		mProjOptions = "";
@@ -155,13 +200,17 @@ public class AddTest extends ServletUtil {
 		return mProjOptions;
 	}
 
+	/**
+	 * Gets all TPTeam TestTypes and wraps them 
+	 * into HTML select option tags
+	 * 
+	 * @return The TestType select option tags
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getTestTypeOptions() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
-
-		// For standalone debug
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		List<TestType> types = null;
 		mTestTypeOptions = "";
@@ -191,6 +240,14 @@ public class AddTest extends ServletUtil {
 		return mTestTypeOptions;
 	}
 
+	/**
+	 * Helper method for rendering core input data form
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	protected void showAddTestPage1(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
@@ -214,6 +271,16 @@ public class AddTest extends ServletUtil {
 		showPage(req, resp, reply, ServletUtil.ADD_TEST_JS, this);
 	}
 
+	/**
+	 * Helper method for rendering the detailed
+	 * input form 
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	protected void showAddTestPage2(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
@@ -248,6 +315,13 @@ public class AddTest extends ServletUtil {
 				this);
 	}
 
+	/**
+	 * Helper method for getting appropriate 
+	 * form table based upon test type selected 
+	 * by user
+	 * 
+	 * @return the String HTML form table
+	 */
 	protected String getTestTypeFormTable() {
 		String testTypeTable = "";
 		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
@@ -256,10 +330,16 @@ public class AddTest extends ServletUtil {
 		return testTypeTable;
 	}
 
+	/**
+	 * Helper method for injecting the appropriate
+	 * JavaScript depending if a new Test folder or
+	 * definiton was selected by the user
+	 * 
+	 * @return The JavaScript reference
+	 */
 	protected String getTestTypeJavaScript() {
 		String testTypeJS = "";
 		if (mTestTypeName.equalsIgnoreCase("JUNIT")) {
-			// testTypeJS = getJUnitJavaScript();
 			testTypeJS = ServletUtil.ADD_TEST_TYPE_JS;
 		} else if (mTestTypeName.equalsIgnoreCase("FOLDER")) {
 			testTypeJS = ServletUtil.ADD_TEST_FOLDER_JS;
@@ -267,6 +347,12 @@ public class AddTest extends ServletUtil {
 		return testTypeJS;
 	}
 
+	/**
+	 * Helper method gets the HTML for rendering
+	 * a JUnit test type input form table
+	 * 
+	 * @return The HTML String form table
+	 */
 	protected String getJUnitFormTable() {
 		StringBuffer reply = new StringBuffer();
 		reply

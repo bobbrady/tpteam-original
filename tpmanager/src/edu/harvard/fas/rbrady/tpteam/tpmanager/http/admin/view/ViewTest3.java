@@ -1,33 +1,41 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	ViewTest3.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that loads the details for a particular Test
+ * 				so that a user can view them
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.view;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Set;
 import java.util.TreeSet;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TestExecution;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	ViewTest3.java
+ * 
+ * Description 	: 	Servlet that loads the details for a particular Test
+ * 					so that a user can view them
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class ViewTest3 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -40,11 +48,20 @@ public class ViewTest3 extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Gets the ID of the Test selected and renders the details
+	 * in HTML
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
 			mTestID = req.getParameter("testID");
-			getPage(req, resp);
+			showUpdateTestPage3(req, resp);
 		} catch (Exception e) {
 			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
 					+ e.getCause() + "</h3>");
@@ -53,11 +70,15 @@ public class ViewTest3 extends ServletUtil {
 		}
 	}
 
-	public void getPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, Exception {
-		showUpdateTestPage3(req, resp);
-	}
-
+	/**
+	 * Helper method for rendering the test details HTML
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	protected void showUpdateTestPage3(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
@@ -72,12 +93,18 @@ public class ViewTest3 extends ServletUtil {
 		showPage(req, resp, reply, null, this);
 	}
 
+	/**
+	 * Loads the Test selected by the user so that
+	 * its details can be displayed
+	 *  
+	 * @param testId the Test ID
+	 * @return the Test details as HTML
+	 * @throws Exception
+	 */
 	protected String getTestRows(String testId) throws Exception {
 		Transaction tx = null;
 		StringBuffer updateRows = new StringBuffer();
 		try {
-			// Standalone session
-			//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 			Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
 			tx = s.beginTransaction();
 			Test test = (Test) s.load(Test.class, new Integer(testId));
@@ -103,6 +130,13 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 
+	/**
+	 * Helper method that renders the HTML 
+	 * for the JUnit details
+	 * 
+	 * @param test the JUnit Test
+	 * @return the Test details in HTML
+	 */
 	protected String getJUnitUpdateRows(Test test) {
 		StringBuffer updateRows = new StringBuffer();
 		for (JunitTest jUnitTest : test.getJunitTests()) {
@@ -122,6 +156,13 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 
+	/**
+	 * Helper method that renders the HTML  
+	 * for the core Test details
+	 * 
+	 * @param test the Test
+	 * @return the core Test details as HTML
+	 */
 	protected String getFolderRows(Test test) throws ParseException {
 		StringBuffer updateRows = new StringBuffer();
 		String desc = "";
@@ -159,6 +200,13 @@ public class ViewTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 	
+	/**
+	 * Helper method that gets all of the selected Test's
+	 * execution results in HTML format
+	 * 
+	 * @param testExecs the Test's Set of TestExecutions
+	 * @return the TestExecution details in HTML format
+	 */
 	protected String getTestResults(Set<TestExecution> testExecs)
 	{
 		StringBuffer results = new StringBuffer();

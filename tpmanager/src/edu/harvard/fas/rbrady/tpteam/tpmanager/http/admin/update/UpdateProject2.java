@@ -25,7 +25,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 /*******************************************************************************
- * File 		:	UpdateProject.java
+ * File 		:	UpdateProject2.java
  * 
  * Description 	: 	Servlet that displays the details for updating
  * 					a particular TPTeam Project

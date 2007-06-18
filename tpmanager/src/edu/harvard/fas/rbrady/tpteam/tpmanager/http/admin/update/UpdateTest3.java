@@ -5,7 +5,7 @@
  * Author	:	Bob Brady, rpbrady@gmail.com
  * 
  * Contents	:	Servlet that loads the details for a particular Test
- * 				into so that a user can edit and update them
+ * 				into a form so that a user can edit and update them
  *  
  ********************************************************************/
 
@@ -28,7 +28,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
  * File 		: 	UpdateTest3.java
  * 
  * Description 	: 	Servlet that loads the details for a particular Test
- * 					into so that a user can edit and update them
+ * 					into a form so that a user can edit and update them
  * 
  * @author Bob Brady, rpbrady@gmail.com
  * @version $Revision$
@@ -51,7 +51,7 @@ public class UpdateTest3 extends ServletUtil {
 	
 	/**
 	 * Gets the ID of the Test selected and renders the details
-	 * in a forma
+	 * in a form
 	 * 
 	 * @param req The Servlet Request
 	 * @param resp The Servlet Response
@@ -165,7 +165,6 @@ public class UpdateTest3 extends ServletUtil {
 	 * @param test the Test
 	 * @return the HTML form inputs
 	 */
-
 	protected String getFolderUpdateRows(Test test) {
 		StringBuffer updateRows = new StringBuffer();
 		String desc = "";

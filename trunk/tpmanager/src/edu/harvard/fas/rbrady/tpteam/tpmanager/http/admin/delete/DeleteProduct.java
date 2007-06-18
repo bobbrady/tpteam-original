@@ -1,29 +1,37 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	DeleteProduct.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for deleting
+ * 				a TPTeam Product
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	DeleteProduct.java
+ * 
+ * Description 	: 	Servlet that displays an input form for deleting
+ * 					a TPTeam Product
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class DeleteProduct extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -42,6 +50,14 @@ public class DeleteProduct extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Gathers the Product selection list, renders input form
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try
@@ -64,13 +80,17 @@ public class DeleteProduct extends ServletUtil {
 			}
 	}
 	
+	/**
+	 * Gets all TPTeam Products and wraps them in HTML
+	 * selection list option tags
+	 * 
+	 * @return the HTML String Product option tag
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private String getProdRows() throws Exception
 	{
-//		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-		// For standalone
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-
 		Transaction tx = null;
 		List<Product> prods = null;
 		StringBuffer prodRows = new StringBuffer();
@@ -102,7 +122,13 @@ public class DeleteProduct extends ServletUtil {
 		return mProdRows;
 	}
 
-	
+	/**
+	 * Helper method that renders errors as HTML
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void throwError(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException
 	{
@@ -110,6 +136,13 @@ public class DeleteProduct extends ServletUtil {
 		adminError(req, resp, error);
 	}
 	
+	/**
+	 * Helper method that renders HTML input form
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException
 	{		
@@ -117,20 +150,5 @@ public class DeleteProduct extends ServletUtil {
 		adminHeader(req, resp, DELETE_PROD_JS);
 		adminReply(req, resp, reply);
 		adminFooter(req, resp);
-	}
-	
-	public static void main(String[] args)
-	{
-		try
-		{
-			
-		DeleteProduct servlet = new DeleteProduct();
-		System.out.println(servlet.getProdRows());
-		
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 }

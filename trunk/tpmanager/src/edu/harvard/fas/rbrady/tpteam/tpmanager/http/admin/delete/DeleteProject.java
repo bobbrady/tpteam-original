@@ -1,29 +1,37 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	DeleteProject.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for deleting
+ * 				a TPTeam Project
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	DeleteProject.java
+ * 
+ * Description 	: 	Servlet that displays an input form for deleting
+ * 					a TPTeam Project
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class DeleteProject extends ServletUtil {
 	private static final long serialVersionUID = 7456848419577223441L;
 	private boolean mIsProjAvailable = false;
@@ -39,6 +47,14 @@ public class DeleteProject extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Gathers all Projects as HTML input forms, renders page
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try
@@ -61,13 +77,17 @@ public class DeleteProject extends ServletUtil {
 			}
 	}
 	
+	/**
+	 * Gets all Projects and wraps them as HTML
+	 * selection list options
+	 * 
+	 * @return the HTML String of Project options
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private String getProjRows() throws Exception
 	{
 		Session s = Activator.getDefault().getHiberSessionFactory().getCurrentSession();
-		// For standalone
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-
 		Transaction tx = null;
 		List<Project> projs = null;
 		StringBuffer projRows = new StringBuffer();
@@ -100,7 +120,14 @@ public class DeleteProject extends ServletUtil {
 		return mProjRows;
 	}
 
-	
+	/**
+	 * Helper method to render errors as HTML
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * 
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void throwError(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException
 	{
@@ -108,6 +135,15 @@ public class DeleteProject extends ServletUtil {
 		adminError(req, resp, error);
 	}
 	
+	/**
+	 * Helper method to render the HTML page, including 
+	 * JavaScript
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException
 	{		
@@ -115,20 +151,5 @@ public class DeleteProject extends ServletUtil {
 		adminHeader(req, resp, DELETE_PROJ_JS);
 		adminReply(req, resp, reply);
 		adminFooter(req, resp);
-	}
-	
-	public static void main(String[] args)
-	{
-		try
-		{
-			
-		DeleteProject servlet = new DeleteProject();
-		System.out.println(servlet.getProjRows());
-		
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 }

@@ -46,7 +46,7 @@ public class AddProject extends ServletUtil {
 	}
 
 	/**
-	 * Renders the new Product input form
+	 * Renders the new Project input form
 	 * 
 	 * @param req The Servlet Request
 	 * @param resp The Servlet Response

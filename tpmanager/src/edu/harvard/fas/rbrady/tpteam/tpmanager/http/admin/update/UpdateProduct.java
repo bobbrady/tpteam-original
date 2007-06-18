@@ -1,29 +1,37 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	UpdateProduct.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for updating
+ * 				a new TPTeam Product
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.update;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Product;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	UpdateProduct.java
+ * 
+ * Description 	: 	Servlet that displays an input form for updating
+ * 					a new TPTeam Product
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class UpdateProduct extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -44,6 +52,12 @@ public class UpdateProduct extends ServletUtil {
 		super.init(config);
 	}
 
+	/**
+	 * Renders the new Product input form
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
@@ -61,6 +75,13 @@ public class UpdateProduct extends ServletUtil {
 		}
 	}
 
+	/**
+	 * Helper method that gets all Products and wraps 
+	 * them in HTML option tags
+	 * 
+	 * @return The Product option tags
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	private String getProdRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
@@ -102,12 +123,29 @@ public class UpdateProduct extends ServletUtil {
 		return mProdRows;
 	}
 
+	/**
+	 * Helper method to render errors as HTML
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * 
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void throwError(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String error = "<h3>Error: No Product Available</h3>";
 		adminError(req, resp, error);
 	}
 
+	/**
+	 * Helper method to render the HTML page, including 
+	 * JavaScript
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String reply = "<h4>Update Product</h4>\n<table>" + mProdRows
@@ -115,16 +153,5 @@ public class UpdateProduct extends ServletUtil {
 		adminHeader(req, resp, UPDATE_PROD_JS);
 		adminReply(req, resp, reply);
 		adminFooter(req, resp);
-	}
-
-	public static void main(String[] args) {
-		try {
-
-			UpdateProduct servlet = new UpdateProduct();
-			System.out.println(servlet.getProdRows());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

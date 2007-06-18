@@ -1,11 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	UpdateTest3.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that loads the details for a particular Test
+ * 				into so that a user can edit and update them
+ *  
+ ********************************************************************/
 
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.update;
 
@@ -15,15 +17,23 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Test;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
+/*******************************************************************************
+ * File 		: 	UpdateTest3.java
+ * 
+ * Description 	: 	Servlet that loads the details for a particular Test
+ * 					into so that a user can edit and update them
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class UpdateTest3 extends ServletUtil {
 
 	private static final long serialVersionUID = 7456848419577223441L;
@@ -38,11 +48,21 @@ public class UpdateTest3 extends ServletUtil {
 		super.init(config);
 	}
 
+	
+	/**
+	 * Gets the ID of the Test selected and renders the details
+	 * in a forma
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
 			mTestID = req.getParameter("testID");
-			getPage(req, resp);
+			showUpdateTestPage3(req, resp);
 		} catch (Exception e) {
 			StringBuffer error = new StringBuffer("<h3>Error: " + e.getMessage() + "<br>"
 					+ e.getCause() + "</h3>");
@@ -51,11 +71,15 @@ public class UpdateTest3 extends ServletUtil {
 		}
 	}
 
-	public void getPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, Exception {
-		showUpdateTestPage3(req, resp);
-	}
-
+	/**
+	 * Helper method for rendering the form HTML
+	 * 
+	 * @param req The Servlet Request
+	 * @param resp The Servlet Response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	protected void showUpdateTestPage3(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException,
 			Exception {
@@ -70,9 +94,15 @@ public class UpdateTest3 extends ServletUtil {
 		showPage(req, resp, reply, mJavaScript, this);
 	}
 
+	/**
+	 * Loads the Test selected by the user so that
+	 * its details can be displayed
+	 *  
+	 * @param testId the Test ID
+	 * @return the Test details as HTML form inputs
+	 * @throws Exception
+	 */
 	protected String getUpdateTestRows(String testId) throws Exception {
-		// Standalone session
-		//Session s = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = null;
 		StringBuffer updateRows = new StringBuffer();
 		try {
@@ -102,6 +132,13 @@ public class UpdateTest3 extends ServletUtil {
 		return updateRows.toString();
 	}
 
+	/**
+	 * Helper method that renders the HTML form input 
+	 * elements for the JUnit details
+	 * 
+	 * @param test the JUnit Test
+	 * @return the HTML form inputs
+	 */
 	protected String getJUnitUpdateRows(Test test) {
 		StringBuffer updateRows = new StringBuffer();
 		for (JunitTest jUnitTest : test.getJunitTests()) {
@@ -120,6 +157,14 @@ public class UpdateTest3 extends ServletUtil {
 		}
 		return updateRows.toString();
 	}
+
+	/**
+	 * Helper method that renders the HTML form input 
+	 * elements for the core Test details
+	 * 
+	 * @param test the Test
+	 * @return the HTML form inputs
+	 */
 
 	protected String getFolderUpdateRows(Test test) {
 		StringBuffer updateRows = new StringBuffer();

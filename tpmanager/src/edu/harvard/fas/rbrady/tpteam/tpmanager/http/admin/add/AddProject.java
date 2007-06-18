@@ -148,7 +148,7 @@ public class AddProject extends ServletUtil {
 	}
 	
 	/**
-	 * Helper method to render HTML errors
+	 * Helper method to render errors as HTML
 	 * @param req The Servlet Request
 	 * @param resp The Servlet Response
 	 * 

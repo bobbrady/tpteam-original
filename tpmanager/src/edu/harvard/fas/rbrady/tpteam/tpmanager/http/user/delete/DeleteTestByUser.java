@@ -1,19 +1,19 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	DeleteTestByUser.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for deleting
+ * 				a TPTeam Test by first selecting its parent Project,
+ * 				for use by a non-administrative Web user
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.delete;
 
 import java.util.Set;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.Project;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.TpteamUser;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
@@ -21,10 +21,29 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.admin.delete.DeleteTest;
 
+/*******************************************************************************
+ * File 		: 	DeleteTestByUser.java
+ * 
+ * Description 	: 	Servlet that displays an input form for deleting
+ * 					a TPTeam Test by first selecting its parent Project,
+ * 					for use by a non-administrative Web user
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class DeleteTestByUser extends DeleteTest implements UserServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Gets all TPTeam Projects that are associated
+	 * with the TPTeam user and wraps them 
+	 * into HTML select option tags
+	 * 
+	 * @return The Project select option tags
+	 * @throws Exception
+	 */
 	protected String getProjRows() throws Exception {
 
 		Transaction tx = null;
@@ -34,10 +53,6 @@ public class DeleteTestByUser extends DeleteTest implements UserServlet {
 			int remoteUserId = ServletUtil.getRemoteUserID(mRemoteUser);
 			Session s = Activator.getDefault().getHiberSessionFactory()
 					.getCurrentSession();
-			// For standalone
-			// Session s =
-			// HibernateUtil.getSessionFactory().getCurrentSession();
-
 			tx = s.beginTransaction();
 			TpteamUser user = (TpteamUser) s.createQuery(
 					"from TpteamUser as user where user.id = " + remoteUserId)

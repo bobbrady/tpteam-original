@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	AddTestEntityByUser.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet used for adding new Tests to the TPTeam
+ * 				database by a non-administrative Web user
+ *  
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.add;
 
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.UserServlet;

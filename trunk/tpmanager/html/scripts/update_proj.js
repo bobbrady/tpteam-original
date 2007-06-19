@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	update_proj.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used before the updating
+ *				a Project
+ *  
+ ********************************************************************/
 function validateForm (form)
 {
 	var name = form.projName.value;

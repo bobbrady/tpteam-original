@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	add_test_tree.css
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A Cascading Style Sheet that aids in displaying the 
+ *				TPTeam Test Tree
+ *  
+ ********************************************************************/
 .trigger{
 	cursor: pointer;
 	cursor: hand;

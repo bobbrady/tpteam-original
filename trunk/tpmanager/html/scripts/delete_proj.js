@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	delete_proj.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form confirmation script used before the deleting
+ *				a Project
+ *  
+ ********************************************************************/
 	function validateForm (form)
 	{
 		form.action = "deleteProjectEntity";

@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	update_user.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used before updating
+ *				a TPTeam user
+ *  
+ ********************************************************************/
 function validateForm (form)
 {
 	var firstName = form.firstName.value;

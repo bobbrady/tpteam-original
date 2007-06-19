@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	exec_test_tree.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script to ensure a Test Tree 
+ *				element was selected before an execution request
+ *  
+ ********************************************************************/
 function validateForm(form)
 {
 	if(selectedID == "")

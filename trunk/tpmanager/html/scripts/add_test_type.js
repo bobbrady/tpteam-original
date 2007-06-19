@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	add_test_type.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used when adding test 
+ *				types
+ *  
+ ********************************************************************/
 function validatePage2Form ()
 {
 	var workspace = document.addTestPage2.eclipseWorkspace.value;

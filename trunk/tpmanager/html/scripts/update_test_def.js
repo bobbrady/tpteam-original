@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	update_test_def.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used before updating
+ *				a Test definition
+ *  
+ ********************************************************************/
 function validateForm(form)
 {
 	var name = form.testName.value;

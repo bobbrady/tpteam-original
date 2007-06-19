@@ -1,4 +1,13 @@
-
+/********************************************************************
+ * 
+ * File		:	add_test.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used when adding tests,
+ *              to verify core test data
+ *  
+ ********************************************************************/
 function validatePage1Form ()
 { 
 	var name = document.addTestPage1.testName.value;

@@ -1,22 +1,47 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	AutomationClient.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A wrapper around the TPTP AutomationClientAdapter, 
+ * 				utilizes the TPTP AgentController to execute TPTP
+ * 				test suites on behalf of the TPManager
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.tptp;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import org.eclipse.hyades.automation.client.adapters.java.AutomationClientAdapter;
 
+/*******************************************************************************
+ * File 		: 	AutomationClient.java
+ * 
+ * Description 	: 	A wrapper around the TPTP AutomationClientAdapter, 
+ * 					utilizes the TPTP AgentController to execute TPTP
+ * 					test suites on behalf of the TPManager
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class AutomationClient {
 
+	/**
+	 * Runs the given TPTP test suites on the
+	 * machine configuration specified by input
+	 * paramters
+	 * 
+	 * @param eclipse the Eclipse Home path
+	 * @param workspace the Eclipse Workspace path
+	 * @param project the Eclipse project inside the workspace
+	 * @param suites the TPTP test suites to be run
+	 * @param report the path to place any generated reports
+	 * @param connection the TPTP connection to the machine, local or remote
+	 * @return the test execution verdict
+	 */
 	@SuppressWarnings("unchecked")
 	public String run(String eclipse, String workspace, String project,
 			String[] suites, String report, String connection) {
@@ -64,7 +89,6 @@ public class AutomationClient {
 		// Retrieve results back from return list
 		results = (List) properties.get("results");
 		System.out.println("Results collected: " + results);
-	
 
 		// Configure service properties for this service invocation
 		properties = new Properties();
@@ -82,35 +106,8 @@ public class AutomationClient {
 		// Output verdict indicated from test results
 		System.out.println("Verdict: '" + properties.getProperty("verdict")
 				+ "'");
-
+		
 		return properties.getProperty("verdict");
 
 	}
-	
-	public static void main(String[] args)
-	{
-		
-		String eclipse = "c:/Java/Eclipse3.2.1_ECF0.9.6/eclipse";
-		String workspace = "c:/tpteam/workspace_tpteam_test";
-		String project = "edu.harvard.fas.rbrady.tpteam.test";
-		String[] suites = new String[]{"edu/harvard/fas/rbrady/tpteam/tpbridge/hibernate/test/ProductTest.testsuite"};
-		String connection = "tptp:rac://localhost:10002/default";
-		String report = eclipse + "/reports";
-		
-		
-		/*
-		String eclipse = "/usr/local/eclipse";
-		String workspace = "/home/tpteam/workspace_tpteam_test";
-		String project = "edu.harvard.fas.rbrady.tpteam.test";
-		String[] suites = new String[]{"edu/harvard/fas/rbrady/tpteam/tpmanager/hibernate/test/ProductTest.testsuite"};
-		String connection = "tptp:rac://192.168.0.12:10002/default";
-		String report = eclipse + "/reports";
-		*/
-
-		
-		AutomationClient client = new AutomationClient();
-		client.run(eclipse, workspace, project, suites, report, connection);
-		
-	}
-
 }

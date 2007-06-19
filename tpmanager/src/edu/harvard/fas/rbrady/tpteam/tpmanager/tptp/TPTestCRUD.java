@@ -1,11 +1,20 @@
+/********************************************************************
+ * 
+ * File		:	TPTestCRUD.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides synchronized methods for performing 
+ * 				TPTeam CRUD operations and sending the resulting 
+ * 				responses
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.tptp;
 
 import java.util.Hashtable;
 import java.util.Set;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
@@ -18,8 +27,27 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ChartUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.ProjectUtil;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestUtil;
 
+/*******************************************************************************
+ * File 		: 	TPTestCRUD.java
+ * 
+ * Description 	: 	Provides synchronized methods for performing 
+ * 					TPTeam CRUD operations and sending the resulting 
+ * 					responses
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TPTestCRUD {
 
+	/**
+	 * Sends a TPEvent response when a new Test folder or definition has been
+	 * persisted to the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent add Test request
+	 * @throws Exception
+	 */
 	public static synchronized void sendTestAddResponse(TPEvent tpEvent)
 			throws Exception {
 
@@ -39,6 +67,14 @@ public class TPTestCRUD {
 
 	}
 
+	/**
+	 * Sends a TPEvent response when the Test folder or definition details have
+	 * been lodaded from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent Test details request
+	 * @throws Exception
+	 */
 	public static void sendTestDetailResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, dictionary.get(TPEvent.FROM));
@@ -56,6 +92,14 @@ public class TPTestCRUD {
 				ITPBridge.TEST_DETAIL_RESP_TOPIC, dictionary);
 	}
 
+	/**
+	 * Sends a TPEvent response when the Test folder or definiton details for an
+	 * update have been loaded from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent Test update details request
+	 * @throws Exception
+	 */
 	public static void sendTestUpdateDatResponse(TPEvent tpEvent)
 			throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
@@ -76,6 +120,14 @@ public class TPTestCRUD {
 				ITPBridge.TEST_UPDATE_DATA_RESP_TOPIC, dictionary);
 	}
 
+	/**
+	 * Sends a TPEvent response when the Test folder or definiton details for an
+	 * update have been persisted to the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent Test update request
+	 * @throws Exception
+	 */
 	public static synchronized void sendTestUpdateResponse(TPEvent tpEvent)
 			throws Exception {
 
@@ -95,6 +147,13 @@ public class TPTestCRUD {
 
 	}
 
+	/**
+	 * Deletes a Test folder or definition from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent Test delete request
+	 * @throws Exception
+	 */
 	public static synchronized void deleteTest(TPEvent tpEvent)
 			throws Exception {
 		Transaction tx = null;
@@ -137,11 +196,17 @@ public class TPTestCRUD {
 				tx.rollback();
 			throw e;
 		}
-
 	}
 
-	public static void sendDelTestResponse(TPEvent tpEvent)
-			throws Exception {
+	/**
+	 * Sends a TPEvent response when the Test folder or definition have been
+	 * deleted from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent Test delete request
+	 * @throws Exception
+	 */
+	public static void sendDelTestResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = tpEvent.getDictionary();
 		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
 				TPEvent.FROM));
@@ -155,6 +220,14 @@ public class TPTestCRUD {
 				ITPBridge.TEST_DEL_RESP_TOPIC, dictionary);
 	}
 
+	/**
+	 * Sends a TPEvent response when the Test Project details have been loaded
+	 * from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent get project request
+	 * @throws Exception
+	 */
 	public static void sendProjGetResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
@@ -170,6 +243,14 @@ public class TPTestCRUD {
 				ITPBridge.PROJ_GET_RESP_TOPIC, dictionary);
 	}
 
+	/**
+	 * Sends a TPEvent response when the Test Tree details have been loaded from
+	 * the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent get test tree request
+	 * @throws Exception
+	 */
 	public static void sendTestTreeGetResponse(TPEvent tpEvent)
 			throws Exception {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
@@ -186,6 +267,14 @@ public class TPTestCRUD {
 				ITPBridge.TEST_TREE_GET_RESP_TOPIC, dictionary);
 	}
 
+	/**
+	 * Sends a TPEvent response when the TPTeam Chart details have been loaded
+	 * from the TPTeam database
+	 * 
+	 * @param tpEvent
+	 *            the incoming TPEvent get chart data request
+	 * @throws Exception
+	 */
 	public static void sendChartDataResponse(TPEvent tpEvent) throws Exception {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(TPEvent.SEND_TO, tpEvent.getDictionary().get(
@@ -208,9 +297,7 @@ public class TPTestCRUD {
 			dictionary.put(TPEvent.CHART_DATASET_XML_KEY, ChartUtil
 					.getLineChartXML(tpEvent));
 		}
-
 		Activator.getDefault().getEventAdminClient().sendEvent(
 				ITPBridge.CHART_GET_DATA_RESP_TOPIC, dictionary);
 	}
-
 }

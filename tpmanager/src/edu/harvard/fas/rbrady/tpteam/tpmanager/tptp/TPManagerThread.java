@@ -1,16 +1,46 @@
+/********************************************************************
+ * 
+ * File		:	TPManagerThread.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	The Thread that instantiated to handle each and 
+ * 				every TPEvent request to the TPManager
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.tptp;
 
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.model.TPEvent;
 
+/*******************************************************************************
+ * File 		: 	TPManagerThread.java
+ * 
+ * Description 	: 	The Thread that instantiated to handle each and 
+ * 					every TPEvent request to the TPManager
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TPManagerThread implements Runnable {
 
+	/** The TPEvent whose request is being handled */
 	private TPEvent mTPEvent;
 
+	/**
+	 * Constructor
+	 * @param tpEvent the TPEvent request
+	 */
 	public TPManagerThread(TPEvent tpEvent) {
 		mTPEvent = tpEvent;
 	}
 
+	/**
+	 * Performs the necessary CRUD or execution operation
+	 * based upon the TPEvent topic.  Sends a response when
+	 * appropriate.
+	 */
 	public void run() {
 		String tpTopic = mTPEvent.getTopic();
 		try {
@@ -42,9 +72,7 @@ public class TPManagerThread implements Runnable {
 				TPTestCRUD.sendChartDataResponse(mTPEvent);
 			}
 		} catch (Exception e) {
-			// Should throw TPTeam ExceptionEvent here?
 			e.printStackTrace();
 		}
 	}
-
 }

@@ -1,13 +1,22 @@
+/********************************************************************
+ * 
+ * File		:	TPTestExec.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides synchronized methods for performing 
+ * 				TPTeam Test executions and sending the resulting 
+ * 				responses
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager.tptp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import edu.harvard.fas.rbrady.tpteam.tpbridge.bridge.ITPBridge;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.HibernateUtil;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.hibernate.JunitTest;
@@ -19,6 +28,17 @@ import edu.harvard.fas.rbrady.tpteam.tpbridge.xml.TestExecutionXML;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.hibernate.TestExecutionUtil;
 
+/*******************************************************************************
+ * File 		: 	TPTestExec.java
+ * 
+ * Description 	: 	Provides synchronized methods for performing 
+ * 					TPTeam Test executions and sending the resulting 
+ * 					responses
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TPTestExec {
 	
 	/** Locale to format test result time */
@@ -28,7 +48,14 @@ public class TPTestExec {
 	public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat(
 			"MM/dd/yyyy HH:mm:ss.SSS z", USA_LOCALE);
 
-
+	/**
+	 * Loads the test metadata from the TPTeam database
+	 * for a given Test and then executes the Test
+	 * 
+	 * @param testID the TPTeam ID of the Test
+	 * @param tpEvent the TPEvent get test execution request
+	 * @throws Exception
+	 */
 	public static synchronized void runTest(String testID, TPEvent tpEvent)
 			throws Exception {
 		Transaction tx = null;
@@ -81,6 +108,16 @@ public class TPTestExec {
 
 	}
 
+	/**
+	 * Helper method that collects the JUnit metadata for
+	 * a given test and requests the AutomationClient 
+	 * execute it
+	 * 
+	 * @see AutomationClient
+	 * @param testID the TPTeam ID of the Test
+	 * @param tpEvent the TPEvent get test execution request
+	 * @throws Exception
+	 */
 	private static synchronized void runJUnitTest(String testID, TPEvent tpEvent)
 			throws Exception {
 		Transaction tx = null;
@@ -132,6 +169,13 @@ public class TPTestExec {
 		}
 	}
 
+	/**
+	 * Sends a Test execution response TPEvent
+	 * when the requested Test execution has 
+	 * completed
+	 * 
+	 * @param tpEvent the TPEvent Test execution request
+	 */
 	public static void sendTestExecResponse(TPEvent tpEvent) {
 		tpEvent.setTopic(ITPBridge.TEST_EXEC_RESULT_TOPIC);
 		tpEvent.getDictionary().put(TPEvent.FROM,
@@ -151,6 +195,12 @@ public class TPTestExec {
 				tpEvent.getTopic(), tpEvent.getDictionary());
 	}
 	
+	/**
+	 * Helper method to get properly
+	 * formatted test execution timestamp
+	 * 
+	 * @return the timestamp
+	 */
 	private static String getDateTime() {
 		Date now = new Date();
 		return SIMPLE_DATE_FORMATTER.format(now);

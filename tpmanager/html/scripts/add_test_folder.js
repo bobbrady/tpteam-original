@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	add_test_folder.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used when adding test 
+ *				folders
+ *  
+ ********************************************************************/
 function validatePage2Form ()
 {
 	if(selectedID == "")

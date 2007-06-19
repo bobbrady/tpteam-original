@@ -1,3 +1,12 @@
+/********************************************************************
+ * 
+ * File		:	add_test_tree.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A script used to render a test tree when adding tests
+ *  
+ ********************************************************************/
 var openImg = new Image();
 openImg.src = "/bridge/tpteam/images/open.gif";
 var closedImg = new Image();

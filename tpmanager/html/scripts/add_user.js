@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	add_user.js
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	A form validation script used when adding new TPTeam
+ *				users
+ *  
+ ********************************************************************/
 function validateForm ()
 {
 	var firstName = document.addUser.firstName.value;

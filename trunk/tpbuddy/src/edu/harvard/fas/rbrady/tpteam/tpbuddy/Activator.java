@@ -1,11 +1,12 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	Activator.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Controls the lifecycle of the TPBuddy Plug-in
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -16,9 +17,16 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminClient;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.tpbridge.TPBridgeClient;
 
-/**
- * The activator class controls the plug-in life cycle
- */
+/********************************************************************
+ * File			:	Activator.java
+ *
+ * Description	: 	Controls the lifecycle of the TPBuddy Plug-in
+ *
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$
+ * Copyright (c) 2007 Bob Brady
+ *********************************************************************/
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
@@ -98,6 +106,8 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
+	// Public accessors
+	
 	public  EventAdminClient getEventAdminClient() {
 		return mEventAdminClient;
 	}

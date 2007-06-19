@@ -94,9 +94,6 @@ public class UpdateTest extends ServletUtil {
 	protected String getProjRows() throws Exception {
 		Session s = Activator.getDefault().getHiberSessionFactory()
 				.getCurrentSession();
-		// For standalone
-		// Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-
 		Transaction tx = null;
 		List<Project> projs = null;
 		StringBuffer projRows = new StringBuffer();

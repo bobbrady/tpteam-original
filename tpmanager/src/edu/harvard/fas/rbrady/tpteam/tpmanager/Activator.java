@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	Activator.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
-
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Controls the lifecycle of the TPManager Plug-in
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpmanager;
 
 import org.hibernate.SessionFactory;
@@ -20,9 +20,19 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.http.HttpServiceTracker;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.tpbridge.TPBridgeClient;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.tptp.TPManager;
 
+/********************************************************************
+ * File			:	Activator.java
+ *
+ * Description	: 	Controls the lifecycle of the TPManager Plug-in
+ *
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$
+ * Copyright (c) 2007 Bob Brady
+ *********************************************************************/
 public class Activator implements BundleActivator {
 
-	// The shared instance
+	/** The plug-in shared instance */
 	private static Activator mBundle;
 
 	private EventAdminClient mEventAdminClient;
@@ -35,16 +45,20 @@ public class Activator implements BundleActivator {
 
 	private ServiceTracker mHttpServiceTracker;
 
+	/** The database session */
 	private SessionFactory mHiberSessionFactory;
 
 	public Activator() {
 		mBundle = this;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Called when plug-in starts its lifecycle
 	 * 
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * Initializes the EventAdmin Service handler and client,
+	 * sets the Hibernate database session
+	 * 
+	 * @param context the plug-in context
 	 */
 	public void start(BundleContext context) throws Exception {
 		mEventAdminHandler = new EventAdminHandler(context);
@@ -57,15 +71,13 @@ public class Activator implements BundleActivator {
 		mHttpServiceTracker.open();
 
 		mHiberSessionFactory = mTPBridgeClient.getHibernateSessionFactory();
-
-		// OracleTest.dbConnect();
-
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Closes the OSGi ServiceTracker and Hibernate
+	 * database session
 	 * 
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * @param context the plug-in context
 	 */
 	public void stop(BundleContext context) throws Exception {
 		mHttpServiceTracker.close();
@@ -81,6 +93,8 @@ public class Activator implements BundleActivator {
 	public static Activator getDefault() {
 		return mBundle;
 	}
+	
+	// Public accessors
 
 	public EventAdminClient getEventAdminClient() {
 		return mEventAdminClient;

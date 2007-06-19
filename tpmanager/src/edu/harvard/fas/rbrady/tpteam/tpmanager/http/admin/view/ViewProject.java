@@ -1,6 +1,6 @@
 /********************************************************************
  * 
- * File		:	UpdateProject.java
+ * File		:	ViewProject.java
  *
  * Author	:	Bob Brady, rpbrady@gmail.com
  * 
@@ -23,7 +23,7 @@ import edu.harvard.fas.rbrady.tpteam.tpmanager.Activator;
 import edu.harvard.fas.rbrady.tpteam.tpmanager.http.ServletUtil;
 
 /*******************************************************************************
- * File 		: 	ViewProduct.java
+ * File 		: 	ViewProject.java
  * 
  * Description 	: 	Servlet that displays an input form for viewing
  * 					a particular TPTeam Project

@@ -1,11 +1,14 @@
-/*******************************************************************************
- * Copyright (c) 2006 Robert Brady. All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+/********************************************************************
+ * 
+ * File		:	ViewProductByUser.java
  *
- * Contributors: Robert Brady - initial API and implementation
- ******************************************************************************/
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Servlet that displays an input form for selecting
+ * 				a particular TPTeam Product for viewing, for use
+ * 				by a non-administrative Web user
+ *  
+ ********************************************************************/
 
 package edu.harvard.fas.rbrady.tpteam.tpmanager.http.user.view;
 

@@ -19,7 +19,7 @@ import org.apache.commons.betwixt.io.BeanWriter;
 import edu.harvard.fas.rbrady.tpteam.tpbridge.chart.ChartDataSet;
 
 /*******************************************************************************
- * File : ChartDataSet.java
+ * File : ChartDataSetXML.java
  * 
  * Description : XML Serialization utility methods for ChartDataSet ojbects
  * 

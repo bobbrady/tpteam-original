@@ -1,3 +1,13 @@
+/********************************************************************
+ * 
+ * File		:	TestView.java
+ *
+ * Author	:	Bob Brady, rpbrady@gmail.com
+ * 
+ * Contents	:	Provides a view of the TPTeam Test Tree and hosts
+ * 				Actions that perform CRUD and executions
+ * 
+ ********************************************************************/
 package edu.harvard.fas.rbrady.tpteam.tpbuddy.views;
 
 import java.util.Hashtable;
@@ -34,6 +44,16 @@ import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.AddTestDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.dialogs.UpdateDialog;
 import edu.harvard.fas.rbrady.tpteam.tpbuddy.eventadmin.EventAdminHandler;
 
+/*******************************************************************************
+ * File 		: 	TestView.java
+ * 
+ * Description 	: 	Provides a view of the TPTeam Test Tree and hosts
+ * 					Actions that perform CRUD and executions
+ * 
+ * @author Bob Brady, rpbrady@gmail.com
+ * @version $Revision$
+ * @date $Date$ Copyright (c) 2007 Bob Brady
+ ******************************************************************************/
 public class TestView extends ViewPart implements Observer {
 	/** The view ID */
 	public static final String ID = "edu.harvard.fas.rbrady.tpteam.tpbuddy.views.testview";

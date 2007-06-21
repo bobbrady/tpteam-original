@@ -1,6 +1,6 @@
 /********************************************************************
  * 
- * File		:	ProjetUtil.java
+ * File		:	ProjectUtil.java
  *
  * Author	:	Bob Brady, rpbrady@gmail.com
  * 

@@ -1,10 +1,10 @@
 <!--
-	File		:	test.betwixt
+	File		:	testtype.betwixt
 	
 	Author		: 	Bob Brady, rpbrady@gmail.com
 	
 	Contents	:	Betwixt custom serialization file
-					for Test objects
+					for TestType objects
 -->
 <?xml version='1.0' encoding='UTF-8' ?>
 <!--

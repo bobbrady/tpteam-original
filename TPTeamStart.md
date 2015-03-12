@@ -1,0 +1,12 @@
+# Introduction #
+
+A more detailed summary of TPTeam can be found on the [TPTeamIntro](TPTeamIntro.md) page.
+
+The aim of TPTeam is to create an exemplary collaborative testing tool by using the Eclipse Equinox and Communication Framework (ECF) projects. This goal will be achieved by the development of three components: TPBuddy, a rich GUI client; TPBridge, an event-driven bundle that bridges communication across JVMs; and TPManager, a test management bundle. All three components utilize novel service-oriented architecture components derived from Equinox and distributed events to achieve collaborative unit testing. TPTeam represents a practical first step in utilizing newly available Eclipse open source projects for the creation of collaborative tools.
+
+
+# Documentation #
+
+  * [TPTeamInstall](TPTeamInstall.md): This section describes the perquisites and step-by-step procedure for installing TPTeam
+  * TPTeamConfig: How-to configure various security, database, team, and other settings.
+  * [EclipseWorld2006 TPTeam Presentation](http://tpteam.eclipse.googlepages.com/TPTeamEclipseWorld.ppt): A PowerPoint presentation covering motivation, use cases, OSGi & ECF fundamentals, plus code snippets supporting TPTeam.

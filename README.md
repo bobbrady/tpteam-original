@@ -1,4 +1,5 @@
-## TPTeam: a collaborative testing using the Eclipse OSGi framework and XMPP chat protocol, embedded in Tomcat 
+## TPTeam: a collaborative testing using Eclipse OSGi and XMPP chat protocol, embedded in Tomcat 
+![TPTeam Architecture](docs/images/UseCase-full.jpg "TPTeam Architecture")
 The aim of this project is to create an exemplary collaborative testing tool called TPTeam by using the Eclipse Equinox and Communication Framework (ECF) projects. This goal is achieved by the development of three components:
 
 * TPBuddy™, a client GUI utilizing the Eclipse Rich Client Platform (RCP)

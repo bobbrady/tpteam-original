@@ -20,7 +20,7 @@ All three components will utilize novel service-oriented architecture components
 ### News
 #### April 5, 2015
 Ported the project source code from the now defunct Google code to GitHub.  Google did not export over the project artifacts and automatically deleted the entire project immediatedly after export.
-Thank Google! <Shakes Fist>
+Thanks Google! X(
 
 #### September 22, 2007
 Added the TPTeam Harvard Master's degree thesis to the downloads section. This thesis would be a good read for anyone interested in developing an Eclipse RCP app, connecting it to Hibenate, or embedding an Eclipse instance within a servlet container.

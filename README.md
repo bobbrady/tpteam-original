@@ -3,9 +3,9 @@
 
 ### Overview
 The aim of TPTeam is to create an exemplary collaborative testing tool by using the Eclipse Equinox and Communication Framework (ECF) projects.This goal will be achieved by the development of three components: 
-* TPBuddy™, a rich GUI client
-* TPBridge™, an event-driven bundle that bridges communication across JVM
-* TPManager™, a test management bundle. 
+* TPBuddy™, a rich GUI client that is an Eclipse IDE plug-in (bundle).
+* TPBridge™, an event-driven bundle that bridges communication across JVMs.  An Eclispe OSGi bundle.
+* TPManager™, a test management bundle, part of an OSGi stack embedded in a Tomcat servlet container
 
 All three components will utilize novel service-oriented architecture components derived from Equinox and distributed events to achieve collaborative unit testing. The proposed work represents a practical first step in utilizing newly available Eclipse open source projects for the creation of collaborative tools.
 

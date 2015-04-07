@@ -1,10 +1,13 @@
-## TPTeam: a collaborative testing using the Eclipse OSGi framework and XMPP chat protocol, embedded in Tomcat 
-The aim of this project is to create an exemplary collaborative testing tool called TPTeam by using the Eclipse Equinox and Communication Framework (ECF) projects. This goal is achieved by the development of three components:
+## TPTeam: a collaborative testing using Eclipse OSGi and XMPP chat protocol, embedded in Tomcat 
+![TPTeam Architecture](docs/images/UseCase-full.jpg "TPTeam Architecture")
 
-* TPBuddy™, a client GUI utilizing the Eclipse Rich Client Platform (RCP)
-* TPBridge™, an event-driven plug-in that bridges communication across Java Virtual Machines (JVMs) using the freely available infrastructure of Google Talk.
-* TPManager™, a server-side test management plug-in.
-All three components utilize a novel service-oriented architecture derived from Equinox and distributed events to achieve collaborative unit testing. Out-of-JVM communication is done via instant messaging through Google Talk servers and the open Extensible Messaging and Presence Protocol (XMPP). Tests are executed in the form of Eclipse Test and Performance Tools Platform (TPTP) JUnit testsuites, which allow for server-side management. The work represents a practical first step in utilizing newly available Eclipse open source projects and public infrastructure for the creation of collaborative tools.
+### Overview
+The aim of TPTeam is to create an exemplary collaborative testing tool by using the Eclipse Equinox and Communication Framework (ECF) projects.This goal will be achieved by the development of three components: 
+* TPBuddy™, a rich GUI client that is an Eclipse IDE plug-in (bundle).
+* TPBridge™, an event-driven bundle that bridges communication across JVMs.  An Eclispe OSGi bundle.
+* TPManager™, a test management bundle, part of an OSGi stack embedded in a Tomcat servlet container
+
+All three components will utilize novel service-oriented architecture components derived from Equinox and distributed events to achieve collaborative unit testing. The proposed work represents a practical first step in utilizing newly available Eclipse open source projects for the creation of collaborative tools.
 
 ### News
 #### April 5, 2015

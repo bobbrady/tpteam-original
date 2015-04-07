@@ -9,6 +9,8 @@ The aim of TPTeam is to create an exemplary collaborative testing tool by using 
 
 All three components will utilize novel service-oriented architecture components derived from Equinox and distributed events to achieve collaborative unit testing. The proposed work represents a practical first step in utilizing newly available Eclipse open source projects for the creation of collaborative tools.
 
+![TPTeam Workflow](docs/images/TPTeamEclipseWorld.jpg "TPTeam Workflow")
+
 ### News
 #### April 5, 2015
 Ported the project source code from the now defunct Google code to GitHub.  Google did not export over the project artifacts and automatically deleted the entire project immediatedly after export.
